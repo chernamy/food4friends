@@ -6,3 +6,4 @@ MarkupSafe==0.23
 MySQL-python==1.2.5
 Werkzeug==0.9.4
 wheel==0.24.0
+requests==2.13.0
