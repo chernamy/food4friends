@@ -19,7 +19,6 @@ def api_login():
     if not user_data:
         return messages.BuildErrorMessage("Invalid login credentials"), 422
 
-    print "Returning"
     session["username"] = username
     return messages.BuildInfoMessage("Successfully logged in as %s" %(username))
 
