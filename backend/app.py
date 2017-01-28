@@ -5,6 +5,7 @@ import controllers
 app = Flask(__name__)
 
 app.register_blueprint(controllers.login)
+app.register_blueprint(controllers.logout)
 
 if __name__ == '__main__':
     # listen on external IPs

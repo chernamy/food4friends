@@ -1,17 +1,22 @@
 import unittest
-import app
-import test_config
+import base_test
 import json
+import messages
 
-class TestLogin(unittest.TestCase):
+class LoginTest(base_test.BaseTestCase):
 
-    def setUp(self):
-        self.app = app.app.test_client()
-    
     def testLoginRouteExists(self):
-        data = {"username": "user", "password": "password"}
-        r = self.app.post("/api/v1/login", data=json.dumps(data))
-        self.assertEquals(r.data, "You reached the test login route.")
+        data = {"username": "username", "password": "password"}
+        r = self.app.post("/api/v1/login", data=json.dumps(data),
+                            content_type="application/json")
+        self.assertEquals(r.data,
+                            messages.BuildInfoMessage("Successfully logged in "\
+                                                        "as %s" %("username")))
+
+        r = self.app.post("/api/v1/logout")
+        self.assertEquals(r.data,
+                            messages.BuildInfoMessage("Successfully logged "\
+                                                        "out"))
         
 
 if __name__ == "__main__":
