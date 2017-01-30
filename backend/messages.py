@@ -19,6 +19,10 @@ def BuildItemListMessage(items):
     }
     return json.dumps(msg)
 
+def UnwrapItemListMessage(msg):
+    items = json.loads(msg)
+    return items["items"]
+
 SUCCESS = BuildInfoMessage("Success")
 
 # ---- Buy Request Error Messages ---- #
