@@ -11,7 +11,6 @@ class BuyTest(base_test.BaseTestCase):
         self.assertEquals(r.data,
                             messages.BuildItemListMessage(
                             [extensions.TEST_ITEM1, extensions.TEST_ITEM2]))
-        print r.data
 
 if __name__ == "__main__":
     unittest.main()
