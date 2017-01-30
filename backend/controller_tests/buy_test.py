@@ -5,9 +5,11 @@ import extensions
 import messages
 
 class BuyTest(base_test.BaseTestCase):
+
+    BUY_ROUTE = "/api/v1/buy/"
     
     def testBuyViewRouteExists(self):
-        r = self.app.get("/api/v1/buy/")
+        r = self.GetJSON(BuyTest.BUY_ROUTE)
         self.assertEquals(r.data,
                             messages.BuildItemListMessage(
                             [extensions.TEST_ITEM1, extensions.TEST_ITEM2]))
@@ -17,9 +19,14 @@ class BuyTest(base_test.BaseTestCase):
         # User 2 buys from user 1.
         data = {"sellerid": extensions.TEST_ITEM1.userid,
                 "buyerid": "user3", "servings": 1}
-        r = self.app.post("/api/v1/buy/", data=json.dumps(data),
-                            content_type="application/json")
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
+
+    def testBuy1Serving(self):
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": "user3", "servings": 1}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+
 
 if __name__ == "__main__":
     unittest.main()
