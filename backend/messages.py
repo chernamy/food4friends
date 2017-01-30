@@ -18,3 +18,13 @@ def BuildItemListMessage(items):
         "items": [item.__dict__ for item in items]
     }
     return json.dumps(msg)
+
+SUCCESS = BuildInfoMessage("Success")
+
+# ---- Buy Request Error Messages ---- #
+MISSING_SELLER_ID = BuildErrorMessage("Missing sellerid field")
+MISSING_BUYER_ID = BuildErrorMessage("Missing buyerid field")
+MISSING_SERVINGS = BuildErrorMessage("Missing servings field")
+INVALID_SERVINGS = BuildErrorMessage("Invalid servings field (must be int)")
+NONEXISTENT_SELLER = BuildErrorMessage("No sell offer for given sellerid field")
+TOO_MANY_SERVINGS = BuildErrorMessage("Servings field too large for sell offer")

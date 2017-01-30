@@ -35,15 +35,15 @@ TEST_USER2 = UserData("username2", "password2", "First2", "Last2", "buyer", "-")
 
 class ItemData(object):
 
-    def __init__(self, itemid, sellerid, servings, price, address, description,
-                duration):
-        self.itemid = itemid
-        self.sellerid = sellerid
+    def __init__(self, userid, photo, servings, duration, price, address,
+                                                                description):
+        self.userid = userid
+        self.photo = photo
         self.servings = servings
+        self.duration = duration
         self.price = float(price)
         self.address = address
         self.description = description
-        self.duration = duration
 
     @staticmethod
     def FromDbData(data):
@@ -53,16 +53,17 @@ class ItemData(object):
         """Creates the command to insert this item into the database.
         """
         return "INSERT INTO ITEM VALUES('%s', '%s', '%s', '%s',"\
-                    "'%s', '%s', '%s')" %(self.itemid, self.sellerid,
-                                        self.servings, self.price, self.address,
-                                        self.description, self.duration)
+                    "'%s', '%s', '%s')" %(self.userid, self.photo,
+                                        self.servings, self.duration,
+                                        self.price, self.address,
+                                        self.description)
 
     @staticmethod
     def BuildQuery(args):
         return "SELECT * FROM ITEM" + BuildQueryArgs(args)
 
-TEST_ITEM1 = ItemData("1", "username", 10, 12.25, "42.28, -83.73","tasty", 3)
-TEST_ITEM2 = ItemData("2", "username2", 20, 25.0, "42.30, -83.73", "yummy", 5)
+TEST_ITEM1 = ItemData("user1", "1.png", 10, 3, 12.25, "42.28, -83.73","tasty")
+TEST_ITEM2 = ItemData("user2", "2.png", 20, 5, 25.00, "42.30, -83.73", "yummy")
 
 conn = None
 
@@ -97,14 +98,14 @@ def SetUpTestDatabase():
 
     ExecuteCommand("DROP TABLE IF EXISTS ITEM;")
     ExecuteCommand("CREATE TABLE ITEM("\
-                "itemid VARCHAR(40) NOT NULL, "\
-                "sellerid VARCHAR(20) NOT NULL, "\
+                "userid VARCHAR(40) NOT NULL, "\
+                "photo VARCHAR(40) NOT NULL, "\
                 "servings INT NOT NULL, "\
+                "duration INT NOT NULL, "\
                 "price DECIMAL(5, 2) NOT NULL, "\
                 "address VARCHAR(255) NOT NULL, "\
                 "description TEXT, "\
-                "duration INT NOT NULL, "\
-                "PRIMARY KEY(itemid));")
+                "PRIMARY KEY(userid));")
     SetUpTestItemData()
 
 def SetUpProdDatabase():
@@ -113,6 +114,9 @@ def SetUpProdDatabase():
                             db="prod")
     
 def Init():
+    """Reinitializes the database. If this is prod, the connection will just
+    be reset. If this is test, the test data will be reset.
+    """
     if config.env["state"] == "test":
         SetUpTestDatabase()
     else:
