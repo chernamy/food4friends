@@ -36,7 +36,6 @@ MISSING_SELLERID = BuildErrorMessage("Missing sellerid field")
 MISSING_BUYERID = BuildErrorMessage("Missing buyerid field")
 MISSING_SERVINGS = BuildErrorMessage("Missing servings field")
 INVALID_SERVINGS = BuildErrorMessage("Invalid servings field (must be int)")
-NONEXISTENT_BUYER = BuildErrorMessage("Nonexistent buyerid")
 NONEXISTENT_SELLER = BuildErrorMessage("No sell offer for given sellerid field")
 TOO_MANY_SERVINGS = BuildErrorMessage(
                         "Servings field too large for sell offer")

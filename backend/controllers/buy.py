@@ -15,6 +15,9 @@ def api_buy_view():
 @buy.route("/api/v1/buy", methods=["POST"])
 @buy.route("/api/v1/buy/", methods=["POST"])
 def api_buy_purchase():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
     if "sellerid" not in request.json:
         return messages.MISSING_SELLERID, 400
     if "buyerid" not in request.json:
@@ -25,9 +28,8 @@ def api_buy_purchase():
     sellerid = request.json.get("sellerid")
     buyerid = request.json.get("buyerid")
 
-    buyer_data = extensions.QueryUsers([("userid", buyerid)])
-    if not buyer_data:
-        return messages.NONEXISTENT_BUYER, 400
+    if buyerid != session["userid"]:
+        return messages.NOT_LOGGED_IN, 403
 
     try:
         servings = int(request.json.get("servings"))

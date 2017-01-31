@@ -35,7 +35,8 @@ class UserData(object):
 TEST_USER1 = UserData("user1", "password1", "First1", "Last1", "seller", "-")
 TEST_USER2 = UserData("user2", "password2", "First2", "Last2", "seller", "-")
 TEST_USER3 = UserData("user3", "password3", "First3", "Last3", "none", "-")
-TEST_USER4 = UserData("user4", "password4", "First4", "Last4", "buyer", "-")
+TEST_USER4 = UserData("user4", "password4", "First4", "Last4", "none", "-")
+TEST_USER5 = UserData("user5", "password5", "First5", "Last5", "buyer", "-")
 
 class ItemData(object):
 
@@ -92,6 +93,7 @@ def SetUpTestUserData():
     ExecuteCommand(TEST_USER2.ToInsertCommand())
     ExecuteCommand(TEST_USER3.ToInsertCommand())
     ExecuteCommand(TEST_USER4.ToInsertCommand())
+    ExecuteCommand(TEST_USER5.ToInsertCommand())
 
 def SetUpTestItemData():
     ExecuteCommand(TEST_ITEM1.ToInsertCommand())
