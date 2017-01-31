@@ -8,13 +8,13 @@ buy = Blueprint("/api/v1/buy", __name__)
 
 @buy.route("/api/v1/buy", methods=["GET"])
 @buy.route("/api/v1/buy/", methods=["GET"])
-def api_buy_view():
+def ViewBuyList():
     item_data = extensions.QueryItems()
     return messages.BuildItemListMessage(item_data), 200
 
 @buy.route("/api/v1/buy", methods=["POST"])
 @buy.route("/api/v1/buy/", methods=["POST"])
-def api_buy_purchase():
+def Purchase():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 

@@ -6,7 +6,7 @@ login = Blueprint("api/v1/login/", __name__)
 logout = Blueprint("api/v1/logout/", __name__)
 
 @login.route("/api/v1/login/", methods=["POST"])
-def api_login():
+def Login():
     if "userid" not in request.json:
         return messages.MISSING_USERID, 400
     if "password" not in request.json:
@@ -26,7 +26,7 @@ def api_login():
     return messages.SUCCESS, 200
 
 @logout.route("/api/v1/logout/", methods=["POST"])
-def api_logout():
+def Logout():
     if not "userid" in session:
         return messages.NOT_LOGGED_IN, 401
 

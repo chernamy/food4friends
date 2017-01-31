@@ -12,7 +12,7 @@ IMAGE_DIR = "testout"
 
 @sell.route("/api/v1/sell", methods=["POST"])
 @sell.route("/api/v1/sell/", methods=["POST"])
-def api_sell_post():
+def PostOffer():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
