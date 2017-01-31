@@ -12,6 +12,9 @@ def api_login():
     if "password" not in request.json:
         return messages.MISSING_PASSWORD, 400
 
+    if "userid" in session:
+        return messages.ALREADY_LOGGED_IN, 401
+
     userid = request.json.get("userid")
     password = request.json.get("password")
     user_data = extensions.QueryUsers([("userid", userid),

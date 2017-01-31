@@ -1,8 +1,8 @@
 import unittest
 import base_test
 import extensions
-import login_test
 import json
+import login_test
 import messages
 
 class BuyTest(base_test.BaseTestCase):

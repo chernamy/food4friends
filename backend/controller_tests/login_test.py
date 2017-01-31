@@ -38,6 +38,14 @@ class LoginTest(base_test.BaseTestCase):
         r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_PASSWORD)
         
+    def testMultipleLogin(self):
+        data = {"userid": "user1", "password": "password1"}
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        data = {"userid": "user2", "password": "password2"}
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        self.assertEquals(r.data, messages.ALREADY_LOGGED_IN)
 
 if __name__ == "__main__":
     unittest.main()
