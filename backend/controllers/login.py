@@ -7,22 +7,22 @@ logout = Blueprint('api/v1/logout', __name__)
 
 @login.route("/api/v1/login/", methods=["POST"])
 def api_login():
-    if "username" not in request.json:
-        return messages.BuildErrorMessage("Missing username"), 422
+    if "userid" not in request.json:
+        return messages.BuildErrorMessage("Missing userid"), 422
     if "password" not in request.json:
         return messages.BuildErrorMessage("Missing password"), 422
 
-    username = request.json.get("username")
+    userid = request.json.get("userid")
     password = request.json.get("password")
-    user_data = extensions.QueryUsers([("username", username),
+    user_data = extensions.QueryUsers([("userid", userid),
                                         ("password", password)])
     if not user_data:
         return messages.BuildErrorMessage("Invalid login credentials"), 422
 
-    session["username"] = username
-    return messages.BuildInfoMessage("Successfully logged in as %s" %(username))
+    session["userid"] = userid
+    return messages.SUCCESS
 
 @logout.route("/api/v1/logout/", methods=["POST"])
 def api_logout():
     session.clear()
-    return messages.BuildInfoMessage("Successfully logged out")
+    return messages.SUCCESS

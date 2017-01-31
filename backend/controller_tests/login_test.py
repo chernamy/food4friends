@@ -5,26 +5,30 @@ import messages
 
 class LoginTest(base_test.BaseTestCase):
 
+    LOGIN_ROUTE = "/api/v1/login/"
+    LOGOUT_ROUTE = "/api/v1/logout/"
+
     def testLoginRouteExists(self):
-        data = {"username": "username", "password": "password"}
-        r = self.app.post("/api/v1/login/", data=json.dumps(data),
-                            content_type="application/json")
-        self.assertEquals(r.data,
-                            messages.BuildInfoMessage("Successfully logged in "\
-                                                        "as %s" %("username")))
+        data = {"userid": "user1", "password": "password1"}
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
 
     def testLogoutRouteExists(self):
-        data = {"username": "username", "password": "password"}
-        r = self.app.post("/api/v1/login/", data=json.dumps(data),
-                            content_type="application/json")
-        self.assertEquals(r.data,
-                            messages.BuildInfoMessage("Successfully logged in "\
-                                                        "as %s" %("username")))
+        data = {"userid": "user1", "password": "password1"}
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
 
-        r = self.app.post("/api/v1/logout/")
-        self.assertEquals(r.data,
-                            messages.BuildInfoMessage("Successfully logged "\
-                                                        "out"))
+        r = self.PostJSON(LoginTest.LOGOUT_ROUTE)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+    def testMissingFields(self):
+        data = {"password": "password1"}
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_USERID)
+
+        data = {"userid": "user1"}
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_PASSWORD)
         
 
 if __name__ == "__main__":

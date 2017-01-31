@@ -4,9 +4,9 @@ import config
 
 class UserData(object):
     
-    def __init__(self, username, password, firstname, lastname, role,
+    def __init__(self, userid, password, firstname, lastname, role,
                 location):
-        self.username = username
+        self.userid = userid
         self.password = password
         self.firstname = firstname
         self.lastname = lastname
@@ -23,15 +23,15 @@ class UserData(object):
         """Creates the command to insert this user into the database.
         """
         return "INSERT INTO USER VALUES('%s', '%s', '%s', '%s', '%s', '%s')" %(
-                    self.username, self.password, self.firstname,
+                    self.userid, self.password, self.firstname,
                     self.lastname, self.role, self.location)
 
     @staticmethod
     def BuildQuery(args):
         return "SELECT * FROM USER" + BuildQueryArgs(args)
 
-TEST_USER1 = UserData("username", "password", "First1", "Last1", "none", "-")
-TEST_USER2 = UserData("username2", "password2", "First2", "Last2", "buyer", "-")
+TEST_USER1 = UserData("user1", "password1", "First1", "Last1", "none", "-")
+TEST_USER2 = UserData("user2", "password2", "First2", "Last2", "buyer", "-")
 
 class ItemData(object):
 
@@ -91,13 +91,13 @@ def SetUpTestDatabase():
 
     ExecuteCommand("DROP TABLE IF EXISTS USER;")
     ExecuteCommand("CREATE TABLE USER("\
-                "username VARCHAR(20) NOT NULL, "\
+                "userid VARCHAR(20) NOT NULL, "\
                 "password VARCHAR(20) NOT NULL, "\
                 "firstname VARCHAR(25) NOT NULL, "\
                 "lastname VARCHAR(25) NOT NULL, "\
                 "role ENUM('none', 'buyer', 'seller') NOT NULL, "\
                 "location VARCHAR(255), "\
-                "PRIMARY KEY(username));")
+                "PRIMARY KEY(userid));")
     SetUpTestUserData()
 
     ExecuteCommand("DROP TABLE IF EXISTS ITEM;")
@@ -137,8 +137,8 @@ def BuildQueryArgs(args):
     Returns:
         (string) The appropriate argument list for the MySQL query.
             For example, if the input is [], no argument list is returned.
-            If the input is [(username, "mjchao")],
-            " where  username = 'mjchao'" is returned. If the input is
+            If the input is [(userid, "mjchao")],
+            " where  userid = 'mjchao'" is returned. If the input is
             [(firstname, "Mickey"), (lastname, "Chao"),
             " where firstname = 'Mickey' and lastname = 'Chao'" is returned.
     """

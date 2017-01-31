@@ -39,7 +39,7 @@ class BuyTest(base_test.BaseTestCase):
                                 offer["userid"] == userid)
         return extensions.ItemData(**user_offer_data)
 
-    def testBuy1Serving(self):
+    def testBuy2Serving(self):
         # find how many servings are in the initial sell offer for user 1
         initial_item = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
         initial_servings = initial_item.servings
@@ -54,6 +54,50 @@ class BuyTest(base_test.BaseTestCase):
 
         # check that 2 servings were deducted
         self.assertEqual(initial_servings - 2, after_buy_servings)
+
+    def testBuyBadServings(self):
+        initial_item = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
+        initial_servings = initial_item.servings
+
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": "user3", "servings": 0}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.INVALID_SERVINGS)
+
+        data["servings"] = -100
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.INVALID_SERVINGS)
+
+        data["servings"] = 99999999
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.TOO_MANY_SERVINGS)
+        
+        after_buy_item = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
+        after_buy_servings = after_buy_item.servings
+
+        # make sure that # of servings did not change
+        self.assertEqual(initial_servings, after_buy_servings)
+
+    def testBadSellerId(self):
+        data = {"sellerid": "whoami?", "buyerid": "user3", "servings": 5}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.NONEXISTENT_SELLER)
+
+    def testBadBuyerId(self):
+        pass
+
+    def testMissingFields(self):
+        data = {"buyerid": "user3", "servings": 3}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.MISSING_SELLERID)
+
+        data = {"sellerid": "user1", "servings": 3}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.MISSING_BUYERID)
+
+        data = {"sellerid": "user1", "buyerid": "user3"}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.MISSING_SERVINGS)
 
 
 if __name__ == "__main__":

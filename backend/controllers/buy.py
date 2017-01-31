@@ -14,17 +14,21 @@ def api_buy_view():
 @buy.route("/api/v1/buy/", methods=["POST"])
 def api_buy_purchase():
     if "sellerid" not in request.json:
-        return messages.MISSING_SELLER_ID
+        return messages.MISSING_SELLERID
     if "buyerid" not in request.json:
-        return messages.MISSING_BUYER_ID
+        return messages.MISSING_BUYERID
     if "servings" not in request.json:
         return messages.MISSING_SERVINGS
 
     sellerid = request.json.get("sellerid")
     buyerid = request.json.get("buyerid")
+
     try:
         servings = int(request.json.get("servings"))
     except:
+        return messages.INVALID_SERVINGS
+
+    if servings <= 0:
         return messages.INVALID_SERVINGS
 
     user_data = extensions.QueryItems([("userid", sellerid)])

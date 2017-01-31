@@ -25,9 +25,14 @@ def UnwrapItemListMessage(msg):
 
 SUCCESS = BuildInfoMessage("Success")
 
+# ---- Login Request Error Messages ---- #
+MISSING_USERID = BuildErrorMessage("Missing userid")
+MISSING_PASSWORD = BuildErrorMessage("Missing password")
+INVALID_CREDENTIALS = BuildErrorMessage("Invalid credentials")
+
 # ---- Buy Request Error Messages ---- #
-MISSING_SELLER_ID = BuildErrorMessage("Missing sellerid field")
-MISSING_BUYER_ID = BuildErrorMessage("Missing buyerid field")
+MISSING_SELLERID = BuildErrorMessage("Missing sellerid field")
+MISSING_BUYERID = BuildErrorMessage("Missing buyerid field")
 MISSING_SERVINGS = BuildErrorMessage("Missing servings field")
 INVALID_SERVINGS = BuildErrorMessage("Invalid servings field (must be int)")
 NONEXISTENT_SELLER = BuildErrorMessage("No sell offer for given sellerid field")
