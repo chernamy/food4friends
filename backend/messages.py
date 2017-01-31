@@ -35,7 +35,23 @@ NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")
 MISSING_SELLERID = BuildErrorMessage("Missing sellerid field")
 MISSING_BUYERID = BuildErrorMessage("Missing buyerid field")
 MISSING_SERVINGS = BuildErrorMessage("Missing servings field")
-INVALID_SERVINGS = BuildErrorMessage("Invalid servings field (must be int)")
+INVALID_SERVINGS = BuildErrorMessage("Invalid servings field "\
+                                        "(must be positive integer)")
 NONEXISTENT_SELLER = BuildErrorMessage("No sell offer for given sellerid field")
 TOO_MANY_SERVINGS = BuildErrorMessage("Servings field too large for sell offer")
 OFFER_EXPIRED = BuildErrorMessage("Offer has already expired")
+
+# ---- Sell Request Error Messages ---- #
+# Repeat: MISSING_USERID
+MISSING_PHOTO = BuildErrorMessage("Missing photo")
+# Repeat: MISSING_SERVINGS
+MISSING_DURATION = BuildErrorMessage("Missing duration")
+MISSING_PRICE = BuildErrorMessage("Missing price")
+MISSING_ADDRESS = BuildErrorMessage("Missing address")
+MISSING_DESCRIPTION = BuildErrorMessage("Missing description")
+# Repeat: INVALID_SERVINGS
+INVALID_PHOTO_EXT = BuildErrorMessage("Invalid photo extension. Must be "\
+                                        "png, jpg, jpeg, or gif.")
+INVALID_DURATION = BuildErrorMessage("Invalid duration field "\
+                                        "(must be positive integer)")
+INVALID_PRICE = BuildErrorMessage("Invalid price (must be nonnegative decimal)")

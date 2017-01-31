@@ -47,3 +47,14 @@ class BaseTestCase(unittest.TestCase):
         else:
             return self.app.post(route, data=json.dumps(data),
                                     content_type="application/json")
+
+    def PostFile(self, route, data):
+        """Posts the given image with JSON data to the specified route.
+
+        Args:
+            route: (string) the route to which to post (end it with a trailing
+                    "/")
+            data: (dict) the data with the file to post.
+        """
+        return self.app.post(route, data=data,
+                                content_type="multipart/form-data")
