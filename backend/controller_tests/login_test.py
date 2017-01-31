@@ -21,6 +21,14 @@ class LoginTest(base_test.BaseTestCase):
         r = self.PostJSON(LoginTest.LOGOUT_ROUTE)
         self.assertEquals(r.data, messages.SUCCESS)
 
+    def testLoginFailed(self):
+        data = {"userid": "user1", "password": "password2"}
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_CREDENTIALS)
+
+        r = self.PostJSON(LoginTest.LOGOUT_ROUTE)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
     def testMissingFields(self):
         data = {"password": "password1"}
         r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)

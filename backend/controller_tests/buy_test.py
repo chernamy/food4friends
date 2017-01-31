@@ -84,7 +84,9 @@ class BuyTest(base_test.BaseTestCase):
         self.assertEqual(r.data, messages.NONEXISTENT_SELLER)
 
     def testBadBuyerId(self):
-        pass
+        data = {"sellerid": "user1", "buyerid": "whoami?", "servings": 5}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.NONEXISTENT_BUYER)
 
     def testMissingFields(self):
         data = {"buyerid": "user3", "servings": 3}

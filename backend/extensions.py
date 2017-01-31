@@ -30,8 +30,10 @@ class UserData(object):
     def BuildQuery(args):
         return "SELECT * FROM USER" + BuildQueryArgs(args)
 
-TEST_USER1 = UserData("user1", "password1", "First1", "Last1", "none", "-")
-TEST_USER2 = UserData("user2", "password2", "First2", "Last2", "buyer", "-")
+TEST_USER1 = UserData("user1", "password1", "First1", "Last1", "seller", "-")
+TEST_USER2 = UserData("user2", "password2", "First2", "Last2", "seller", "-")
+TEST_USER3 = UserData("user3", "password3", "First3", "Last3", "none", "-")
+TEST_USER4 = UserData("user4", "password4", "First4", "Last4", "buyer", "-")
 
 class ItemData(object):
 
@@ -79,6 +81,8 @@ def ExecuteCommand(command):
 def SetUpTestUserData():
     ExecuteCommand(TEST_USER1.ToInsertCommand())
     ExecuteCommand(TEST_USER2.ToInsertCommand())
+    ExecuteCommand(TEST_USER3.ToInsertCommand())
+    ExecuteCommand(TEST_USER4.ToInsertCommand())
 
 def SetUpTestItemData():
     ExecuteCommand(TEST_ITEM1.ToInsertCommand())
