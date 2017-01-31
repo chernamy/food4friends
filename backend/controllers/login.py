@@ -2,8 +2,8 @@ from flask import *
 import extensions
 import messages
 
-login = Blueprint('api/v1/login', __name__)
-logout = Blueprint('api/v1/logout', __name__)
+login = Blueprint("api/v1/login/", __name__)
+logout = Blueprint("api/v1/logout/", __name__)
 
 @login.route("/api/v1/login/", methods=["POST"])
 def api_login():

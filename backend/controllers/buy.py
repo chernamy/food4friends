@@ -1,4 +1,6 @@
 from flask import *
+import calendar
+import time
 import extensions
 import messages
 
@@ -35,15 +37,24 @@ def api_buy_purchase():
     if servings <= 0:
         return messages.INVALID_SERVINGS, 400
 
-    user_data = extensions.QueryItems([("userid", sellerid)])
-    if not user_data:
+    item_data = extensions.QueryItems([("userid", sellerid)])
+    if not item_data:
         return messages.NONEXISTENT_SELLER, 400
 
-    seller_servings = user_data[0].servings
+    offer_start = item_data[0].start
+    offer_end = offer_start + item_data[0].duration * 60
+    curr_time = calendar.timegm(time.gmtime())
+    if curr_time > offer_end:
+        return messages.OFFER_EXPIRED, 400
+
+    seller_servings = item_data[0].servings
     if servings > seller_servings:
         return messages.TOO_MANY_SERVINGS, 400
 
     extensions.UpdateItems("servings = servings - %d" %(servings),
                             [("userid", sellerid)])
+
+    # TODO(mjchao): Update database to reflect that buyer has purchased
+    # this item.
     return messages.SUCCESS, 200
     

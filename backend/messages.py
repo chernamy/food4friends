@@ -40,3 +40,4 @@ NONEXISTENT_BUYER = BuildErrorMessage("Nonexistent buyerid")
 NONEXISTENT_SELLER = BuildErrorMessage("No sell offer for given sellerid field")
 TOO_MANY_SERVINGS = BuildErrorMessage(
                         "Servings field too large for sell offer")
+OFFER_EXPIRED = BuildErrorMessage("Offer has already expired")

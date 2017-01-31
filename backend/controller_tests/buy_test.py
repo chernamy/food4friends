@@ -39,7 +39,7 @@ class BuyTest(base_test.BaseTestCase):
                                 offer["userid"] == userid)
         return extensions.ItemData(**user_offer_data)
 
-    def testBuy2Serving(self):
+    def testBuyServings(self):
         # find how many servings are in the initial sell offer for user 1
         initial_item = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
         initial_servings = initial_item.servings
@@ -100,6 +100,11 @@ class BuyTest(base_test.BaseTestCase):
         data = {"sellerid": "user1", "buyerid": "user3"}
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
         self.assertEqual(r.data, messages.MISSING_SERVINGS)
+
+    def testOfferExpired(self):
+        data = {"sellerid": "user2", "buyerid": "user3", "servings": 4}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.OFFER_EXPIRED)
 
 
 if __name__ == "__main__":

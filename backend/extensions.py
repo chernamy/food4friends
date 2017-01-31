@@ -1,6 +1,8 @@
+import calendar
+import config
 import MySQLdb
 import MySQLdb.cursors
-import config
+import time
 
 class UserData(object):
     
@@ -37,11 +39,12 @@ TEST_USER4 = UserData("user4", "password4", "First4", "Last4", "buyer", "-")
 
 class ItemData(object):
 
-    def __init__(self, userid, photo, servings, duration, price, address,
-                                                                description):
+    def __init__(self, userid, photo, servings, start, duration, price, address,
+                    description):
         self.userid = userid
         self.photo = photo
         self.servings = servings
+        self.start = start
         self.duration = duration
         self.price = float(price)
         self.address = address
@@ -54,11 +57,11 @@ class ItemData(object):
     def ToInsertCommand(self):
         """Creates the command to insert this item into the database.
         """
-        return "INSERT INTO ITEM VALUES('%s', '%s', '%s', '%s',"\
+        return "INSERT INTO ITEM VALUES('%s', '%s', '%s', '%s', '%s',"\
                     "'%s', '%s', '%s')" %(self.userid, self.photo,
-                                        self.servings, self.duration,
-                                        self.price, self.address,
-                                        self.description)
+                                        self.servings, self.start,
+                                        self.duration, self.price,
+                                        self.address, self.description)
 
     @staticmethod
     def BuildQuery(args):
@@ -68,8 +71,14 @@ class ItemData(object):
     def BuildUpdate(update, args):
         return "UPDATE ITEM SET " + update + BuildQueryArgs(args)
 
-TEST_ITEM1 = ItemData("user1", "1.png", 10, 3, 12.25, "42.28, -83.73","tasty")
-TEST_ITEM2 = ItemData("user2", "2.png", 20, 5, 25.00, "42.30, -83.73", "yummy")
+CURR_TIME_SECS = calendar.timegm(time.gmtime())
+TEST_ITEM1 = ItemData("user1", "1.png", 10, CURR_TIME_SECS, 3, 12.25,
+                        "42.28, -83.73","tasty")
+
+# This is a test item that was created 10 minutes ago and expired 5 minutes
+# ago
+TEST_ITEM2 = ItemData("user2", "2.png", 20, CURR_TIME_SECS - 600, 5, 25.00,
+                        "42.30, -83.73", "yummy")
 
 conn = None
 
@@ -109,6 +118,7 @@ def SetUpTestDatabase():
                 "userid VARCHAR(40) NOT NULL, "\
                 "photo VARCHAR(40) NOT NULL, "\
                 "servings INT NOT NULL, "\
+                "start INT NOT NULL,"\
                 "duration INT NOT NULL, "\
                 "price DECIMAL(5, 2) NOT NULL, "\
                 "address VARCHAR(255) NOT NULL, "\
