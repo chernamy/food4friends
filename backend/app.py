@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.register_blueprint(controllers.login)
 app.register_blueprint(controllers.logout)
 app.register_blueprint(controllers.buy)
+app.register_blueprint(controllers.sell)
 
 if __name__ == '__main__':
     # listen on external IPs

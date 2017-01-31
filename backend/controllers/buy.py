@@ -1,10 +1,10 @@
 from flask import *
 import calendar
-import time
 import extensions
 import messages
+import time
 
-buy = Blueprint("api/v1/buy", __name__)
+buy = Blueprint("/api/v1/buy", __name__)
 
 @buy.route("/api/v1/buy", methods=["GET"])
 @buy.route("/api/v1/buy/", methods=["GET"])

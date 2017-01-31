@@ -1,4 +1,3 @@
-from flask import *
 import json
 
 def BuildErrorMessage(error):
@@ -37,6 +36,5 @@ MISSING_BUYERID = BuildErrorMessage("Missing buyerid field")
 MISSING_SERVINGS = BuildErrorMessage("Missing servings field")
 INVALID_SERVINGS = BuildErrorMessage("Invalid servings field (must be int)")
 NONEXISTENT_SELLER = BuildErrorMessage("No sell offer for given sellerid field")
-TOO_MANY_SERVINGS = BuildErrorMessage(
-                        "Servings field too large for sell offer")
+TOO_MANY_SERVINGS = BuildErrorMessage("Servings field too large for sell offer")
 OFFER_EXPIRED = BuildErrorMessage("Offer has already expired")
