@@ -62,6 +62,10 @@ class ItemData(object):
     def BuildQuery(args):
         return "SELECT * FROM ITEM" + BuildQueryArgs(args)
 
+    @staticmethod
+    def BuildUpdate(update, args):
+        return "UPDATE ITEM SET " + update + BuildQueryArgs(args)
+
 TEST_ITEM1 = ItemData("user1", "1.png", 10, 3, 12.25, "42.28, -83.73","tasty")
 TEST_ITEM2 = ItemData("user2", "2.png", 20, 5, 25.00, "42.30, -83.73", "yummy")
 
@@ -155,7 +159,7 @@ def BuildQueryArgs(args):
     else:
         return ""
 
-def query_users(args=[]):
+def QueryUsers(args=[]):
     """Returns user data in the database with the specified properties.
     Args:
         args: A list of (property, value) or (property, value, op) tuples.
@@ -168,7 +172,7 @@ def query_users(args=[]):
     x.execute(query)
     return [UserData.FromDbData(result) for result in x.fetchall()]
 
-def query_items(args=[]):
+def QueryItems(args=[]):
     """Returns item data in the database with the specified properties.
 
     Args:
@@ -181,3 +185,15 @@ def query_items(args=[]):
     x = conn.cursor()
     x.execute(query)
     return [ItemData.FromDbData(result) for result in x.fetchall()]
+
+def UpdateItems(change, args=[]):
+    """Updates item data in the database with the specified change.
+
+    Args:
+        change: (string) A change to make
+        args: A list of (property, value) or (property, value, op) tuples.
+    """
+    command = ItemData.BuildUpdate(change, args)
+    x = conn.cursor()
+    x.execute(command)
+

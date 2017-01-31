@@ -43,15 +43,17 @@ class BuyTest(base_test.BaseTestCase):
         # find how many servings are in the initial sell offer for user 1
         initial_item = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
         initial_servings = initial_item.servings
-        print "Initial servings:", initial_servings
 
+        # buy 2 servings from user 1's sell offer
         data = {"sellerid": extensions.TEST_ITEM1.userid,
-                "buyerid": "user3", "servings": 1}
+                "buyerid": "user3", "servings": 2}
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
 
         after_buy_item = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
         after_buy_servings = after_buy_item.servings
-        print "After servings:", after_buy_servings
+
+        # check that 2 servings were deducted
+        self.assertEqual(initial_servings - 2, after_buy_servings)
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ def api_login():
 
     username = request.json.get("username")
     password = request.json.get("password")
-    user_data = extensions.query_users([("username", username),
+    user_data = extensions.QueryUsers([("username", username),
                                         ("password", password)])
     if not user_data:
         return messages.BuildErrorMessage("Invalid login credentials"), 422

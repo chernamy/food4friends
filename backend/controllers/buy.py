@@ -7,7 +7,7 @@ buy = Blueprint("api/v1/buy", __name__)
 @buy.route("/api/v1/buy", methods=["GET"])
 @buy.route("/api/v1/buy/", methods=["GET"])
 def api_buy_view():
-    item_data = extensions.query_items()
+    item_data = extensions.QueryItems()
     return messages.BuildItemListMessage(item_data)
 
 @buy.route("/api/v1/buy", methods=["POST"])
@@ -27,7 +27,7 @@ def api_buy_purchase():
     except:
         return messages.INVALID_SERVINGS
 
-    user_data = extensions.query_items([("userid", sellerid)])
+    user_data = extensions.QueryItems([("userid", sellerid)])
     if not user_data:
         return messages.NONEXISTENT_SELLER
 
@@ -35,7 +35,7 @@ def api_buy_purchase():
     if servings > seller_servings:
         return messages.TOO_MANY_SERVINGS
 
-    #TODO update servings
-    print "Success"
+    extensions.UpdateItems("servings = servings - %d" %(servings),
+                            [("userid", sellerid)])
     return messages.SUCCESS
     
