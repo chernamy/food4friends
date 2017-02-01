@@ -18,14 +18,18 @@ class SellTest(base_test.BaseTestCase):
     IMAGE_DIR = config.env["image_dir"]
 
     @staticmethod
-    def GetTestItem():
+    def GetTestItem(end=10):
         """Returns a test item. Note: The end time is set to 10, which is
         10 seconds since the epoch start. You might want to change this.
+
+        Args:
+            end: (int) The end time in seconds since epoch. It will default
+                to 10.
 
         Returns:
             (ItemData) An item for testing.
         """
-        return extensions.ItemData("user4", SellTest.TEST_IMAGE_PATH, 20, 10,
+        return extensions.ItemData("user4", SellTest.TEST_IMAGE_PATH, 20, end,
                                     10.25, "-----", "fruit")
 
     @staticmethod
@@ -135,18 +139,14 @@ class SellTest(base_test.BaseTestCase):
         approx_end_time = calendar.timegm(time.gmtime()) + 10 * 60
 
         found_item = self.GetOfferForUser("user4")
-        expected_item = self.GetTestItem()
-        expected_item.end = approx_end_time
+        expected_item = self.GetTestItem(approx_end_time)
         self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
 
         # check that the image was saved to the server
         self.assertTrue(filecmp.cmp(SellTest.TEST_IMAGE_PATH,
                         os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")))
         
-        
-
-        
-
+    
 
 if __name__ == "__main__":
     unittest.main()
