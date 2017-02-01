@@ -55,7 +55,5 @@ def Purchase():
     extensions.UpdateItems("servings = servings - %d" %(servings),
                             [("userid", sellerid)])
 
-    # TODO(mjchao): Update database to reflect that buyer has purchased
-    # this item.
     return messages.SUCCESS, 200
     

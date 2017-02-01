@@ -1,14 +1,15 @@
 from flask import *
 import calendar
-import time
+import config
 import extensions
 import messages
 import os
+import time
 
 sell = Blueprint("/api/v1/sell/", __name__)
 
 ALLOWED_EXT = set(["png", "jpg", "jpeg", "gif"])
-IMAGE_DIR = "testout"
+IMAGE_DIR = config.env["image_dir"]
 
 @sell.route("/api/v1/sell", methods=["POST"])
 @sell.route("/api/v1/sell/", methods=["POST"])

@@ -66,6 +66,7 @@ class ItemData(object):
     def BuildUpdate(update, args):
         return "UPDATE ITEM SET " + update + BuildQueryArgs(args)
 
+
 CURR_TIME_SECS = calendar.timegm(time.gmtime())
 # This is a test item that will expire in 10 minutes
 TEST_ITEM1 = ItemData("user1", "1.png", 10, CURR_TIME_SECS + 600, 12.25,
