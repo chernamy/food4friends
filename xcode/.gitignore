@@ -1,2 +1,3 @@
 *.bundle
 *.framework
+.DS_Store
