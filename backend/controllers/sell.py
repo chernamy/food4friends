@@ -47,7 +47,7 @@ def PostOffer():
         return messages.INVALID_SERVINGS, 400
 
     try:
-        duration = request.form.get("duration")
+        duration = int(request.form.get("duration"))
     except:
         return messages.INVALID_DURATION, 400
 
@@ -65,5 +65,13 @@ def PostOffer():
     address = request.form.get("address")
     description = request.form.get("description")
 
-    photo.save(os.path.join(IMAGE_DIR, userid + "." + ext))
+    photo_path = os.path.join(IMAGE_DIR, userid + "." + ext)
+    photo.save(photo_path)
+
+    print duration
+    end = calendar.timegm(time.gmtime()) + duration * 60
+
+    new_item = extensions.ItemData(userid, photo_path, servings, end,
+                                    price, address, description)
+    extensions.AddItem(new_item)
     return messages.SUCCESS, 200

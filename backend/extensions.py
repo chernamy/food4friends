@@ -204,3 +204,10 @@ def UpdateItems(change, args=[]):
     x = conn.cursor()
     x.execute(command)
 
+def AddItem(item):
+    """Adds the given item to the database.
+
+    Args:
+        item: (ItemData) The item to insert.
+    """
+    ExecuteCommand(item.ToInsertCommand())

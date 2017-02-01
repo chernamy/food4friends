@@ -1,5 +1,6 @@
 import unittest
 import base_test
+import buy_test
 import calendar
 import config
 import extensions
@@ -96,10 +97,10 @@ class SellTest(base_test.BaseTestCase):
             (ItemData) The item data representing the sell offer for the
                 specified user.
         """
-        r = self.GetJSON(BuyTest.BUY_ROUTE)
+        r = self.GetJSON(buy_test.BuyTest.BUY_ROUTE)
         sell_offers = messages.UnwrapItemListMessage(r.data)
         user_offer_data = next(offer for offer in sell_offers if 
-                                offer["userid"] == userif)
+                                offer["userid"] == userid)
         return extensions.ItemData(**user_offer_data)
 
     def LoginAsUser4(self):
@@ -126,7 +127,6 @@ class SellTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.SUCCESS)
 
     def testSellRouteUpdatesOffers(self):
-        return
         self.LoginAsUser4()
 
         try:
@@ -138,8 +138,9 @@ class SellTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.SUCCESS)
         approx_end_time = calendar.timegm(time.gmtime()) + 10 * 60
 
-        found_item = self.GetOfferForUser("user4")
+        found_item = self.GetSellOfferForUser("user4")
         expected_item = self.GetTestItem(approx_end_time)
+        expected_item.photo = os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")
         self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
 
         # check that the image was saved to the server
