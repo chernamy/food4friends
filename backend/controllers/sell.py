@@ -68,7 +68,6 @@ def PostOffer():
     photo_path = os.path.join(IMAGE_DIR, userid + "." + ext)
     photo.save(photo_path)
 
-    print duration
     end = calendar.timegm(time.gmtime()) + duration * 60
 
     new_item = extensions.ItemData(userid, photo_path, servings, end,
