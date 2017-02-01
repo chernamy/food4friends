@@ -43,8 +43,7 @@ def Purchase():
     if not item_data:
         return messages.NONEXISTENT_SELLER, 400
 
-    offer_start = item_data[0].start
-    offer_end = offer_start + item_data[0].duration * 60
+    offer_end = item_data[0].end
     curr_time = calendar.timegm(time.gmtime())
     if curr_time > offer_end:
         return messages.OFFER_EXPIRED, 400
