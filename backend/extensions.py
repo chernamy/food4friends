@@ -6,12 +6,8 @@ import time
 
 class UserData(object):
     
-    def __init__(self, userid, password, firstname, lastname, role,
-                location):
+    def __init__(self, userid, role, location):
         self.userid = userid
-        self.password = password
-        self.firstname = firstname
-        self.lastname = lastname
         self.role = role
         self.location = location
 
@@ -24,19 +20,18 @@ class UserData(object):
     def ToInsertCommand(self):
         """Creates the command to insert this user into the database.
         """
-        return "INSERT INTO USER VALUES('%s', '%s', '%s', '%s', '%s', '%s')" %(
-                    self.userid, self.password, self.firstname,
-                    self.lastname, self.role, self.location)
+        return "INSERT INTO USER VALUES('%s', '%s', '%s')" %(self.userid,
+            self.role, self.location)
 
     @staticmethod
     def BuildQuery(args):
         return "SELECT * FROM USER" + BuildQueryArgs(args)
 
-TEST_USER1 = UserData("user1", "password1", "First1", "Last1", "seller", "-")
-TEST_USER2 = UserData("user2", "password2", "First2", "Last2", "seller", "-")
-TEST_USER3 = UserData("user3", "password3", "First3", "Last3", "none", "-")
-TEST_USER4 = UserData("user4", "password4", "First4", "Last4", "none", "-")
-TEST_USER5 = UserData("user5", "password5", "First5", "Last5", "buyer", "-")
+TEST_USER1 = UserData("user1", "seller", "-")
+TEST_USER2 = UserData("user2", "seller", "-")
+TEST_USER3 = UserData("user3", "none", "-")
+TEST_USER4 = UserData("user4", "none", "-")
+TEST_USER5 = UserData("user5", "buyer", "-")
 
 class ItemData(object):
 
@@ -107,9 +102,6 @@ def SetUpTestDatabase():
     ExecuteCommand("DROP TABLE IF EXISTS USER;")
     ExecuteCommand("CREATE TABLE USER("\
                 "userid VARCHAR(20) NOT NULL, "\
-                "password VARCHAR(20) NOT NULL, "\
-                "firstname VARCHAR(25) NOT NULL, "\
-                "lastname VARCHAR(25) NOT NULL, "\
                 "role ENUM('none', 'buyer', 'seller') NOT NULL, "\
                 "location VARCHAR(255), "\
                 "PRIMARY KEY(userid));")

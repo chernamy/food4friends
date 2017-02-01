@@ -9,16 +9,13 @@ logout = Blueprint("api/v1/logout/", __name__)
 def Login():
     if "userid" not in request.json:
         return messages.MISSING_USERID, 400
-    if "password" not in request.json:
-        return messages.MISSING_PASSWORD, 400
 
     if "userid" in session:
         return messages.ALREADY_LOGGED_IN, 401
-
+    
     userid = request.json.get("userid")
-    password = request.json.get("password")
-    user_data = extensions.QueryUsers([("userid", userid),
-                                        ("password", password)])
+    user_data = extensions.QueryUsers([("userid", userid)])
+
     if not user_data:
         return messages.INVALID_CREDENTIALS, 422
 

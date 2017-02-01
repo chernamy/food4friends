@@ -9,12 +9,12 @@ class LoginTest(base_test.BaseTestCase):
     LOGOUT_ROUTE = "/api/v1/logout/"
 
     def testLoginRouteExists(self):
-        data = {"userid": "user1", "password": "password1"}
+        data = {"userid": "user1"}
         r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
     def testLogoutRouteExists(self):
-        data = {"userid": "user1", "password": "password1"}
+        data = {"userid": "user1"}
         r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
@@ -22,7 +22,7 @@ class LoginTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.SUCCESS)
 
     def testLoginFailed(self):
-        data = {"userid": "user1", "password": "password2"}
+        data = {"userid": "unknown_user"}
         r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
         self.assertEquals(r.data, messages.INVALID_CREDENTIALS)
 
@@ -30,20 +30,16 @@ class LoginTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
     def testMissingFields(self):
-        data = {"password": "password1"}
+        data = {}
         r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_USERID)
 
-        data = {"userid": "user1"}
-        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
-        self.assertEquals(r.data, messages.MISSING_PASSWORD)
-        
     def testMultipleLogin(self):
-        data = {"userid": "user1", "password": "password1"}
+        data = {"userid": "user1"}
         r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
-        data = {"userid": "user2", "password": "password2"}
+        data = {"userid": "user2"}
         r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
         self.assertEquals(r.data, messages.ALREADY_LOGGED_IN)
 
