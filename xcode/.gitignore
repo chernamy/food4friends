@@ -1,3 +1,4 @@
 *.bundle
 *.framework
 .DS_Store
+/Samples
