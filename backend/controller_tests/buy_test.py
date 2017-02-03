@@ -13,8 +13,7 @@ class BuyTest(base_test.BaseTestCase):
         login_test.LoginTest.LoginAsUser(self, 3)
         r = self.GetJSON(BuyTest.BUY_ROUTE)
         self.assertEquals(r.data,
-                            messages.BuildItemListMessage(
-                            [extensions.TEST_ITEM1, extensions.TEST_ITEM2]))
+            messages.BuildItemListMessage([extensions.TEST_ITEM1]))
 
     def testBuyPostRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 3)

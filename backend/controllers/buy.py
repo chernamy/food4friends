@@ -10,7 +10,17 @@ buy = Blueprint("/api/v1/buy", __name__)
 @buy.route("/api/v1/buy/", methods=["GET"])
 def ViewBuyList():
     item_data = extensions.QueryItems()
-    return messages.BuildItemListMessage(item_data), 200
+    curr_time = calendar.timegm(time.gmtime())
+    unexpired_items = []
+    for item in item_data:
+        if curr_time > item.end:
+            extensions.DeleteItem(item)
+            user = extensions.QueryUsers([("userid", item.userid)])[0]
+            extensions.UpdateUserRole(user, "none")
+        else:
+            unexpired_items.append(item)
+
+    return messages.BuildItemListMessage(unexpired_items), 200
 
 @buy.route("/api/v1/buy", methods=["POST"])
 @buy.route("/api/v1/buy/", methods=["POST"])
