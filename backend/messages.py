@@ -57,3 +57,5 @@ INVALID_DURATION = BuildErrorMessage("Invalid duration field "\
                                         "(must be positive integer)")
 INVALID_PRICE = BuildErrorMessage("Invalid price (must be nonnegative decimal" \
                             " with at most two digits after the decimal place)")
+INVALID_USER_ROLE = BuildErrorMessage("You are already a buyer or seller. " \
+                    "Finish that transaction before making a new sell offer.")

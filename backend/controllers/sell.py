@@ -33,6 +33,13 @@ def PostOffer():
         return messages.MISSING_DESCRIPTION, 400
 
     userid = request.form.get("userid")
+    if userid != session["userid"]:
+        return messages.NOT_LOGGED_IN, 403
+
+    user_data = extensions.QueryUsers([("userid", userid)])
+    if user_data[0].role != "none":
+        return messages.INVALID_USER_ROLE
+
     photo = request.files["photo"]
     ext = photo.filename[(photo.filename.rfind(".")+1):].lower()
     if ext not in ALLOWED_EXT:

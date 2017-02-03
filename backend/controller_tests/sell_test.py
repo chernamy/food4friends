@@ -246,5 +246,22 @@ class SellTest(base_test.BaseTestCase):
         self.assertTrue(filecmp.cmp(SellTest.TEST_IMAGE_PATH,
                         os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")))
 
+    def testCannotSellWhenBuying(self):
+        login_data = {"userid": "user2"}
+        r = self.PostJSON(login_test.LoginTest.LOGIN_ROUTE, login_data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem())
+        data["userid"] = "user2"
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_USER_ROLE)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem())
+        # try making a sell offer on behalf of someone else
+        data["userid"] = "user4"
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
+
 if __name__ == "__main__":
     unittest.main()
