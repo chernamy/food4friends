@@ -146,8 +146,49 @@ class SellTest(base_test.BaseTestCase):
         # check that the image was saved to the server
         self.assertTrue(filecmp.cmp(SellTest.TEST_IMAGE_PATH,
                         os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")))
-        
-    
+
+    def testSellRouteMissingFields(self):
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
+        self.LoginAsUser4()
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        del data["userid"]
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_USERID)
+         
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        del data["photo"]
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_PHOTO)
+ 
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        del data["servings"]
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_SERVINGS)
+ 
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        del data["duration"]
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_DURATION)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        del data["price"]
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_PRICE)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        del data["address"]
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_ADDRESS)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        del data["description"]
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_DESCRIPTION)
+
 
 if __name__ == "__main__":
     unittest.main()

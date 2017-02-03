@@ -31,6 +31,7 @@ ALREADY_LOGGED_IN = BuildErrorMessage("You're already logged in. Logout first.")
 NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")
 
 # ---- Buy Request Error Messages ---- #
+# Repeat: NOT_LOGGED_IN
 MISSING_SELLERID = BuildErrorMessage("Missing sellerid field")
 MISSING_BUYERID = BuildErrorMessage("Missing buyerid field")
 MISSING_SERVINGS = BuildErrorMessage("Missing servings field")
@@ -41,6 +42,7 @@ TOO_MANY_SERVINGS = BuildErrorMessage("Servings field too large for sell offer")
 OFFER_EXPIRED = BuildErrorMessage("Offer has already expired")
 
 # ---- Sell Request Error Messages ---- #
+# Repeat: NOT_LOGGED_IN
 # Repeat: MISSING_USERID
 MISSING_PHOTO = BuildErrorMessage("Missing photo")
 # Repeat: MISSING_SERVINGS
