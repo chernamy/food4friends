@@ -16,6 +16,7 @@ class SellTest(base_test.BaseTestCase):
     
     SELL_ROUTE = "/api/v1/sell/"
     TEST_IMAGE_PATH = "testdata/user4.jpeg"
+    TEST_INVALID_IMAGE_EXT_PATH = "testdata/user4.blah"
     IMAGE_DIR = config.env["image_dir"]
 
     @staticmethod
@@ -163,21 +164,57 @@ class SellTest(base_test.BaseTestCase):
         del data["photo"]
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_PHOTO)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        data["photo"] = self.GetImageFile(SellTest.TEST_INVALID_IMAGE_EXT_PATH)
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_PHOTO_EXT)
  
         data = self.ConvertItemToPostDict(self.GetTestItem()) 
         del data["servings"]
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_SERVINGS)
- 
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        data["servings"] = 10.5
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_SERVINGS)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        data["servings"] = -100
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_SERVINGS)
+
         data = self.ConvertItemToPostDict(self.GetTestItem()) 
         del data["duration"]
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_DURATION)
 
         data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        data["duration"] = -100
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_DURATION)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        data["duration"] = 10.23
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_DURATION)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
         del data["price"]
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_PRICE)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        data["price"] = -10.23
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_PRICE)
+
+        data = self.ConvertItemToPostDict(self.GetTestItem()) 
+        # too many decimals - only two decimal points allowed for prices.
+        data["price"] = 10.23456789
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_PRICE)
 
         data = self.ConvertItemToPostDict(self.GetTestItem()) 
         del data["address"]
@@ -189,6 +226,25 @@ class SellTest(base_test.BaseTestCase):
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_DESCRIPTION)
 
+        # check that invalid fields didn't affect server's ability to
+        # process valid sell offers.
+        try:
+            os.remove(os.path.join(SellTest.IMAGE_DIR, "user4.jpeg"))
+        except:
+            pass
+
+        r = self.MakeSellOffer(SellTest.GetTestItem())
+        self.assertEquals(r.data, messages.SUCCESS)
+        approx_end_time = calendar.timegm(time.gmtime()) + 10 * 60
+
+        found_item = self.GetSellOfferForUser("user4")
+        expected_item = self.GetTestItem(approx_end_time)
+        expected_item.photo = os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")
+        self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
+
+        # check that the image was saved to the server
+        self.assertTrue(filecmp.cmp(SellTest.TEST_IMAGE_PATH,
+                        os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")))
 
 if __name__ == "__main__":
     unittest.main()

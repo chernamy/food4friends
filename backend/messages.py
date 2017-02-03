@@ -55,4 +55,5 @@ INVALID_PHOTO_EXT = BuildErrorMessage("Invalid photo extension. Must be "\
                                         "png, jpg, jpeg, or gif.")
 INVALID_DURATION = BuildErrorMessage("Invalid duration field "\
                                         "(must be positive integer)")
-INVALID_PRICE = BuildErrorMessage("Invalid price (must be nonnegative decimal)")
+INVALID_PRICE = BuildErrorMessage("Invalid price (must be nonnegative decimal" \
+                            " with at most two digits after the decimal place)")

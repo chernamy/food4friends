@@ -39,7 +39,7 @@ def PostOffer():
         return messages.INVALID_PHOTO_EXT, 400
 
     try:
-        servings = request.form.get("servings")
+        servings = int(request.form.get("servings"))
     except:
         return messages.INVALID_SERVINGS, 400
 
@@ -55,11 +55,15 @@ def PostOffer():
         return messages.INVALID_DURATION, 400
 
     try:
-        price = request.form.get("price")
+        price = float(request.form.get("price"))
     except:
         return messages.INVALID_PRICE, 400
 
     if price < 0.0:
+        return messages.INVALID_PRICE, 400
+
+    # check if there are more than 2 digits after the decimal place
+    if round(price, 2) != price:
         return messages.INVALID_PRICE, 400
 
     address = request.form.get("address")
