@@ -247,17 +247,17 @@ class SellTest(base_test.BaseTestCase):
                         os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")))
 
     def testCannotSellBadUser(self):
-        login_data = {"userid": "user2"}
+        login_data = {"userid": "user1"}
         r = self.PostJSON(login_test.LoginTest.LOGIN_ROUTE, login_data)
         self.assertEquals(r.data, messages.SUCCESS)
 
-        # cannot sell as user 2 because user 2 is already selling
+        # cannot sell as user 1 because user 1 is already selling
         data = self.ConvertItemToPostDict(self.GetTestItem())
-        data["userid"] = "user2"
+        data["userid"] = "user1"
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.INVALID_USER_ROLE)
 
-        # logout from user 2
+        # logout from user 1
         r = self.PostJSON(login_test.LoginTest.LOGOUT_ROUTE)
         self.assertEquals(r.data, messages.SUCCESS)
 
