@@ -99,6 +99,41 @@ TEST_ITEM1 = ItemData("user1", "1.png", 10, CURR_TIME_SECS + 600, 12.25,
 TEST_ITEM2 = ItemData("user2", "2.png", 20, CURR_TIME_SECS - 600, 25.00,
                         "42.30, -83.73", "yummy")
 
+class BuyingData(object):
+    
+    def __init__(self, sellerid, buyerid, servings):
+        self.sellerid = sellerid
+        self.buyerid = buyerid
+        self.servings = servings
+
+    @staticmethod
+    def FromDbData(data):
+        return BuyingData(*data)
+
+    def ToInsertCommand(self):
+        """Creates the command to insert this item into the database.
+
+        Returns:
+            (string) The MySQL command to insert this item in the database.
+        """
+        return "INSERT INTO BUYING VALUES('%s', '%s', '%s')" %(self.sellerid,
+            self.buyerid, self.servings)
+    
+    def ToDeleteCommand(self):
+        """Creates the command to delete this item from the database.
+
+        Returns:
+            (string) The MySQL command to delete this item from the database.
+        """
+        return "DELETE FROM BUYING WHERE buyerid='%s' and sellerid='%s'" %(
+            self.buyerid, self.sellerid)
+    
+    @staticmethod
+    def BuildQuery(args):
+        return "SELECT * FROM BUYING" + BuildQueryArgs(args)
+
+TEST_BUYING1 = BuyingData("user5", "user1", 10)
+
 conn = None
 
 def ExecuteCommand(command):
@@ -116,6 +151,9 @@ def SetUpTestUserData():
 def SetUpTestItemData():
     ExecuteCommand(TEST_ITEM1.ToInsertCommand())
     ExecuteCommand(TEST_ITEM2.ToInsertCommand())
+
+def SetUpTestBuyingData():
+    ExecuteCommand(TEST_BUYING1.ToInsertCommand())
 
 def SetUpTestDatabase():
     global conn
@@ -141,6 +179,13 @@ def SetUpTestDatabase():
                 "description TEXT, "\
                 "PRIMARY KEY(userid));")
     SetUpTestItemData()
+
+    ExecuteCommand("DROP TABLE IF EXISTS BUYING;")
+    ExecuteCommand("CREATE TABLE BUYING("\
+                    "sellerid VARCHAR(40) NOT NULL, "\
+                    "buyerid VARCHAR(40) NOT NULL, "\
+                    "servings INT NOT NULL);")
+    SetUpTestBuyingData()
 
 def SetUpProdDatabase():
     global conn
