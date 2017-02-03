@@ -19,9 +19,27 @@ class UserData(object):
 
     def ToInsertCommand(self):
         """Creates the command to insert this user into the database.
+
+        Returns:
+            (string) The MySQL command to insert this user into the database.
         """
         return "INSERT INTO USER VALUES('%s', '%s', '%s')" %(self.userid,
             self.role, self.location)
+
+    def GetUpdateRoleCommand(self, new_role):
+        """Creates the command to update this user's role.
+
+        Args:
+            new_role: (string) "buyer", "seller", or "none" - the new role
+                for this user.
+
+        Returns:
+            (string) The MySQL command to update the user's role.
+        """
+        if new_role != "buyer" and new_role != "seller" and new_role != "none":
+            raise ValueError("Invalid new role")
+        return "UPDATE USER SET role='%s' where userid='%s'" %(new_role,
+                                                                self.userid)
 
     @staticmethod
     def BuildQuery(args):
@@ -57,6 +75,11 @@ class ItemData(object):
                                         self.servings, self.end,
                                         self.price, self.address,
                                         self.description)
+
+    def ToDeleteCommand(self):
+        """Creates the command to delete this item from the database.
+        """
+        return "DELETE FROM ITEM WHERE userid='%s'" %(self.userid) 
 
     @staticmethod
     def BuildQuery(args):
@@ -211,3 +234,22 @@ def AddItem(item):
         item: (ItemData) The item to insert.
     """
     ExecuteCommand(item.ToInsertCommand())
+
+def DeleteItem(item):
+    """Deletes the given item from the database.
+
+    Args:
+        item: (ItemData) The item to delete.
+    """
+    ExecuteCommand(item.ToDeleteCommand())
+
+def UpdateUserRole(user_data, new_role):
+    """Updates the given user's role in the database.
+
+    Args:
+        user_data: (UserData) The user to update.
+        new_role: (string) "buyer", "seller" or "none" - the new role of the
+            user
+    """
+    user_data.role = new_role
+    ExecuteCommand(user_data.GetUpdateRoleCommand(new_role))

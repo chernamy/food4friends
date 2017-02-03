@@ -266,11 +266,21 @@ class SellTest(base_test.BaseTestCase):
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
-
     def testAcknowledgesExpiredSellOffers(self):
         # you should be allowed to create a sell offer as user 2 because
         # the last sell offer already expired.
-        login_test.LoginTest.LoginAsUser(self, 1)
+        login_test.LoginTest.LoginAsUser(self, 2)
+        data = self.ConvertItemToPostDict(self.GetTestItem())
+        data["userid"] = "user2"
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        approx_end_time = calendar.timegm(time.gmtime()) + 10 * 60
+
+        found_item = self.GetSellOfferForUser("user2")
+        expected_item = self.GetTestItem(approx_end_time)
+        expected_item.userid = "user2"
+        expected_item.photo = os.path.join(SellTest.IMAGE_DIR, "user2.jpeg")
+        self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
 
 if __name__ == "__main__":
     unittest.main()

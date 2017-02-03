@@ -37,8 +37,17 @@ def PostOffer():
         return messages.NOT_LOGGED_IN, 403
 
     user_data = extensions.QueryUsers([("userid", userid)])
-    if user_data[0].role != "none":
-        return messages.INVALID_USER_ROLE
+    if user_data[0].role == "buyer":
+        return messages.INVALID_USER_ROLE, 400
+    elif user_data[0].role == "seller":
+        user_item_data = extensions.QueryItems([("userid", userid)])
+        curr_time = calendar.timegm(time.gmtime())
+        if curr_time >= user_item_data[0].end:
+            # user is no longer a seller because the item expired.
+            extensions.DeleteItem(user_item_data[0])
+            extensions.UpdateUserRole(user_data[0], "none")
+        else:
+            return messages.INVALID_USER_ROLE, 400
 
     photo = request.files["photo"]
     ext = photo.filename[(photo.filename.rfind(".")+1):].lower()
