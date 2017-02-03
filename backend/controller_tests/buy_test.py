@@ -9,20 +9,15 @@ class BuyTest(base_test.BaseTestCase):
 
     BUY_ROUTE = "/api/v1/buy/"
 
-    def LoginAsUser3(self):
-        login_data = {"userid": "user3", "password": "password3"}
-        r = self.PostJSON(login_test.LoginTest.LOGIN_ROUTE, login_data)
-        self.assertEquals(r.data, messages.SUCCESS)
-
     def testBuyViewRouteExists(self):
-        self.LoginAsUser3()
+        login_test.LoginTest.LoginAsUser(self, 3)
         r = self.GetJSON(BuyTest.BUY_ROUTE)
         self.assertEquals(r.data,
                             messages.BuildItemListMessage(
                             [extensions.TEST_ITEM1, extensions.TEST_ITEM2]))
 
     def testBuyPostRouteExists(self):
-        self.LoginAsUser3()
+        login_test.LoginTest.LoginAsUser(self, 3)
 
         # User 2 buys from user 1.
         data = {"sellerid": extensions.TEST_ITEM1.userid,
@@ -47,7 +42,7 @@ class BuyTest(base_test.BaseTestCase):
         return extensions.ItemData(**user_offer_data)
 
     def testBuyServings(self):
-        self.LoginAsUser3()
+        login_test.LoginTest.LoginAsUser(self, 3)
 
         # find how many servings are in the initial sell offer for user 1
         initial_item = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
@@ -65,7 +60,7 @@ class BuyTest(base_test.BaseTestCase):
         self.assertEqual(initial_servings - 2, after_buy_servings)
 
     def testBuyBadServings(self):
-        self.LoginAsUser3()
+        login_test.LoginTest.LoginAsUser(self, 3)
 
         initial_item = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
         initial_servings = initial_item.servings
@@ -89,15 +84,15 @@ class BuyTest(base_test.BaseTestCase):
         # make sure that # of servings did not change
         self.assertEqual(initial_servings, after_buy_servings)
 
-    def testBadSellerId(self):
-        self.LoginAsUser3()
+    def testBadSellerId(self): 
+        login_test.LoginTest.LoginAsUser(self, 3)
 
         data = {"sellerid": "whoami?", "buyerid": "user3", "servings": 5}
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
         self.assertEqual(r.data, messages.NONEXISTENT_SELLER)
 
     def testMissingFields(self):
-        self.LoginAsUser3()
+        login_test.LoginTest.LoginAsUser(self, 3)
 
         data = {"buyerid": "user3", "servings": 3}
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
@@ -112,7 +107,7 @@ class BuyTest(base_test.BaseTestCase):
         self.assertEqual(r.data, messages.MISSING_SERVINGS)
 
     def testOfferExpired(self):
-        self.LoginAsUser3()
+        login_test.LoginTest.LoginAsUser(self, 3)
 
         data = {"sellerid": "user2", "buyerid": "user3", "servings": 4}
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
@@ -124,7 +119,7 @@ class BuyTest(base_test.BaseTestCase):
         self.assertEqual(r.data, messages.NOT_LOGGED_IN)
 
         # Try submitting buy request on behalf of someone else
-        self.LoginAsUser3()
+        login_test.LoginTest.LoginAsUser(self, 3)
         data["buyerid"] = "user4"
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
         self.assertEqual(r.data, messages.NOT_LOGGED_IN)

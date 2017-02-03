@@ -104,13 +104,6 @@ class SellTest(base_test.BaseTestCase):
                                 offer["userid"] == userid)
         return extensions.ItemData(**user_offer_data)
 
-    def LoginAsUser4(self):
-        """Logs in as user4.
-        """
-        login_data = {"userid": "user4", "password": "password4"}
-        r = self.PostJSON(login_test.LoginTest.LOGIN_ROUTE, login_data)
-        self.assertEquals(r.data, messages.SUCCESS)
-
     def MakeSellOffer(self, item):
         """Posts a sell offer to the server for the given item.
 
@@ -122,13 +115,13 @@ class SellTest(base_test.BaseTestCase):
         return self.PostFile(SellTest.SELL_ROUTE, data)
 
     def testSellRouteExists(self):
-        self.LoginAsUser4()
+        login_test.LoginTest.LoginAsUser(self, 4)
 
         r = self.MakeSellOffer(SellTest.GetTestItem())
         self.assertEquals(r.data, messages.SUCCESS)
 
     def testSellRouteUpdatesOffers(self):
-        self.LoginAsUser4()
+        login_test.LoginTest.LoginAsUser(self, 4)
 
         try:
             os.remove(os.path.join(SellTest.IMAGE_DIR, "user4.jpeg"))
@@ -153,7 +146,7 @@ class SellTest(base_test.BaseTestCase):
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
-        self.LoginAsUser4()
+        login_test.LoginTest.LoginAsUser(self, 4)
 
         data = self.ConvertItemToPostDict(self.GetTestItem()) 
         del data["userid"]
@@ -247,9 +240,7 @@ class SellTest(base_test.BaseTestCase):
                         os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")))
 
     def testCannotSellBadUser(self):
-        login_data = {"userid": "user1"}
-        r = self.PostJSON(login_test.LoginTest.LOGIN_ROUTE, login_data)
-        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.LoginAsUser(self, 1)
 
         # cannot sell as user 1 because user 1 is already selling
         data = self.ConvertItemToPostDict(self.GetTestItem())
@@ -258,13 +249,10 @@ class SellTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.INVALID_USER_ROLE)
 
         # logout from user 1
-        r = self.PostJSON(login_test.LoginTest.LOGOUT_ROUTE)
-        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
 
         # login as user 5
-        login_data = {"userid": "user5"}
-        r = self.PostJSON(login_test.LoginTest.LOGIN_ROUTE, login_data)
-        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.LoginAsUser(self, 5)
 
         # canot sell as user 5 because user 5 is already buying
         data = self.ConvertItemToPostDict(self.GetTestItem())
@@ -278,6 +266,11 @@ class SellTest(base_test.BaseTestCase):
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
+
+    def testAcknowledgesExpiredSellOffers(self):
+        # you should be allowed to create a sell offer as user 2 because
+        # the last sell offer already expired.
+        login_test.LoginTest.LoginAsUser(self, 1)
 
 if __name__ == "__main__":
     unittest.main()
