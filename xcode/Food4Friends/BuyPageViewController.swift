@@ -16,9 +16,11 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var numServings = 2
     
+    // Things you should query for
     var names = ["Enchilada", "Cheesecake", "Wings"]
     var images = [UIImage(named: "enchilada"), UIImage(named: "cheesecake"), UIImage(named: "wings")]
     
+    // default view controller stuff
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -29,23 +31,32 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    // Popup functions
     @IBAction func buyItem(_ sender: UIButton) {
         
         popupView.isHidden = false
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
-    }
     
     @IBAction func cancelPopup(_ sender: Any) {
         popupView.isHidden = true
     }
     
+    // For creating the table view
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // return how many rows in the table
+        return 3
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BuyPageCell
+        
         cell.photo.image = images[indexPath.row]
         cell.name.text = names[indexPath.row]
+        
         return cell
     }
 }
