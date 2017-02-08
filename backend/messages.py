@@ -18,6 +18,9 @@ def BuildUserInfoMessage(user):
     }
     return json.dumps(msg)
 
+def UnwrapUserInfoMessage(msg):
+    return json.loads(msg)["user"]
+
 def BuildItemListMessage(items):
     msg = {
         "items": [item.__dict__ for item in items]

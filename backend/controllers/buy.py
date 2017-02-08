@@ -68,5 +68,8 @@ def Purchase():
         extensions.UpdateItems("servings = servings - %d" %(servings),
                                 [("userid", sellerid)])
 
+    # guaranteed to exist because logged in with buyerid
+    user_data = extensions.QueryUsers([("userid", buyerid)])[0]
+    extensions.UpdateUserRole(user_data, "buyer")
     return messages.SUCCESS, 200
     

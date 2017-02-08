@@ -4,6 +4,7 @@ import extensions
 import json
 import login_test
 import messages
+import user_test
 
 class BuyTest(base_test.BaseTestCase):
 
@@ -71,6 +72,19 @@ class BuyTest(base_test.BaseTestCase):
         # for sale.
         r = self.GetJSON(BuyTest.BUY_ROUTE)
         self.assertEquals(r.data, messages.BuildItemListMessage([]))
+
+    def testBuyRoleChanged(self):
+        login_test.LoginTest.LoginAsUser(self, 3)
+        item_to_buy = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": "user3", "servings": 2}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        # check that the role of user3 has changed
+        r = user_test.UserTest.GetUserData(self, "user3")
+        user = extensions.UserData(**messages.UnwrapUserInfoMessage(r.data))
+        self.assertEquals(user.role, "buyer")
 
     def testBuyBadServings(self):
         login_test.LoginTest.LoginAsUser(self, 3)
