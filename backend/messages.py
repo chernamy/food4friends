@@ -1,3 +1,4 @@
+import extensions
 import json
 
 def BuildErrorMessage(error):
@@ -19,7 +20,8 @@ def BuildUserInfoMessage(user):
     return json.dumps(msg)
 
 def UnwrapUserInfoMessage(msg):
-    return json.loads(msg)["user"]
+    user_data = json.loads(msg)["user"]
+    return extensions.UserData(**user_data)
 
 def BuildItemListMessage(items):
     msg = {
@@ -28,8 +30,8 @@ def BuildItemListMessage(items):
     return json.dumps(msg)
 
 def UnwrapItemListMessage(msg):
-    items = json.loads(msg)
-    return items["items"]
+    items = json.loads(msg)["items"]
+    return [extensions.ItemData(**item_dict) for item_dict in items]
 
 SUCCESS = BuildInfoMessage("Success")
 

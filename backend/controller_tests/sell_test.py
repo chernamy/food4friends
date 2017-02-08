@@ -101,8 +101,8 @@ class SellTest(base_test.BaseTestCase):
         r = self.GetJSON(buy_test.BuyTest.BUY_ROUTE)
         sell_offers = messages.UnwrapItemListMessage(r.data)
         user_offer_data = next(offer for offer in sell_offers if 
-                                offer["userid"] == userid)
-        return extensions.ItemData(**user_offer_data)
+                                offer.userid == userid)
+        return user_offer_data
 
     def MakeSellOffer(self, item):
         """Posts a sell offer to the server for the given item.

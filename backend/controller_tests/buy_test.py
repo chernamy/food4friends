@@ -38,8 +38,8 @@ class BuyTest(base_test.BaseTestCase):
         r = self.GetJSON(BuyTest.BUY_ROUTE)
         sell_offers = messages.UnwrapItemListMessage(r.data)
         user_offer_data = next(offer for offer in sell_offers if
-                                offer["userid"] == userid)
-        return extensions.ItemData(**user_offer_data)
+                                offer.userid == userid)
+        return user_offer_data
 
     def testBuyServings(self):
         login_test.LoginTest.LoginAsUser(self, 3)
@@ -83,7 +83,7 @@ class BuyTest(base_test.BaseTestCase):
 
         # check that the role of user3 has changed
         r = user_test.UserTest.GetUserData(self, "user3")
-        user = extensions.UserData(**messages.UnwrapUserInfoMessage(r.data))
+        user = messages.UnwrapUserInfoMessage(r.data)
         self.assertEquals(user.role, "buyer")
 
     def testBuyBadServings(self):
