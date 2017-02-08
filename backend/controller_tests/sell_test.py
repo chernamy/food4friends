@@ -108,7 +108,9 @@ class SellTest(base_test.BaseTestCase):
         return user_offer_data
 
     def MakeSellOffer(self, item):
-        """Posts a sell offer to the server for the given item.
+        """Posts a sell offer to the server for the given item. The "end"
+        field of the ItemData will be converted to the duration. E.g. if you
+        want a duration of 5 minutes, set the "end" field to 5.
 
         Args:
             item: (ItemData) The item to be posted as a sell offer to the
@@ -371,8 +373,15 @@ class SellTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.NOT_BUYER)
 
     def testCompleteRouteNonexistentTransaction(self):
-        # TODO (mjchao): Implement this test
-        pass
+        # Try hitting an invalid transaction between user2 and user5
+        # Note this might become invalidated if we change the DB to remove
+        # expired sell offers on a non-lazy policy. user2's offer is expired,
+        # but because we haven't made a GET for the buyer offers, user2
+        # stays as a seller.
+        login_test.LoginTest.LoginAsUser(self, 2)
+        data = {"userid": "user2", "buyerid": "user5"}
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.NONEXISTENT_TRANSACTION)
 
 if __name__ == "__main__":
     unittest.main()
