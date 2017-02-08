@@ -58,6 +58,20 @@ class BuyTest(base_test.BaseTestCase):
         # check that 2 servings were deducted
         self.assertEqual(initial_servings - 2, after_buy_servings)
 
+    def testBuyAllServings(self):
+        login_test.LoginTest.LoginAsUser(self, 3)
+
+        # buy all servings of the item
+        item_to_buy = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": "user3", "servings": item_to_buy.servings}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+
+        # check that the seller no longer has any of that item we just bought
+        # for sale.
+        r = self.GetJSON(BuyTest.BUY_ROUTE)
+        self.assertEquals(r.data, messages.BuildItemListMessage([]))
+
     def testBuyBadServings(self):
         login_test.LoginTest.LoginAsUser(self, 3)
 

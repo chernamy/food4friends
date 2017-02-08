@@ -9,6 +9,20 @@ class UserTest(base_test.BaseTestCase):
     
     USER_ROUTE = "/api/v1/user/"
 
+    def GetUserData(test_driver, userid):
+        """Gets the user data for the given user.
+
+        Args:
+            test_driver: (BaseTest) An instance of a test driver.
+            userid: (string) The user id of the user for which information is
+                requested.
+
+        Returns:
+            (string) The JSON returned by the server.
+        """
+        data = {"userid": userid}
+        return self.GetJSON(UserTest.USER_ROUTE, data)
+
     def testUserRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
         data = {"userid": "user1"}

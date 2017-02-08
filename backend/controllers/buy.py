@@ -61,9 +61,12 @@ def Purchase():
     seller_servings = item_data[0].servings
     if servings > seller_servings:
         return messages.TOO_MANY_SERVINGS, 400
-
-    extensions.UpdateItems("servings = servings - %d" %(servings),
-                            [("userid", sellerid)])
+    
+    if servings == seller_servings:
+        extensions.DeleteItem(item_data[0])
+    else:
+        extensions.UpdateItems("servings = servings - %d" %(servings),
+                                [("userid", sellerid)])
 
     return messages.SUCCESS, 200
     
