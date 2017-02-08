@@ -99,7 +99,7 @@ TEST_ITEM1 = ItemData("user1", "1.png", 10, CURR_TIME_SECS + 600, 12.25,
 TEST_ITEM2 = ItemData("user2", "2.png", 20, CURR_TIME_SECS - 600, 25.00,
                         "42.30, -83.73", "yummy")
 
-class BuyingData(object):
+class TransactionData(object):
     
     def __init__(self, sellerid, buyerid, servings):
         self.sellerid = sellerid
@@ -108,7 +108,7 @@ class BuyingData(object):
 
     @staticmethod
     def FromDbData(data):
-        return BuyingData(*data)
+        return TransactionData(*data)
 
     def ToInsertCommand(self):
         """Creates the command to insert this item into the database.
@@ -116,8 +116,8 @@ class BuyingData(object):
         Returns:
             (string) The MySQL command to insert this item in the database.
         """
-        return "INSERT INTO BUYING VALUES('%s', '%s', '%s')" %(self.sellerid,
-            self.buyerid, self.servings)
+        return "INSERT INTO TRANSACTION VALUES('%s', '%s', '%s')" %(
+                                    self.sellerid, self.buyerid, self.servings)
     
     def ToDeleteCommand(self):
         """Creates the command to delete this item from the database.
@@ -125,14 +125,14 @@ class BuyingData(object):
         Returns:
             (string) The MySQL command to delete this item from the database.
         """
-        return "DELETE FROM BUYING WHERE buyerid='%s' and sellerid='%s'" %(
+        return "DELETE FROM TRANSACTION WHERE buyerid='%s' and sellerid='%s'" %(
             self.buyerid, self.sellerid)
     
     @staticmethod
     def BuildQuery(args):
-        return "SELECT * FROM BUYING" + BuildQueryArgs(args)
+        return "SELECT * FROM TRANSACTION" + BuildQueryArgs(args)
 
-TEST_BUYING1 = BuyingData("user5", "user1", 10)
+TEST_TRANSACTION1 = TransactionData("user1", "user5", 10)
 
 conn = None
 
@@ -152,8 +152,8 @@ def SetUpTestItemData():
     ExecuteCommand(TEST_ITEM1.ToInsertCommand())
     ExecuteCommand(TEST_ITEM2.ToInsertCommand())
 
-def SetUpTestBuyingData():
-    ExecuteCommand(TEST_BUYING1.ToInsertCommand())
+def SetUpTestTransactionData():
+    ExecuteCommand(TEST_TRANSACTION1.ToInsertCommand())
 
 def SetUpTestDatabase():
     global conn
@@ -180,12 +180,12 @@ def SetUpTestDatabase():
                 "PRIMARY KEY(userid));")
     SetUpTestItemData()
 
-    ExecuteCommand("DROP TABLE IF EXISTS BUYING;")
-    ExecuteCommand("CREATE TABLE BUYING("\
+    ExecuteCommand("DROP TABLE IF EXISTS TRANSACTION;")
+    ExecuteCommand("CREATE TABLE TRANSACTION("\
                     "sellerid VARCHAR(40) NOT NULL, "\
                     "buyerid VARCHAR(40) NOT NULL, "\
                     "servings INT NOT NULL);")
-    SetUpTestBuyingData()
+    SetUpTestTransactionData()
 
 def SetUpProdDatabase():
     global conn
@@ -247,6 +247,17 @@ def QueryUsers(args=[]):
     x.execute(query)
     return [UserData.FromDbData(result) for result in x.fetchall()]
 
+def UpdateUserRole(user_data, new_role):
+    """Updates the given user's role in the database.
+
+    Args:
+        user_data: (UserData) The user to update.
+        new_role: (string) "buyer", "seller" or "none" - the new role of the
+            user
+    """
+    user_data.role = new_role
+    ExecuteCommand(user_data.GetUpdateRoleCommand(new_role))
+
 def QueryItems(args=[]):
     """Returns item data in the database with the specified properties.
 
@@ -288,13 +299,27 @@ def DeleteItem(item):
     """
     ExecuteCommand(item.ToDeleteCommand())
 
-def UpdateUserRole(user_data, new_role):
-    """Updates the given user's role in the database.
+def QueryTransactions(args=[]):
+    """Returns transaction data in the database with the specified properties.
+    """
+    query = TransactionData.BuildQuery(args)
+    x = conn.cursor()
+    x.execute(query)
+    return [TransactionData.FromDbData(result) for result in x.fetchall()]
+
+def AddTransaction(transaction_data):
+    """Adds the given transaction to the database.
 
     Args:
-        user_data: (UserData) The user to update.
-        new_role: (string) "buyer", "seller" or "none" - the new role of the
-            user
+        transaction_data: (TransactionData) A transaction that needs to be
+            completed.
     """
-    user_data.role = new_role
-    ExecuteCommand(user_data.GetUpdateRoleCommand(new_role))
+    ExecuteCommand(transaction_data.ToInsertCommand())
+
+def CompleteTransaction(transaction_data):
+    """Deletes the given buying record from the database.
+
+    Args:
+        transaction_data: (TransactionData) The buying data to delete.
+    """
+    ExecuteCommand(transaction_data.ToDeleteCommand())

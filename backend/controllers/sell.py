@@ -94,3 +94,58 @@ def PostOffer():
                                     price, address, description)
     extensions.AddItem(new_item)
     return messages.SUCCESS, 200
+
+@sell.route("/api/v1/sell/complete", methods=["POST"])
+@sell.route("/api/v1/sell/complete/", methods=["POST"])
+def CompleteTransaction():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    if "userid" not in request.json:
+        return messages.MISSING_USERID
+    if "buyerid" not in request.json:
+        return messages.MISSING_BUYERID
+
+    userid = request.json.get("userid")
+
+    if userid != session["userid"]:
+        return messages.NOT_LOGGED_IN, 403
+
+    # confirm actually a seller
+    seller_data = extensions.QueryUsers([("userid", userid)])[0]
+    if seller_data.role != "seller":
+        return messages.NOT_SELLER, 403
+
+    buyerid = request.json.get("buyerid")
+
+    # confirm buyer exists
+    buyer_data = extensions.QueryUsers([("userid", buyerid)])
+    if not buyer_data:
+        return messages.NONEXISTENT_BUYER, 400
+    buyer_data = buyer_data[0]
+
+    # confirm actually a buyer
+    if buyer_data.role != "buyer":
+        return messages.NOT_BUYER, 400
+
+    transaction_data = extensions.QueryTransactions([("sellerid", userid),
+                                                        ("buyerid", buyerid)])
+    if not transaction_data:
+        return messages.NONEXISTENT_TRANSACTION
+
+    transaction_data = transaction_data[0]
+    extensions.CompleteTransaction(transaction_data)
+
+    # the buyer goes back to having no role
+    extensions.UpdateUserRole(buyer_data, "none")
+
+    # if the seller has completed all transactions and has no sell offer
+    # remaining, then the seller also goes back to having no role
+    if (not extensions.QueryItems([("userid", userid)]) and
+        not extensions.QueryTransactions([("sellerid", userid)])):
+        extensions.UpdateUserRole(seller_data, "none")
+    
+    return messages.SUCCESS, 200
+    
+    
+

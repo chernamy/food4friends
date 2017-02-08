@@ -11,6 +11,7 @@ import login_test
 import messages
 import os
 import time
+import user_test
 
 class SellTest(base_test.BaseTestCase):
     
@@ -18,6 +19,8 @@ class SellTest(base_test.BaseTestCase):
     TEST_IMAGE_PATH = "testdata/user4.jpeg"
     TEST_INVALID_IMAGE_EXT_PATH = "testdata/user4.blah"
     IMAGE_DIR = config.env["image_dir"]
+
+    COMPLETE_ROUTE = "/api/v1/sell/complete/"
 
     @staticmethod
     def GetTestItem(end=10):
@@ -281,6 +284,60 @@ class SellTest(base_test.BaseTestCase):
         expected_item.userid = "user2"
         expected_item.photo = os.path.join(SellTest.IMAGE_DIR, "user2.jpeg")
         self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
+
+    def testCompleteRouteExists(self):
+        login_test.LoginTest.LoginAsUser(self, 1)
+
+        # Try completing the transaction where user1 sells to user5
+        data = {"userid": "user1", "buyerid": "user5"}
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+    def testCompleteUpdatesBuyerRole(self):
+        login_test.LoginTest.LoginAsUser(self, 1)
+
+        # Try completing the transaction where user1 sells to user5
+        data = {"userid": "user1", "buyerid": "user5"}
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        r = user_test.UserTest.GetUserData(self, "user5")
+        user = messages.UnwrapUserInfoMessage(r.data)
+        self.assertEquals(user.role, "none")
+
+    def testCompleteUpdatesSellerRole(self):
+        # finish buying all servings for user1's sell offer
+        login_test.LoginTest.LoginAsUser(self, 4)
+        data = {"sellerid": "user1", "buyerid": "user4", "servings": 10}
+        r = self.PostJSON(buy_test.BuyTest.BUY_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
+
+        # complete all transactions for user1's sell offer
+        login_test.LoginTest.LoginAsUser(self, 1)
+        data = {"userid": "user1", "buyerid": "user4"}
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        data["buyerid"] = "user5"
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        # check that roles have been updated
+        r = user_test.UserTest.GetUserData(self, "user5")
+        user = messages.UnwrapUserInfoMessage(r.data)
+        self.assertEquals(user.role, "none")
+
+        r = user_test.UserTest.GetUserData(self, "user4")
+        user = messages.UnwrapUserInfoMessage(r.data)
+        self.assertEquals(user.role, "none")
+
+        r = user_test.UserTest.GetUserData(self, "user1")
+        user = messages.UnwrapUserInfoMessage(r.data)
+        self.assertEquals(user.role, "none")
+
+    # TODO (mjchao): Check for invalid complete requests.
+        
 
 if __name__ == "__main__":
     unittest.main()

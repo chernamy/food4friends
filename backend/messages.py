@@ -69,9 +69,19 @@ MISSING_DESCRIPTION = BuildErrorMessage("Missing description")
 # Repeat: INVALID_SERVINGS
 INVALID_PHOTO_EXT = BuildErrorMessage("Invalid photo extension. Must be "\
                                         "png, jpg, jpeg, or gif.")
-INVALID_DURATION = BuildErrorMessage("Invalid duration field "\
+INVALID_DURATION = BuildErrorMessage("Invalid duration field " \
                                         "(must be positive integer)")
 INVALID_PRICE = BuildErrorMessage("Invalid price (must be nonnegative decimal" \
                             " with at most two digits after the decimal place)")
 INVALID_USER_ROLE = BuildErrorMessage("You are already a buyer or seller. " \
                     "Finish that transaction before making a new sell offer.")
+
+# ---- Complete Transaction Error Messages ---- #
+# Repeat: NOT_LOGGED_IN
+# Repeat: MISSING_USERID
+# Repeat: MISSING_BUYERID
+NOT_SELLER = BuildErrorMessage("You must be a seller to perform this action.")
+NONEXISTENT_BUYER = BuildErrorMessage("buyerid does not exist")
+NOT_BUYER = BuildErrorMessage("The user with the given buyerid is not a buyer.")
+NONEXISTENT_TRANSACTION = BuildErrorMessage("The specified transaction does " \
+                                            "not exist.")

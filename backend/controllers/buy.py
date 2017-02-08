@@ -71,5 +71,9 @@ def Purchase():
     # guaranteed to exist because logged in with buyerid
     user_data = extensions.QueryUsers([("userid", buyerid)])[0]
     extensions.UpdateUserRole(user_data, "buyer")
+
+    # add in the transaction data
+    transaction = extensions.TransactionData(sellerid, buyerid, servings)
+    extensions.AddTransaction(transaction)
     return messages.SUCCESS, 200
     
