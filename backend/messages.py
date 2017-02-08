@@ -12,6 +12,12 @@ def BuildInfoMessage(info):
     }
     return json.dumps(msg)
 
+def BuildUserInfoMessage(user):
+    msg = {
+        "user": user.__dict__
+    }
+    return json.dumps(msg)
+
 def BuildItemListMessage(items):
     msg = {
         "items": [item.__dict__ for item in items]
@@ -29,6 +35,11 @@ MISSING_USERID = BuildErrorMessage("Missing userid")
 INVALID_CREDENTIALS = BuildErrorMessage("Invalid credentials")
 ALREADY_LOGGED_IN = BuildErrorMessage("You're already logged in. Logout first.")
 NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")
+
+# ---- User Request Error Messages ---- #
+# Repeat: NOT_LOGGED_IN
+# Repeat: MISSING_USERID
+NONEXISTENT_USER = BuildErrorMessage("User does not exist")
 
 # ---- Buy Request Error Messages ---- #
 # Repeat: NOT_LOGGED_IN

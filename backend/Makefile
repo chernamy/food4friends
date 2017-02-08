@@ -15,3 +15,6 @@ sell_test:
 
 login_test:
 	python -m controller_tests.login_test
+
+user_test:
+	python -m controller_tests.user_test
