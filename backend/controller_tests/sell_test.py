@@ -336,8 +336,43 @@ class SellTest(base_test.BaseTestCase):
         user = messages.UnwrapUserInfoMessage(r.data)
         self.assertEquals(user.role, "none")
 
-    # TODO (mjchao): Check for invalid complete requests.
-        
+    def testCompleteRouteMissingFields(self):
+        data = {"userid": "user1", "buyerid": "user5"}
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
+        login_test.LoginTest.LoginAsUser(self, 1)
+        del data["userid"]
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_USERID)
+        data["userid"] = "user1"
+
+        del data["buyerid"]
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_BUYERID)
+        data["buyerid"] = "user5"
+
+    def testCompleteRouteInvalidFields(self):
+        login_test.LoginTest.LoginAsUser(self, 4)
+        data = {"userid": "user4", "buyerid": "user5"}
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.NOT_SELLER)
+        login_test.LoginTest.Logout(self)
+
+        login_test.LoginTest.LoginAsUser(self, 1)
+        data["userid"] = "user1"
+        data["buyerid"] = "whoami?"
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.NONEXISTENT_BUYER)
+
+        data["userid"] = "user1"
+        data["buyerid"] = "user4"
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.NOT_BUYER)
+
+    def testCompleteRouteNonexistentTransaction(self):
+        # TODO (mjchao): Implement this test
+        pass
 
 if __name__ == "__main__":
     unittest.main()
