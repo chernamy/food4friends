@@ -131,7 +131,7 @@ def CompleteTransaction():
     transaction_data = extensions.QueryTransactions([("sellerid", userid),
                                                         ("buyerid", buyerid)])
     if not transaction_data:
-        return messages.NONEXISTENT_TRANSACTION
+        return messages.NONEXISTENT_TRANSACTION, 400
 
     transaction_data = transaction_data[0]
     extensions.CompleteTransaction(transaction_data)
