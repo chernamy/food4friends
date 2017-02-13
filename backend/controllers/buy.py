@@ -52,21 +52,22 @@ def Purchase():
     item_data = extensions.QueryItems([("userid", sellerid)])
     if not item_data:
         return messages.NONEXISTENT_SELLER, 400
+    item_data = item_data[0]
 
-    offer_end = item_data[0].end
+    offer_end = item_data.end
     curr_time = calendar.timegm(time.gmtime())
     if curr_time > offer_end:
         return messages.OFFER_EXPIRED, 400
 
-    seller_servings = item_data[0].servings
+    seller_servings = item_data.servings
     if servings > seller_servings:
         return messages.TOO_MANY_SERVINGS, 400
     
     if servings == seller_servings:
-        extensions.DeleteItem(item_data[0])
+        extensions.DeleteItem(item_data)
     else:
-        extensions.UpdateItems("servings = servings - %d" %(servings),
-                                [("userid", sellerid)])
+        extensions.UpdateItem("servings = servings - %d" %(servings),
+                                item_data)
 
     # guaranteed to exist because logged in with buyerid
     user_data = extensions.QueryUsers([("userid", buyerid)])[0]

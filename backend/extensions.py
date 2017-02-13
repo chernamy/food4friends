@@ -85,9 +85,8 @@ class ItemData(object):
     def BuildQuery(args):
         return "SELECT * FROM ITEM" + BuildQueryArgs(args)
 
-    @staticmethod
-    def BuildUpdate(update, args):
-        return "UPDATE ITEM SET " + update + BuildQueryArgs(args)
+    def BuildUpdate(self, update):
+        return "UPDATE ITEM SET " + update + " WHERE userid='%s'" %(self.userid)
 
 
 CURR_TIME_SECS = calendar.timegm(time.gmtime())
@@ -272,14 +271,14 @@ def QueryItems(args=[]):
     x.execute(query)
     return [ItemData.FromDbData(result) for result in x.fetchall()]
 
-def UpdateItems(change, args=[]):
+def UpdateItem(change, item):
     """Updates item data in the database with the specified change.
 
     Args:
         change: (string) A change to make
-        args: A list of (property, value) or (property, value, op) tuples.
+        item: (ItemData) The item to change
     """
-    command = ItemData.BuildUpdate(change, args)
+    command = item.BuildUpdate(change)
     x = conn.cursor()
     x.execute(command)
 

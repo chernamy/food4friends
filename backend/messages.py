@@ -85,3 +85,9 @@ NONEXISTENT_BUYER = BuildErrorMessage("buyerid does not exist")
 NOT_BUYER = BuildErrorMessage("The user with the given buyerid is not a buyer.")
 NONEXISTENT_TRANSACTION = BuildErrorMessage("The specified transaction does " \
                                             "not exist.")
+
+# ---- Edit Transaction Error Messages ---- #
+# Repeat: NOT_LOGGED_IN
+# Repeat: MISSING_USERID
+# Repeat: NOT_SELLER
+# Repeat: INVALID_PHOTO_EXT
