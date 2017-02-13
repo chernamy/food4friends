@@ -91,3 +91,9 @@ NONEXISTENT_TRANSACTION = BuildErrorMessage("The specified transaction does " \
 # Repeat: MISSING_USERID
 # Repeat: NOT_SELLER
 # Repeat: INVALID_PHOTO_EXT
+INVALID_DELTA_SERVINGS = BuildErrorMessage("servings must be an integer.")
+NEGATIVE_SERVINGS = BuildErrorMessage("Cannot reduce servings to a negative " \
+                                        "amount.")
+INVALID_DELTA_DURATION = BuildErrorMessage("duration must be an integer.")
+NEGATIVE_DURATION = BuildErrorMessage("You are not allowed to reduce the end " \
+                                        "time.")

@@ -16,9 +16,12 @@ import user_test
 class SellTest(base_test.BaseTestCase):
     
     SELL_ROUTE = "/api/v1/sell/"
-    TEST_IMAGE_PATH = "testdata/user4.jpeg"
-    TEST_INVALID_IMAGE_EXT_PATH = "testdata/user4.blah"
+    TEST_IMAGE_PATH = os.path.join("testdata", "user4.jpeg")
+    TEST_INVALID_IMAGE_EXT_PATH = os.path.join("testdata", "user4.blah")
     IMAGE_DIR = config.env["image_dir"]
+
+    SELL_UPDATE_ROUTE = "/api/v1/sell/"
+    TEST_UPDATE_IMAGE_PATH = os.path.join("testdata", "user1.jpg")
 
     COMPLETE_ROUTE = "/api/v1/sell/complete/"
 
@@ -382,6 +385,17 @@ class SellTest(base_test.BaseTestCase):
         data = {"userid": "user2", "buyerid": "user5"}
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.NONEXISTENT_TRANSACTION)
+
+    def testUpdateRouteExists(self):
+        login_test.LoginTest.LoginAsUser(self, 1)
+        data = {"userid": "user1",
+                "photo": self.GetImageFile(SellTest.TEST_UPDATE_IMAGE_PATH),
+                "servings": "100",
+                "duration": "10",
+                "description": "cake"}
+        r = self.PutFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
 
 if __name__ == "__main__":
     unittest.main()
