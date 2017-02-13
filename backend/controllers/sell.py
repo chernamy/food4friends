@@ -11,9 +11,83 @@ sell = Blueprint("/api/v1/sell/", __name__)
 ALLOWED_EXT = set(["png", "jpg", "jpeg", "gif"])
 IMAGE_DIR = config.env["image_dir"]
 
+@sell.route("/api/v1/sell", methods=["PUT"])
+@sell.route("/api/v1/sell/", methods=["PUT"])
+def EditOffer():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    if "userid" not in request.form:
+        return messages.MISSING_USERID, 400
+
+    userid = request.form.get("userid")
+    if userid != session["userid"]:
+        return messages.NOT_LOGGED_IN, 403
+    
+    item_data = extensions.QueryItems([("userid", userid)])
+    if not item_data:
+        return messages.NOT_SELLER, 400
+
+    item_data = item_data[0]
+
+    # Validate all data provided by client first
+    if "photo" in request.files:
+        photo = request.files["photo"]
+        ext = photo.filename[(photo.filename.rfind(".")+1):].lower()
+        if ext not in ALLOWED_EXT:
+            return messages.INVALID_PHOTO_EXT, 400       
+
+    if "servings" in request.form:
+        delta_servings = request.form.get("servings")
+        try:
+            delta_servings = int(delta_servings)
+        except:
+            return messages.INVALID_DELTA_SERVINGS, 400
+
+        new_servings = item_data.servings + delta_servings
+        if new_servings < 0:
+            return messages.NEGATIVE_SERVINGS, 400
+
+    if "duration" in request.form:
+        delta_duration = request.form.get("duration")
+        try:
+            delta_duration = int(delta_duration)
+        except:
+            return messages.INVALID_DELTA_DURATION, 400
+
+        if delta_duration < 0:
+            return messages.NEGATIVE_DURATION, 400
+
+    # If all data provided by client was correct, then update it.
+    if "photo" in request.files:
+        # delete the old photo to save space
+        try:
+            os.remove(item_data.photo)
+        except:
+            pass
+
+        # put in the new photo
+        photo_path = os.path.join(IMAGE_DIR, userid + "." + ext)
+        photo.save(photo_path)
+        extensions.UpdateItem("photo = '%s'" %(photo_path), item_data)
+        item_data = extensions.QueryItems([("userid", userid)])[0]
+
+    if "servings" in request.form:
+        new_servings = item_data.servings + delta_servings
+        extensions.UpdateItem("servings = " + str(new_servings), item_data)
+        item_data = extensions.QueryItems([("userid", userid)])[0]
+
+    if "duration" in request.form:
+        new_end = item_data.end + delta_duration * 60
+        extensions.UpdateItem("end = " + str(new_end), item_data)
+        item_data = extensions.QueryItems([("userid", userid)])[0]
+    
+    return messages.SUCCESS, 200
+
+
 @sell.route("/api/v1/sell", methods=["POST"])
 @sell.route("/api/v1/sell/", methods=["POST"])
-def PostOffer():
+def CreateOffer():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
