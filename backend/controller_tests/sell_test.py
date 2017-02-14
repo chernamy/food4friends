@@ -395,6 +395,23 @@ class SellTest(base_test.BaseTestCase):
                 "description": "cake"}
         r = self.PutFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
+        
+        # check that the item was updated
+        login_test.LoginTest.LoginAsUser(self, 3)
+        r = self.GetJSON(buy_test.BuyTest.BUY_ROUTE)
+        expected_item = extensions.ItemData(**extensions.TEST_ITEM1.__dict__)
+        expected_item.photo = os.path.join("images/user1.jpg")
+        expected_item.servings += 100
+        expected_item.end += 10 * 60
+        expected_item.description = "cake"
+        self.assertEquals(r.data,
+            messages.BuildItemListMessage([expected_item]))
+
+        # check that file was updated
+        self.assertTrue(filecmp.cmp(SellTest.TEST_UPDATE_IMAGE_PATH,
+                        os.path.join(SellTest.IMAGE_DIR, "user1.jpg")))
+
 
 
 if __name__ == "__main__":

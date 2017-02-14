@@ -81,6 +81,11 @@ def EditOffer():
         new_end = item_data.end + delta_duration * 60
         extensions.UpdateItem("end = " + str(new_end), item_data)
         item_data = extensions.QueryItems([("userid", userid)])[0]
+
+    if "description" in request.form:
+        new_description = request.form.get("description")
+        extensions.UpdateItem("description = '%s'" %(new_description),
+                                item_data)
     
     return messages.SUCCESS, 200
 
