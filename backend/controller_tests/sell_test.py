@@ -41,6 +41,16 @@ class SellTest(base_test.BaseTestCase):
                                     10.25, "-----", "fruit")
 
     @staticmethod
+    def GetTestUpdateDict(end=10):
+        data = {"userid": "user1",
+                "photo": SellTest.GetImageFile(SellTest.TEST_UPDATE_IMAGE_PATH),
+                "servings": "100",
+                "duration": "10",
+                "description": "cake"}
+        return data
+        
+
+    @staticmethod
     def GetImageFile(filename):
         """Gets the file data for a given image.
 
@@ -388,11 +398,7 @@ class SellTest(base_test.BaseTestCase):
 
     def testUpdateRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
-        data = {"userid": "user1",
-                "photo": self.GetImageFile(SellTest.TEST_UPDATE_IMAGE_PATH),
-                "servings": "100",
-                "duration": "10",
-                "description": "cake"}
+        data = self.GetTestUpdateDict() 
         r = self.PutFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
         login_test.LoginTest.Logout(self)
@@ -401,7 +407,7 @@ class SellTest(base_test.BaseTestCase):
         login_test.LoginTest.LoginAsUser(self, 3)
         r = self.GetJSON(buy_test.BuyTest.BUY_ROUTE)
         expected_item = extensions.ItemData(**extensions.TEST_ITEM1.__dict__)
-        expected_item.photo = os.path.join("images/user1.jpg")
+        expected_item.photo = os.path.join("images", "user1.jpg")
         expected_item.servings += 100
         expected_item.end += 10 * 60
         expected_item.description = "cake"
@@ -411,6 +417,52 @@ class SellTest(base_test.BaseTestCase):
         # check that file was updated
         self.assertTrue(filecmp.cmp(SellTest.TEST_UPDATE_IMAGE_PATH,
                         os.path.join(SellTest.IMAGE_DIR, "user1.jpg")))
+
+    def testUpdateRouteInvalidFields(self):
+        data = SellTest.GetTestUpdateDict()
+        r = self.PutFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
+        login_test.LoginTest.LoginAsUser(self, 1)
+        data = SellTest.GetTestUpdateDict()
+        del data["userid"]
+        r = self.PutFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.MISSING_USERID)
+
+        # test invalid photo ext
+        data = SellTest.GetTestUpdateDict()
+        data["photo"] = SellTest.GetImageFile(os.path.join("testdata",
+                                                            "user4.blah"))
+        r = self.PutFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_PHOTO_EXT)
+
+        # test non-numerical servings
+        data = SellTest.GetTestUpdateDict()
+        data["servings"] = "not-a-number"
+        r = self.PutFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_DELTA_SERVINGS)
+
+        # test negative servings
+        data = SellTest.GetTestUpdateDict()
+        data["servings"] = "-11"
+        r = self.PutFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.NEGATIVE_SERVINGS)
+
+        # test non-numerical duration
+        data = SellTest.GetTestUpdateDict()
+        data["duration"] = "not-a-number"
+        r = self.PutFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.INVALID_DELTA_DURATION)
+
+        # test negative duration
+        data = SellTest.GetTestUpdateDict()
+        data["duration"] = -1
+        r = self.PutFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.NEGATIVE_DURATION)
+
+
+        
+
 
 
 
