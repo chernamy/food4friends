@@ -459,12 +459,30 @@ class SellTest(base_test.BaseTestCase):
         data["duration"] = -1
         r = self.PutFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.NEGATIVE_DURATION)
-
-
         
+    def testSellRouteSQLInjection(self):
+        login_test.LoginTest.LoginAsUser(self, 4)
+        sell_item = SellTest.GetTestItem()
+        sell_item.description = "; DROP TABLE ITEM;"
+        data = self.ConvertItemToPostDict(sell_item)
+        r = self.PostFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
 
+        # should raise exception if item table was dropped
+        found_item = self.GetSellOfferForUser("user4")
+        self.assertEquals(found_item.description, sell_item.description)
 
+        login_test.LoginTest.Logout(self)
+        login_test.LoginTest.LoginAsUser(self, 1)
 
+        data = SellTest.GetTestUpdateDict()
+        data["description"] = "; DROP TABLE ITEM;"
+        r = self.PutFile(SellTest.SELL_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        # should raise exception if item table was dropped
+        found_item = self.GetSellOfferForUser("user1")
+        self.assertEquals(found_item.description, data["description"])
 
 if __name__ == "__main__":
     unittest.main()
