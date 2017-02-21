@@ -188,8 +188,8 @@ def SetUpTestDatabase():
 
 def SetUpProdDatabase():
     global conn
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="root",
-                            db="prod")
+    conn = MySQLdb.connect(host="localhost", user=config.db_user,
+                            passwd=config.db_passwd, db="prod")
     
 def Init():
     """Reinitializes the database. If this is prod, the connection will just
