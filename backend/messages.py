@@ -37,6 +37,7 @@ SUCCESS = BuildInfoMessage("Success")
 
 # ---- Login Request Error Messages ---- #
 MISSING_USERID = BuildErrorMessage("Missing userid")
+MISSING_ACCESS_TOKEN = BuildErrorMessage("Missing access token")
 INVALID_CREDENTIALS = BuildErrorMessage("Invalid credentials")
 ALREADY_LOGGED_IN = BuildErrorMessage("You're already logged in. Logout first.")
 NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")

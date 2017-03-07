@@ -1,5 +1,7 @@
 from flask import *
+import config
 import extensions
+import fb
 import messages
 
 login = Blueprint("api/v1/login/", __name__)
@@ -18,6 +20,18 @@ def Login():
 
     if not user_data:
         return messages.INVALID_CREDENTIALS, 422
+
+    # TODO: untested block. Need to integrate with UI
+    if not config.env["state"] == "test":
+        if "token" not in request.json:
+            return messages.MISSING_ACCESS_TOKEN, 400
+
+        access_token = request.json.get("token")
+        if fb.VerifyAccessToken(userid, token):
+            session["fb_access_token"] = token
+        else:
+            return messages.INVALID_CREDENTIALS, 422
+    # ------- End untested block ----------- #
 
     session["userid"] = userid
     return messages.SUCCESS, 200
