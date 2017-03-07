@@ -26,3 +26,6 @@ login_test:
 
 user_test:
 	python -m controller_tests.user_test
+
+fb_test:
+	python -m controller_tests.fb_test
