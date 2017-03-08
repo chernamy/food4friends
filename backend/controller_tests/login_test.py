@@ -25,7 +25,7 @@ class LoginTest(base_test.BaseTestCase):
         user_id = test_user_data["id"]
         token = test_user_data["access_token"]
         data = {"userid": user_id, "token": token}
-        r = test_driver.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        r = test_driver.PostJSON(LoginTest.LOGIN_ROUTE, data, https=True)
         return r
 
     @staticmethod
@@ -49,25 +49,29 @@ class LoginTest(base_test.BaseTestCase):
 
     def testLoginFailed(self):
         data = {"userid": "unknown_user", "token": "wrong token"}
-        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data, https=True)
         self.assertEquals(r.data, messages.INVALID_CREDENTIALS)
 
-        r = self.PostJSON(LoginTest.LOGOUT_ROUTE)
+        r = self.PostJSON(LoginTest.LOGOUT_ROUTE, https=True)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
     def testMissingFields(self):
         data = {}
-        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data, https=True)
         self.assertEquals(r.data, messages.MISSING_USERID)
 
         data = {"userid": "user1"}
-        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data)
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, data, https=True)
         self.assertEquals(r.data, messages.MISSING_ACCESS_TOKEN)
 
     def testMultipleLogin(self):
         LoginTest.LoginAsUser(self, 1)
         r = LoginTest.LoginAsUser(self, 2)
         self.assertEquals(r.data, messages.ALREADY_LOGGED_IN)
+
+    def testHTTP(self):
+        r = self.PostJSON(LoginTest.LOGIN_ROUTE, https=False)
+        self.assertEquals(r.status_code, 302)
 
 if __name__ == "__main__":
     unittest.main()

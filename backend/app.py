@@ -14,4 +14,5 @@ app.register_blueprint(controllers.user)
 if __name__ == '__main__':
     # listen on external IPs
     extensions.Init()
+    app.config["SSL"] = True
     app.run(host=config.env['host'], port=config.env['port'], debug=True)
