@@ -29,3 +29,6 @@ user_test:
 
 fb_test:
 	python fb_test.py
+
+community_test:
+	python -m controller_tests.community_test

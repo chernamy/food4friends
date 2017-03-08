@@ -10,6 +10,8 @@ app.register_blueprint(controllers.logout)
 app.register_blueprint(controllers.buy)
 app.register_blueprint(controllers.sell)
 app.register_blueprint(controllers.user)
+app.register_blueprint(controllers.community)
+app.register_blueprint(controllers.communities)
 
 if __name__ == '__main__':
     # listen on external IPs

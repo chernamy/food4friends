@@ -33,6 +33,18 @@ def UnwrapItemListMessage(msg):
     items = json.loads(msg)["items"]
     return [extensions.ItemData(**item_dict) for item_dict in items]
 
+def BuildCommunityListMessage(communities):
+    msg = {
+        "communities": [community.__dict__ for community in communities]
+    }
+    return json.dumps(msg)
+
+def UnwrapCommunityListMessage(msg):
+    communities = json.loads(msg)["communities"]
+    return [extensions.CommunityData(**community_dict) for
+            community_dict in communities]
+    
+
 SUCCESS = BuildInfoMessage("Success")
 
 # ---- Login Request Error Messages ---- #
@@ -99,3 +111,8 @@ NEGATIVE_SERVINGS = BuildErrorMessage("Cannot reduce servings to a negative " \
 INVALID_DELTA_DURATION = BuildErrorMessage("duration must be an integer.")
 NEGATIVE_DURATION = BuildErrorMessage("You are not allowed to reduce the end " \
                                         "time.")
+
+# ---- Community Error Messages ---- #
+# Repeat: NOT_LOGGED_IN
+MISSING_COMMUNITYNAME = BuildErrorMessage("Missing communityname")
+
