@@ -9,6 +9,9 @@ buy = Blueprint("/api/v1/buy", __name__)
 @buy.route("/api/v1/buy", methods=["GET"])
 @buy.route("/api/v1/buy/", methods=["GET"])
 def ViewBuyList():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN
+
     item_data = extensions.QueryItems()
     curr_time = calendar.timegm(time.gmtime())
     unexpired_items = []

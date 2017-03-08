@@ -16,6 +16,10 @@ class BuyTest(base_test.BaseTestCase):
         self.assertEquals(r.data,
             messages.BuildItemListMessage([extensions.TEST_ITEM1]))
 
+    def testBuyViewRouteNotLoggedIn(self):
+        r = self.GetJSON(BuyTest.BUY_ROUTE)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
     def testBuyPostRouteExists(self):
         r = login_test.LoginTest.LoginAsUser(self, 3)
 
