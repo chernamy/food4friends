@@ -1,5 +1,6 @@
 import calendar
 import config
+import fb_test
 import MySQLdb
 import MySQLdb.cursors
 import time
@@ -45,11 +46,11 @@ class UserData(object):
     def BuildQuery(args):
         return "SELECT * FROM USER" + BuildQueryArgs(args)
 
-TEST_USER1 = UserData("user1", "seller", "-")
-TEST_USER2 = UserData("user2", "seller", "-")
-TEST_USER3 = UserData("user3", "none", "-")
-TEST_USER4 = UserData("user4", "none", "-")
-TEST_USER5 = UserData("user5", "buyer", "-")
+TEST_USER1 = UserData(fb_test.FBTest.TEST_USER_IDS[0], "seller", "-")
+TEST_USER2 = UserData(fb_test.FBTest.TEST_USER_IDS[1], "seller", "-")
+TEST_USER3 = UserData(fb_test.FBTest.TEST_USER_IDS[2], "none", "-")
+TEST_USER4 = UserData(fb_test.FBTest.TEST_USER_IDS[3], "none", "-")
+TEST_USER5 = UserData(fb_test.FBTest.TEST_USER_IDS[4], "buyer", "-")
 
 class ItemData(object):
 
@@ -91,12 +92,12 @@ class ItemData(object):
 
 CURR_TIME_SECS = calendar.timegm(time.gmtime())
 # This is a test item that will expire in 10 minutes
-TEST_ITEM1 = ItemData("user1", "1.png", 10, CURR_TIME_SECS + 600, 12.25,
-                        "42.28, -83.73","tasty")
+TEST_ITEM1 = ItemData(TEST_USER1.userid, "1.png", 10, CURR_TIME_SECS + 600,
+                        12.25, "42.28, -83.73","tasty")
 
 # This is a test item that expired 10 minutes ago
-TEST_ITEM2 = ItemData("user2", "2.png", 20, CURR_TIME_SECS - 600, 25.00,
-                        "42.30, -83.73", "yummy")
+TEST_ITEM2 = ItemData(TEST_USER2.userid, "2.png", 20, CURR_TIME_SECS - 600,
+                        25.00, "42.30, -83.73", "yummy")
 
 class TransactionData(object):
     
@@ -131,7 +132,7 @@ class TransactionData(object):
     def BuildQuery(args):
         return "SELECT * FROM TRANSACTION" + BuildQueryArgs(args)
 
-TEST_TRANSACTION1 = TransactionData("user1", "user5", 10)
+TEST_TRANSACTION1 = TransactionData(TEST_USER1.userid, TEST_USER5.userid, 10)
 
 conn = None
 

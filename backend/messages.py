@@ -49,6 +49,7 @@ NONEXISTENT_USER = BuildErrorMessage("User does not exist")
 
 # ---- Buy Request Error Messages ---- #
 # Repeat: NOT_LOGGED_IN
+BUY_WRONG_USERID = BuildErrorMessage("You cannot buy on behalf of another user.")
 MISSING_SELLERID = BuildErrorMessage("Missing sellerid field")
 MISSING_BUYERID = BuildErrorMessage("Missing buyerid field")
 MISSING_SERVINGS = BuildErrorMessage("Missing servings field")

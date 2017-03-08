@@ -39,7 +39,7 @@ def Purchase():
     buyerid = request.json.get("buyerid")
 
     if buyerid != session["userid"]:
-        return messages.NOT_LOGGED_IN, 403
+        return messages.BUY_WRONG_USERID, 403
 
     try:
         servings = int(request.json.get("servings"))
