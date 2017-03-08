@@ -3,11 +3,13 @@ import config
 import extensions
 import fb
 import messages
+import utils
 
 login = Blueprint("api/v1/login/", __name__)
 logout = Blueprint("api/v1/logout/", __name__)
 
 @login.route("/api/v1/login/", methods=["POST"])
+@utils.ssl_required
 def Login():
     if "userid" not in request.json:
         return messages.MISSING_USERID, 400
