@@ -424,3 +424,17 @@ def AddCommunity(community_data):
     """
     ExecuteCommand(community_data.ToInsertCommand())
 
+def QueryMembership(args=[]):
+    query = MembershipData.BuildQuery(args)
+    x = conn.cursor()
+    x.execute(query)
+    return [MembershipData.FromDbData(result) for result in x.fetchall()]
+
+def AddMembership(membership_data):
+    """Adds the given membership data to the database.
+
+    Args:
+        membership_data: (MembershipData) The membership data to be added to
+            the database.
+    """
+    ExecuteCommand(membership_data.ToInsertCommand())

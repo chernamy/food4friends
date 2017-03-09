@@ -115,4 +115,5 @@ NEGATIVE_DURATION = BuildErrorMessage("You are not allowed to reduce the end " \
 # ---- Community Error Messages ---- #
 # Repeat: NOT_LOGGED_IN
 MISSING_COMMUNITYNAME = BuildErrorMessage("Missing communityname")
+MISSING_ADD_USERID = BuildErrorMessage("Missing userid to be added")
 
