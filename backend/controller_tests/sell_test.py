@@ -424,7 +424,8 @@ class SellTest(base_test.BaseTestCase):
         # check that the item was updated
         login_test.LoginTest.LoginAsUser(self, 3)
         r = self.GetJSON(buy_test.BuyTest.BUY_ROUTE)
-        expected_item = extensions.ItemData(**extensions.TEST_ITEM1.__dict__)
+        expected_item = extensions.ItemData.FromDict(
+                            extensions.TEST_ITEM1.__dict__)
         expected_item.photo = os.path.join("images",
                 "%s.jpg" %(extensions.TEST_USER1.userid))
         expected_item.servings += 100

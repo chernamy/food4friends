@@ -21,7 +21,7 @@ def BuildUserInfoMessage(user):
 
 def UnwrapUserInfoMessage(msg):
     user_data = json.loads(msg)["user"]
-    return extensions.UserData(**user_data)
+    return extensions.UserData.FromDict(user_data)
 
 def BuildItemListMessage(items):
     msg = {
@@ -31,7 +31,7 @@ def BuildItemListMessage(items):
 
 def UnwrapItemListMessage(msg):
     items = json.loads(msg)["items"]
-    return [extensions.ItemData(**item_dict) for item_dict in items]
+    return [extensions.ItemData.FromDict(item_dict) for item_dict in items]
 
 def BuildCommunityListMessage(communities):
     msg = {
