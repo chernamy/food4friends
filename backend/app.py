@@ -10,8 +10,11 @@ app.register_blueprint(controllers.logout)
 app.register_blueprint(controllers.buy)
 app.register_blueprint(controllers.sell)
 app.register_blueprint(controllers.user)
+app.register_blueprint(controllers.community)
+app.register_blueprint(controllers.communities)
 
 if __name__ == '__main__':
     # listen on external IPs
     extensions.Init()
+    app.config["SSL"] = True
     app.run(host=config.env['host'], port=config.env['port'], debug=True)

@@ -9,6 +9,9 @@ buy = Blueprint("/api/v1/buy", __name__)
 @buy.route("/api/v1/buy", methods=["GET"])
 @buy.route("/api/v1/buy/", methods=["GET"])
 def ViewBuyList():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN
+
     item_data = extensions.QueryItems()
     curr_time = calendar.timegm(time.gmtime())
     unexpired_items = []
@@ -39,7 +42,7 @@ def Purchase():
     buyerid = request.json.get("buyerid")
 
     if buyerid != session["userid"]:
-        return messages.NOT_LOGGED_IN, 403
+        return messages.BUY_WRONG_USERID, 403
 
     try:
         servings = int(request.json.get("servings"))

@@ -16,12 +16,15 @@ import user_test
 class SellTest(base_test.BaseTestCase):
     
     SELL_ROUTE = "/api/v1/sell/"
-    TEST_IMAGE_PATH = os.path.join("testdata", "user4.jpeg")
-    TEST_INVALID_IMAGE_EXT_PATH = os.path.join("testdata", "user4.blah")
+    TEST_IMAGE_PATH = os.path.join("testdata",
+            "%s.jpeg" %(extensions.TEST_USER4.userid))
+    TEST_INVALID_IMAGE_EXT_PATH = os.path.join("testdata",
+            "%s.blah" %(extensions.TEST_USER4.userid))
     IMAGE_DIR = config.env["image_dir"]
 
     SELL_UPDATE_ROUTE = "/api/v1/sell/"
-    TEST_UPDATE_IMAGE_PATH = os.path.join("testdata", "user1.jpg")
+    TEST_UPDATE_IMAGE_PATH = os.path.join("testdata",
+            "%s.jpg" %(extensions.TEST_USER1.userid))
 
     COMPLETE_ROUTE = "/api/v1/sell/complete/"
 
@@ -37,12 +40,13 @@ class SellTest(base_test.BaseTestCase):
         Returns:
             (ItemData) An item for testing.
         """
-        return extensions.ItemData("user4", SellTest.TEST_IMAGE_PATH, 20, end,
+        return extensions.ItemData(extensions.TEST_USER4.userid,
+                                    SellTest.TEST_IMAGE_PATH, 20, end,
                                     10.25, "-----", "fruit")
 
     @staticmethod
     def GetTestUpdateDict(end=10):
-        data = {"userid": "user1",
+        data = {"userid": extensions.TEST_USER1.userid,
                 "photo": SellTest.GetImageFile(SellTest.TEST_UPDATE_IMAGE_PATH),
                 "servings": "100",
                 "duration": "10",
@@ -142,7 +146,8 @@ class SellTest(base_test.BaseTestCase):
         login_test.LoginTest.LoginAsUser(self, 4)
 
         try:
-            os.remove(os.path.join(SellTest.IMAGE_DIR, "user4.jpeg"))
+            os.remove(os.path.join(SellTest.IMAGE_DIR,
+                    "%s.jpeg" %(extensions.TEST_USER4.userid)))
         except:
             pass
 
@@ -150,14 +155,16 @@ class SellTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.SUCCESS)
         approx_end_time = calendar.timegm(time.gmtime()) + 10 * 60
 
-        found_item = self.GetSellOfferForUser("user4")
+        found_item = self.GetSellOfferForUser(extensions.TEST_USER4.userid)
         expected_item = self.GetTestItem(approx_end_time)
-        expected_item.photo = os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")
+        expected_item.photo = os.path.join(SellTest.IMAGE_DIR,
+                "%s.jpeg" %(extensions.TEST_USER4.userid))
         self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
 
         # check that the image was saved to the server
         self.assertTrue(filecmp.cmp(SellTest.TEST_IMAGE_PATH,
-                        os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")))
+                        os.path.join(SellTest.IMAGE_DIR,
+                        "%s.jpeg" %(extensions.TEST_USER4.userid))))
 
     def testSellRouteMissingFields(self):
         data = self.ConvertItemToPostDict(self.GetTestItem()) 
@@ -240,7 +247,8 @@ class SellTest(base_test.BaseTestCase):
         # check that invalid fields didn't affect server's ability to
         # process valid sell offers.
         try:
-            os.remove(os.path.join(SellTest.IMAGE_DIR, "user4.jpeg"))
+            os.remove(os.path.join(SellTest.IMAGE_DIR,
+                                    "%s.jpeg" %(extensions.TEST_USER4.userid)))
         except:
             pass
 
@@ -248,21 +256,23 @@ class SellTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.SUCCESS)
         approx_end_time = calendar.timegm(time.gmtime()) + 10 * 60
 
-        found_item = self.GetSellOfferForUser("user4")
+        found_item = self.GetSellOfferForUser(extensions.TEST_USER4.userid)
         expected_item = self.GetTestItem(approx_end_time)
-        expected_item.photo = os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")
+        expected_item.photo = os.path.join(SellTest.IMAGE_DIR,
+                "%s.jpeg" %(extensions.TEST_USER4.userid))
         self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
 
         # check that the image was saved to the server
         self.assertTrue(filecmp.cmp(SellTest.TEST_IMAGE_PATH,
-                        os.path.join(SellTest.IMAGE_DIR, "user4.jpeg")))
+                        os.path.join(SellTest.IMAGE_DIR,
+                                    "%s.jpeg" %(extensions.TEST_USER4.userid))))
 
     def testCannotSellBadUser(self):
         login_test.LoginTest.LoginAsUser(self, 1)
 
         # cannot sell as user 1 because user 1 is already selling
         data = self.ConvertItemToPostDict(self.GetTestItem())
-        data["userid"] = "user1"
+        data["userid"] = extensions.TEST_USER1.userid
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.INVALID_USER_ROLE)
 
@@ -274,13 +284,13 @@ class SellTest(base_test.BaseTestCase):
 
         # canot sell as user 5 because user 5 is already buying
         data = self.ConvertItemToPostDict(self.GetTestItem())
-        data["userid"] = "user5"
+        data["userid"] = extensions.TEST_USER5.userid
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.INVALID_USER_ROLE)
 
         data = self.ConvertItemToPostDict(self.GetTestItem())
         # try making a sell offer on behalf of someone else
-        data["userid"] = "user4"
+        data["userid"] = extensions.TEST_USER4.userid
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
@@ -289,22 +299,24 @@ class SellTest(base_test.BaseTestCase):
         # the last sell offer already expired.
         login_test.LoginTest.LoginAsUser(self, 2)
         data = self.ConvertItemToPostDict(self.GetTestItem())
-        data["userid"] = "user2"
+        data["userid"] = extensions.TEST_USER2.userid
         r = self.PostFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
         approx_end_time = calendar.timegm(time.gmtime()) + 10 * 60
 
-        found_item = self.GetSellOfferForUser("user2")
+        found_item = self.GetSellOfferForUser(extensions.TEST_USER2.userid)
         expected_item = self.GetTestItem(approx_end_time)
-        expected_item.userid = "user2"
-        expected_item.photo = os.path.join(SellTest.IMAGE_DIR, "user2.jpeg")
+        expected_item.userid = extensions.TEST_USER2.userid
+        expected_item.photo = os.path.join(SellTest.IMAGE_DIR,
+                "%s.jpeg" %(extensions.TEST_USER2.userid))
         self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
 
     def testCompleteRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
 
         # Try completing the transaction where user1 sells to user5
-        data = {"userid": "user1", "buyerid": "user5"}
+        data = {"userid": extensions.TEST_USER1.userid,
+                "buyerid": extensions.TEST_USER5.userid}
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
@@ -312,47 +324,51 @@ class SellTest(base_test.BaseTestCase):
         login_test.LoginTest.LoginAsUser(self, 1)
 
         # Try completing the transaction where user1 sells to user5
-        data = {"userid": "user1", "buyerid": "user5"}
+        data = {"userid": extensions.TEST_USER1.userid,
+                "buyerid": extensions.TEST_USER5.userid}
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
-        r = user_test.UserTest.GetUserData(self, "user5")
+        r = user_test.UserTest.GetUserData(self, extensions.TEST_USER5.userid)
         user = messages.UnwrapUserInfoMessage(r.data)
         self.assertEquals(user.role, "none")
 
     def testCompleteUpdatesSellerRole(self):
         # finish buying all servings for user1's sell offer
         login_test.LoginTest.LoginAsUser(self, 4)
-        data = {"sellerid": "user1", "buyerid": "user4", "servings": 10}
+        data = {"sellerid": extensions.TEST_USER1.userid,
+                "buyerid": extensions.TEST_USER4.userid, "servings": 10}
         r = self.PostJSON(buy_test.BuyTest.BUY_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
         login_test.LoginTest.Logout(self)
 
         # complete all transactions for user1's sell offer
         login_test.LoginTest.LoginAsUser(self, 1)
-        data = {"userid": "user1", "buyerid": "user4"}
+        data = {"userid": extensions.TEST_USER1.userid,
+                "buyerid": extensions.TEST_USER4.userid}
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
-        data["buyerid"] = "user5"
+        data["buyerid"] = extensions.TEST_USER5.userid
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
         # check that roles have been updated
-        r = user_test.UserTest.GetUserData(self, "user5")
+        r = user_test.UserTest.GetUserData(self, extensions.TEST_USER5.userid)
         user = messages.UnwrapUserInfoMessage(r.data)
         self.assertEquals(user.role, "none")
 
-        r = user_test.UserTest.GetUserData(self, "user4")
+        r = user_test.UserTest.GetUserData(self, extensions.TEST_USER4.userid)
         user = messages.UnwrapUserInfoMessage(r.data)
         self.assertEquals(user.role, "none")
 
-        r = user_test.UserTest.GetUserData(self, "user1")
+        r = user_test.UserTest.GetUserData(self, extensions.TEST_USER1.userid)
         user = messages.UnwrapUserInfoMessage(r.data)
         self.assertEquals(user.role, "none")
 
     def testCompleteRouteMissingFields(self):
-        data = {"userid": "user1", "buyerid": "user5"}
+        data = {"userid": extensions.TEST_USER1.userid,
+                "buyerid": extensions.TEST_USER5.userid}
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
@@ -360,28 +376,29 @@ class SellTest(base_test.BaseTestCase):
         del data["userid"]
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_USERID)
-        data["userid"] = "user1"
+        data["userid"] = extensions.TEST_USER1.userid
 
         del data["buyerid"]
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_BUYERID)
-        data["buyerid"] = "user5"
+        data["buyerid"] = extensions.TEST_USER5.userid
 
     def testCompleteRouteInvalidFields(self):
         login_test.LoginTest.LoginAsUser(self, 4)
-        data = {"userid": "user4", "buyerid": "user5"}
+        data = {"userid": extensions.TEST_USER4.userid,
+                "buyerid": extensions.TEST_USER5.userid}
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_SELLER)
         login_test.LoginTest.Logout(self)
 
         login_test.LoginTest.LoginAsUser(self, 1)
-        data["userid"] = "user1"
+        data["userid"] = extensions.TEST_USER1.userid
         data["buyerid"] = "whoami?"
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.NONEXISTENT_BUYER)
 
-        data["userid"] = "user1"
-        data["buyerid"] = "user4"
+        data["userid"] = extensions.TEST_USER1.userid
+        data["buyerid"] = extensions.TEST_USER4.userid
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_BUYER)
 
@@ -392,7 +409,8 @@ class SellTest(base_test.BaseTestCase):
         # but because we haven't made a GET for the buyer offers, user2
         # stays as a seller.
         login_test.LoginTest.LoginAsUser(self, 2)
-        data = {"userid": "user2", "buyerid": "user5"}
+        data = {"userid": extensions.TEST_USER2.userid,
+                "buyerid": extensions.TEST_USER5.userid}
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.NONEXISTENT_TRANSACTION)
 
@@ -407,7 +425,8 @@ class SellTest(base_test.BaseTestCase):
         login_test.LoginTest.LoginAsUser(self, 3)
         r = self.GetJSON(buy_test.BuyTest.BUY_ROUTE)
         expected_item = extensions.ItemData(**extensions.TEST_ITEM1.__dict__)
-        expected_item.photo = os.path.join("images", "user1.jpg")
+        expected_item.photo = os.path.join("images",
+                "%s.jpg" %(extensions.TEST_USER1.userid))
         expected_item.servings += 100
         expected_item.end += 10 * 60
         expected_item.description = "cake"
@@ -416,7 +435,8 @@ class SellTest(base_test.BaseTestCase):
 
         # check that file was updated
         self.assertTrue(filecmp.cmp(SellTest.TEST_UPDATE_IMAGE_PATH,
-                        os.path.join(SellTest.IMAGE_DIR, "user1.jpg")))
+                        os.path.join(SellTest.IMAGE_DIR,
+                                    "%s.jpg" %(extensions.TEST_USER1.userid))))
 
     def testUpdateRouteInvalidFields(self):
         data = SellTest.GetTestUpdateDict()
@@ -432,7 +452,7 @@ class SellTest(base_test.BaseTestCase):
         # test invalid photo ext
         data = SellTest.GetTestUpdateDict()
         data["photo"] = SellTest.GetImageFile(os.path.join("testdata",
-                                                            "user4.blah"))
+                "%s.blah" %(extensions.TEST_USER4.userid)))
         r = self.PutFile(SellTest.SELL_ROUTE, data)
         self.assertEquals(r.data, messages.INVALID_PHOTO_EXT)
 
@@ -469,7 +489,7 @@ class SellTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.SUCCESS)
 
         # should raise exception if item table was dropped
-        found_item = self.GetSellOfferForUser("user4")
+        found_item = self.GetSellOfferForUser(extensions.TEST_USER4.userid)
         self.assertEquals(found_item.description, sell_item.description)
 
         login_test.LoginTest.Logout(self)
@@ -481,7 +501,7 @@ class SellTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.SUCCESS)
 
         # should raise exception if item table was dropped
-        found_item = self.GetSellOfferForUser("user1")
+        found_item = self.GetSellOfferForUser(extensions.TEST_USER1.userid)
         self.assertEquals(found_item.description, data["description"])
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import calendar
 import config
+import fb_test
 import MySQLdb
 import MySQLdb.cursors
 import time
@@ -45,11 +46,11 @@ class UserData(object):
     def BuildQuery(args):
         return "SELECT * FROM USER" + BuildQueryArgs(args)
 
-TEST_USER1 = UserData("user1", "seller", "-")
-TEST_USER2 = UserData("user2", "seller", "-")
-TEST_USER3 = UserData("user3", "none", "-")
-TEST_USER4 = UserData("user4", "none", "-")
-TEST_USER5 = UserData("user5", "buyer", "-")
+TEST_USER1 = UserData(fb_test.FBTest.TEST_USER_IDS[0], "seller", "-")
+TEST_USER2 = UserData(fb_test.FBTest.TEST_USER_IDS[1], "seller", "-")
+TEST_USER3 = UserData(fb_test.FBTest.TEST_USER_IDS[2], "none", "-")
+TEST_USER4 = UserData(fb_test.FBTest.TEST_USER_IDS[3], "none", "-")
+TEST_USER5 = UserData(fb_test.FBTest.TEST_USER_IDS[4], "buyer", "-")
 
 class ItemData(object):
 
@@ -91,12 +92,12 @@ class ItemData(object):
 
 CURR_TIME_SECS = calendar.timegm(time.gmtime())
 # This is a test item that will expire in 10 minutes
-TEST_ITEM1 = ItemData("user1", "1.png", 10, CURR_TIME_SECS + 600, 12.25,
-                        "42.28, -83.73","tasty")
+TEST_ITEM1 = ItemData(TEST_USER1.userid, "1.png", 10, CURR_TIME_SECS + 600,
+                        12.25, "42.28, -83.73","tasty")
 
 # This is a test item that expired 10 minutes ago
-TEST_ITEM2 = ItemData("user2", "2.png", 20, CURR_TIME_SECS - 600, 25.00,
-                        "42.30, -83.73", "yummy")
+TEST_ITEM2 = ItemData(TEST_USER2.userid, "2.png", 20, CURR_TIME_SECS - 600,
+                        25.00, "42.30, -83.73", "yummy")
 
 class TransactionData(object):
     
@@ -131,7 +132,68 @@ class TransactionData(object):
     def BuildQuery(args):
         return "SELECT * FROM TRANSACTION" + BuildQueryArgs(args)
 
-TEST_TRANSACTION1 = TransactionData("user1", "user5", 10)
+TEST_TRANSACTION1 = TransactionData(TEST_USER1.userid, TEST_USER5.userid, 10)
+
+
+class CommunityData(object):
+
+    def __init__(self, communityid, communityname):
+        # Note: communityid is autoincremented by the database. Setting it in
+        # the constructor will have no affect on how this data interacts
+        # with the database.
+        self.communityid = communityid
+        self.communityname = communityname
+
+    @staticmethod
+    def FromDbData(data):
+        return CommunityData(*data)
+
+    def ToInsertCommand(self):
+        """Creates the command to insert this community into the database.
+
+        Returns:
+            (string) The MySQL command to insert this community into the
+                database.
+        """
+        return "INSERT INTO COMMUNITY (communityname) VALUES('%s')" %(
+                self.communityname)
+
+    @staticmethod
+    def BuildQuery(args):
+        return "SELECT * FROM COMMUNITY" + BuildQueryArgs(args)
+
+TEST_COMMUNITY1 = CommunityData(1, "TestCommunity1")
+TEST_COMMUNITY2 = CommunityData(2, "TestCommunity2")
+
+class MembershipData(object):
+
+    def __init__(self, communityid, userid):
+        self.communityid = communityid
+        self.userid = userid
+
+    @staticmethod
+    def FromDbData(data):
+        return MembershipData(*data)
+
+    def ToInsertCommand(self):
+        """Creates the command to insert this membership data into the database.
+
+        Returns:
+            (string) The MySQL command to insert this membership data into the
+                database.
+        """
+        return "INSERT INTO MEMBERSHIP VALUES('%d', '%s')" %(self.communityid,
+                self.userid)
+
+    @staticmethod
+    def BuildQuery(args):
+        return "SELECT * FROM MEMBERSHIP" + BuildQueryArgs(args)
+
+TEST_MEMBERSHIP1 = MembershipData(1, TEST_USER1.userid)
+TEST_MEMBERSHIP2 = MembershipData(1, TEST_USER2.userid)
+TEST_MEMBERSHIP3 = MembershipData(1, TEST_USER3.userid)
+TEST_MEMBERSHIP4 = MembershipData(1, TEST_USER4.userid)
+TEST_MEMBERSHIP5 = MembershipData(1, TEST_USER5.userid)
 
 conn = None
 
@@ -153,6 +215,17 @@ def SetUpTestItemData():
 
 def SetUpTestTransactionData():
     ExecuteCommand(TEST_TRANSACTION1.ToInsertCommand())
+
+def SetUpTestCommunityData():
+    ExecuteCommand(TEST_COMMUNITY1.ToInsertCommand())
+    ExecuteCommand(TEST_COMMUNITY2.ToInsertCommand())
+
+def SetUpTestMembershipData():
+    ExecuteCommand(TEST_MEMBERSHIP1.ToInsertCommand())
+    ExecuteCommand(TEST_MEMBERSHIP2.ToInsertCommand())
+    ExecuteCommand(TEST_MEMBERSHIP3.ToInsertCommand())
+    ExecuteCommand(TEST_MEMBERSHIP4.ToInsertCommand())
+    ExecuteCommand(TEST_MEMBERSHIP5.ToInsertCommand())
 
 def SetUpTestDatabase():
     global conn
@@ -185,6 +258,19 @@ def SetUpTestDatabase():
                     "buyerid VARCHAR(40) NOT NULL, "\
                     "servings INT NOT NULL);")
     SetUpTestTransactionData()
+
+    ExecuteCommand("DROP TABLE IF EXISTS COMMUNITY;")
+    ExecuteCommand("CREATE TABLE COMMUNITY("\
+                    "communityid int NOT NULL AUTO_INCREMENT, "\
+                    "communityname varchar(255) NOT NULL, "\
+                    "PRIMARY KEY(communityid));")
+    SetUpTestCommunityData()
+
+    ExecuteCommand("DROP TABLE IF EXISTS MEMBERSHIP;")
+    ExecuteCommand("CREATE TABLE MEMBERSHIP("\
+                    "communityid int NOT NULL, "\
+                    "userid varchar(20) NOT NULL);")
+    SetUpTestMembershipData()
 
 def SetUpProdDatabase():
     global conn
@@ -322,3 +408,19 @@ def CompleteTransaction(transaction_data):
         transaction_data: (TransactionData) The buying data to delete.
     """
     ExecuteCommand(transaction_data.ToDeleteCommand())
+
+def QueryCommunities(args=[]):
+    query = CommunityData.BuildQuery(args)
+    x = conn.cursor()
+    x.execute(query)
+    return [CommunityData.FromDbData(result) for result in x.fetchall()]
+
+def AddCommunity(community_data):
+    """Adds the given community to the database.
+
+    Args:
+        community_data: (CommunityData) The community to be added to the
+            database.
+    """
+    ExecuteCommand(community_data.ToInsertCommand())
+

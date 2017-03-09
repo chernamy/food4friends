@@ -1,4 +1,4 @@
-TEST_FILES = $(wildcard controller_tests/*test.py)
+TEST_FILES = $(wildcard controller_tests/*test.py) fb_test.py
 TESTS = $(subst .py,,$(subst /,.,$(TEST_FILES)))
 
 db_setup:
@@ -26,3 +26,9 @@ login_test:
 
 user_test:
 	python -m controller_tests.user_test
+
+fb_test:
+	python fb_test.py
+
+community_test:
+	python -m controller_tests.community_test

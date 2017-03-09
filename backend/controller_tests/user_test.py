@@ -26,7 +26,7 @@ class UserTest(base_test.BaseTestCase):
 
     def testUserRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
-        data = {"userid": "user1"}
+        data = {"userid": extensions.TEST_USER1.userid}
         r = self.GetJSON(UserTest.USER_ROUTE, data)
         self.assertEquals(r.data,
             messages.BuildUserInfoMessage(extensions.TEST_USER1))
