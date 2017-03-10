@@ -18,8 +18,11 @@ def CreateCommunity():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
+    if request.json is None:
+        return messages.NO_JSON_DATA, 400
+
     if "communityname" not in request.json:
-        return messages.MISSING_COMMUNITYNAME
+        return messages.MISSING_COMMUNITYNAME, 400
 
     communityname = request.json.get("communityname")
     new_community = extensions.CommunityData(0, communityname)
@@ -29,8 +32,41 @@ def CreateCommunity():
     # The new communityid is autoincremented, so its ID should 
     userid = session["userid"]
     new_community_id = extensions.GetLastAutoIncID()
-    AddUserToCommunity(userid, new_community_id)
+    AddUserToCommunity(userid, new_community_id, "joined")
     return messages.SUCCESS, 200
+
+
+@communities.route("/api/v1/communities/joined/", methods=["GET"])
+def GetJoinedCommunities():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    userid = session["userid"]
+    joined_communities = extensions.Query(extensions.MembershipData,
+                                [("userid", userid), ("status", "joined")])
+    rtn_communities = []
+    for community in joined_communities:
+        rtn_communities.extend(extensions.Query(extensions.CommunityData,
+                [("communityid", community.communityid)]))
+
+    return messages.BuildCommunityListMessage(rtn_communities)
+        
+
+@communities.route("/api/v1/communities/invites/", methods=["GET"])
+def GetInvitedCommunities():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    userid = session["userid"]
+    invites = extensions.Query(extensions.MembershipData,
+                                [("userid", userid), ("status", "pending")])
+    communities = []
+    for invite in invites:
+        communities.extend(extensions.Query(extensions.CommunityData,
+                            [("communityid", invite.communityid)]))
+
+    return messages.BuildCommunityListMessage(communities)
+
 
 @community.route("/api/v1/community/", methods=["GET"])
 def GetUsersInCommunity():
@@ -49,13 +85,13 @@ def GetUsersInCommunity():
     return messages.BuildMembersListMessage(communities), 200
         
 
-def AddUserToCommunity(userid, communityid):
-    new_membership = extensions.MembershipData(userid, communityid)
+def AddUserToCommunity(userid, communityid, status):
+    new_membership = extensions.MembershipData(userid, communityid, status)
     extensions.Insert(new_membership)
     
-@community.route("/api/v1/community/", methods=["POST"])
+
+@community.route("/api/v1/community/add/", methods=["POST"])
 def ProcessAddUserToCommunityRequest():
-    # TODO (mjchao): Test this function
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
@@ -71,8 +107,40 @@ def ProcessAddUserToCommunityRequest():
     userid = request.json.get("userid")
     communityid = request.json.get("communityid")
 
-    if extensions.Query(extensions.MEMBERSHIP_DATA,
+    if not extensions.Query(extensions.MembershipData,
+                            [("userid", session["userid"]),
+                            ("communityid", communityid),
+                            ("status", "joined")]):
+        return messages.NOT_IN_COMMUNITY, 403
+
+    if extensions.Query(extensions.MembershipData,
                         [("userid", userid), ("communityid", communityid)]):
         return messages.DUPLICATE_MEMBERSHIP, 400
 
-    AddUserToCommunity(userid, communityid)
+    AddUserToCommunity(userid, communityid, "pending")
+    return messages.SUCCESS, 200
+
+
+@community.route("/api/v1/community/join/", methods=["POST"])
+def AcceptInvitationRequest():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    if request.json is None:
+        return messages.NO_JSON_DATA, 400
+    
+    if "communityid" not in request.json:
+        return messages.MISSING_COMMUNITYID, 400
+
+    userid = session["userid"]
+    communityid = request.json.get("communityid")
+
+    invite = extensions.Query(extensions.MembershipData,
+                            [("userid", userid), ("communityid", communityid),
+                            ("status", "pending")])
+    if not invite:
+        return messages.NOT_INVITED
+
+    extensions.Update(invite[0], "status='joined'")
+    return messages.SUCCESS, 200
+    

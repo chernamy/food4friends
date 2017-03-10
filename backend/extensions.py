@@ -248,17 +248,17 @@ TEST_COMMUNITY2 = CommunityData(2, "TestCommunity2")
 class MembershipData(Data):
 
     _TABLE = "MEMBERSHIP"
-    _COL_NAMES = ["userid", "communityid"]
+    _COL_NAMES = ["userid", "communityid", "status"]
 
     def __init__(self, *data_values):
         super(MembershipData, self).__init__(data_values)
 
 
-TEST_MEMBERSHIP1 = MembershipData(TEST_USER1.userid, 1)
-TEST_MEMBERSHIP2 = MembershipData(TEST_USER2.userid, 1)
-TEST_MEMBERSHIP3 = MembershipData(TEST_USER3.userid, 1)
-TEST_MEMBERSHIP4 = MembershipData(TEST_USER4.userid, 1)
-TEST_MEMBERSHIP5 = MembershipData(TEST_USER5.userid, 1)
+TEST_MEMBERSHIP1 = MembershipData(TEST_USER1.userid, 1, "joined")
+TEST_MEMBERSHIP2 = MembershipData(TEST_USER2.userid, 1, "joined")
+TEST_MEMBERSHIP3 = MembershipData(TEST_USER3.userid, 1, "joined")
+TEST_MEMBERSHIP4 = MembershipData(TEST_USER4.userid, 1, "joined")
+TEST_MEMBERSHIP5 = MembershipData(TEST_USER5.userid, 1, "joined")
 
 
 conn = None
@@ -343,7 +343,8 @@ def SetUpTestDatabase():
     ExecuteCommand("DROP TABLE IF EXISTS MEMBERSHIP;")
     ExecuteCommand("CREATE TABLE MEMBERSHIP("\
                     "userid varchar(20) NOT NULL,"\
-                    "communityid int NOT NULL);")
+                    "communityid int NOT NULL,"\
+                    "status ENUM('pending', 'joined') NOT NULL);")
     SetUpTestMembershipData()
 
 

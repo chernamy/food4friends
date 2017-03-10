@@ -130,6 +130,9 @@ NEGATIVE_DURATION = BuildErrorMessage("You are not allowed to reduce the end " \
 MISSING_COMMUNITYNAME = BuildErrorMessage("Missing communityname")
 MISSING_ADD_USERID = BuildErrorMessage("Missing userid to be added")
 MISSING_COMMUNITYID = BuildErrorMessage("Missing communityid")
-DUPLICATE_MEMBERSHIP = BuildErrorMessage("The member is already in " \
-                                            "the community.")
+NOT_IN_COMMUNITY = BuildErrorMessage("You need to be in the community first.")
+DUPLICATE_MEMBERSHIP = BuildErrorMessage("The member is already in or has " \
+                                            "been invited to the community.")
+NOT_INVITED = BuildErrorMessage("You have not been invited to join this "\
+                                    "community")
 
