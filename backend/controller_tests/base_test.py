@@ -63,6 +63,28 @@ class BaseTestCase(unittest.TestCase):
                                     content_type="application/json",
                                     base_url=base_url)
 
+    def DeleteJSON(self, route, data=None, https=False):
+        """Deletes the given data as JSON to the specified route.
+
+        Args:
+            route: (string) the route to which to delete (end it with a
+                trailing "/")
+            data: (dict) the data to post. By default, this is None, which posts
+                no json data.
+            https: (bool) whether to use https (True) or http (False).
+
+        Returns:
+            (Response) Contains the data about the server's response.
+        """
+        base_url = (BaseTestCase.BASE_HTTPS_URL if https
+                    else BaseTestCase.BASE_HTTP_URL)
+        if data is None:
+            return self.app.delete(route, base_url=base_url)
+        else:
+            return self.app.delete(route, data=json.dumps(data),
+                                    content_type="application/json",
+                                    base_url=base_url)
+
     def PostFile(self, route, data, https=False):
         """Posts the given image with JSON data to the specified route.
 

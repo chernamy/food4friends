@@ -159,3 +159,26 @@ def AcceptInvitationRequest():
     extensions.Update(invite[0], "status='joined'")
     return messages.SUCCESS, 200
     
+@community.route("/api/v1/community/leave/", methods=["DELETE"])
+def LeaveCommunity():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    if request.json is None:
+        return messages.NO_JSON_DATA, 400
+
+    if "communityid" not in request.json:
+        return messages.MISSING_COMMUNITYID, 400
+
+    userid = session["userid"]
+    communityid = request.json.get("communityid")
+
+    membership = extensions.Query(extensions.MembershipData,
+                                    [("userid", userid),
+                                    ("communityid", communityid),
+                                    ("status", "joined")])
+    if not membership:
+        return messages.NOT_IN_COMMUNITY
+
+    extensions.Delete(membership[0])
+    return messages.SUCCESS, 200

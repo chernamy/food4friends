@@ -12,6 +12,7 @@ class CommunityTest(base_test.BaseTestCase):
     SPECIFIC_COMMUNITY_ROUTE = "/api/v1/community/"
     ADD_MEMBER_ROUTE ="/api/v1/community/add/"
     ACCEPT_INVITATION_ROUTE = "/api/v1/community/join/"
+    LEAVE_COMMUNITY_ROUTE = "/api/v1/community/leave/"
 
     def testViewCommunityRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
@@ -220,6 +221,23 @@ class CommunityTest(base_test.BaseTestCase):
         r = self.PostJSON(CommunityTest.ACCEPT_INVITATION_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_INVITED)
 
+    def testLeaveCommunityRouteExists(self):
+        login_test.LoginTest.LoginAsUser(self, 1)
+        data = {"communityid": extensions.TEST_COMMUNITY1.communityid}
+        r = self.DeleteJSON(CommunityTest.LEAVE_COMMUNITY_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        r = self.GetJSON(CommunityTest.JOINED_COMMUNITIES_ROUTE)
+        self.assertEquals(r.data, messages.BuildCommunityListMessage([]))
+
+    def testLeaveCommunityRouteMissingFields(self):
+        data = {"communityid": extensions.TEST_COMMUNITY1.communityid}
+        r = self.DeleteJSON(CommunityTest.LEAVE_COMMUNITY_ROUTE, data)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
+        login_test.LoginTest.LoginAsUser(self, 1)
+        r = self.DeleteJSON(CommunityTest.LEAVE_COMMUNITY_ROUTE)
+        self.assertEquals(r.data, messages.NO_JSON_DATA)
 
 if __name__ == "__main__":
     unittest.main()
