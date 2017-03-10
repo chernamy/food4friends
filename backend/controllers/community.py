@@ -10,7 +10,7 @@ def ViewCommunities():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
-    community_data = extensions.QueryCommunities()
+    community_data = extensions.Query(extensions.CommunityData)
     return messages.BuildCommunityListMessage(community_data), 200
 
 @communities.route("/api/v1/communities/", methods=["POST"])
@@ -23,7 +23,7 @@ def CreateCommunity():
 
     communityname = request.json.get("communityname")
     new_community = extensions.CommunityData(0, communityname)
-    extensions.AddCommunity(new_community)
+    extensions.Insert(new_community)
 
     # TODO (mjchao): Add user to the community just created.
     return messages.SUCCESS, 200

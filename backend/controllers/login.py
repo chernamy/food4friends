@@ -21,7 +21,7 @@ def Login():
         return messages.ALREADY_LOGGED_IN, 401
     
     userid = request.json.get("userid")
-    user_data = extensions.QueryUsers([("userid", userid)])
+    user_data = extensions.Query(extensions.UserData, [("userid", userid)])
     if not user_data:
         return messages.INVALID_CREDENTIALS, 422
 

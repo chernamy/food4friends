@@ -24,7 +24,7 @@ def EditOffer():
     if userid != session["userid"]:
         return messages.NOT_LOGGED_IN, 403
     
-    item_data = extensions.QueryItems([("userid", userid)])
+    item_data = extensions.Query(extensions.ItemData, [("userid", userid)])
     if not item_data:
         return messages.NOT_SELLER, 400
 
@@ -69,23 +69,25 @@ def EditOffer():
         # put in the new photo
         photo_path = os.path.join(IMAGE_DIR, userid + "." + ext)
         photo.save(photo_path)
-        extensions.UpdateItem("photo = '%s'" %(photo_path), item_data)
-        item_data = extensions.QueryItems([("userid", userid)])[0]
+        extensions.Update(item_data, "photo = '%s'" %(photo_path))
+        item_data = extensions.Query(extensions.ItemData,
+                                        [("userid", userid)])[0]
 
     if "servings" in request.form:
         new_servings = item_data.servings + delta_servings
-        extensions.UpdateItem("servings = " + str(new_servings), item_data)
-        item_data = extensions.QueryItems([("userid", userid)])[0]
+        extensions.Update(item_data, "servings = " + str(new_servings))
+        item_data = extensions.Query(extensions.ItemData,
+                                        [("userid", userid)])[0]
 
     if "duration" in request.form:
         new_end = item_data.end + delta_duration * 60
-        extensions.UpdateItem("end = " + str(new_end), item_data)
-        item_data = extensions.QueryItems([("userid", userid)])[0]
+        extensions.Update(item_data, "end = " + str(new_end))
+        item_data = extensions.Query(extensions.ItemData,
+                                        [("userid", userid)])[0]
 
     if "description" in request.form:
         new_description = request.form.get("description")
-        extensions.UpdateItem("description = '%s'" %(new_description),
-                                item_data)
+        extensions.Update(item_data, "description = '%s'" %(new_description))
     
     return messages.SUCCESS, 200
 
@@ -115,16 +117,18 @@ def CreateOffer():
     if userid != session["userid"]:
         return messages.NOT_LOGGED_IN, 403
 
-    user_data = extensions.QueryUsers([("userid", userid)])
+    user_data = extensions.Query(extensions.UserData, [("userid", userid)])
     if user_data[0].role == "buyer":
         return messages.INVALID_USER_ROLE, 400
     elif user_data[0].role == "seller":
-        user_item_data = extensions.QueryItems([("userid", userid)])
+        user_item_data = extensions.Query(extensions.ItemData,
+                                            [("userid", userid)])
         curr_time = calendar.timegm(time.gmtime())
         if curr_time >= user_item_data[0].end:
             # user is no longer a seller because the item expired.
-            extensions.DeleteItem(user_item_data[0])
-            extensions.UpdateUserRole(user_data[0], "none")
+            extensions.Delete(user_item_data[0])
+            extensions.Update(user_data[0], "role='none'")
+            user_data[0].role = "none"
         else:
             return messages.INVALID_USER_ROLE, 400
 
@@ -171,7 +175,7 @@ def CreateOffer():
 
     new_item = extensions.ItemData(userid, photo_path, servings, end,
                                     price, address, description)
-    extensions.AddItem(new_item)
+    extensions.Insert(new_item)
     return messages.SUCCESS, 200
 
 @sell.route("/api/v1/sell/complete", methods=["POST"])
@@ -191,14 +195,14 @@ def CompleteTransaction():
         return messages.NOT_LOGGED_IN, 403
 
     # confirm actually a seller
-    seller_data = extensions.QueryUsers([("userid", userid)])[0]
+    seller_data = extensions.Query(extensions.UserData, [("userid", userid)])[0]
     if seller_data.role != "seller":
         return messages.NOT_SELLER, 403
 
     buyerid = request.json.get("buyerid")
 
     # confirm buyer exists
-    buyer_data = extensions.QueryUsers([("userid", buyerid)])
+    buyer_data = extensions.Query(extensions.UserData, [("userid", buyerid)])
     if not buyer_data:
         return messages.NONEXISTENT_BUYER, 400
     buyer_data = buyer_data[0]
@@ -207,22 +211,25 @@ def CompleteTransaction():
     if buyer_data.role != "buyer":
         return messages.NOT_BUYER, 400
 
-    transaction_data = extensions.QueryTransactions([("sellerid", userid),
-                                                        ("buyerid", buyerid)])
+    transaction_data = extensions.Query(extensions.TransactionData,
+            [("sellerid", userid), ("buyerid", buyerid)])
     if not transaction_data:
         return messages.NONEXISTENT_TRANSACTION, 400
 
     transaction_data = transaction_data[0]
-    extensions.CompleteTransaction(transaction_data)
+    extensions.Delete(transaction_data)
 
     # the buyer goes back to having no role
-    extensions.UpdateUserRole(buyer_data, "none")
+    extensions.Update(buyer_data, "role='none'")
+    buyer_data.role = "none"
 
     # if the seller has completed all transactions and has no sell offer
     # remaining, then the seller also goes back to having no role
-    if (not extensions.QueryItems([("userid", userid)]) and
-        not extensions.QueryTransactions([("sellerid", userid)])):
-        extensions.UpdateUserRole(seller_data, "none")
+    if (not extensions.Query(extensions.ItemData, [("userid", userid)]) and
+        not extensions.Query(extensions.TransactionData,
+                                [("sellerid", userid)])):
+        extensions.Update(seller_data, "role='none'")
+        seller_data.role = "none"
     
     return messages.SUCCESS, 200
     

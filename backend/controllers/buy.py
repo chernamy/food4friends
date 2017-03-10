@@ -12,14 +12,16 @@ def ViewBuyList():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN
 
-    item_data = extensions.QueryItems()
+    item_data = extensions.Query(extensions.ItemData)
     curr_time = calendar.timegm(time.gmtime())
     unexpired_items = []
     for item in item_data:
         if curr_time > item.end:
-            extensions.DeleteItem(item)
-            user = extensions.QueryUsers([("userid", item.userid)])[0]
-            extensions.UpdateUserRole(user, "none")
+            extensions.Delete(item)
+            user = extensions.Query(extensions.UserData,
+                                    [("userid", item.userid)])[0]
+            extensions.Update(user, "role='none'")
+            user.role = "none"
         else:
             unexpired_items.append(item)
 
@@ -52,7 +54,7 @@ def Purchase():
     if servings <= 0:
         return messages.INVALID_SERVINGS, 400
 
-    item_data = extensions.QueryItems([("userid", sellerid)])
+    item_data = extensions.Query(extensions.ItemData, [("userid", sellerid)])
     if not item_data:
         return messages.NONEXISTENT_SELLER, 400
     item_data = item_data[0]
@@ -67,17 +69,17 @@ def Purchase():
         return messages.TOO_MANY_SERVINGS, 400
     
     if servings == seller_servings:
-        extensions.DeleteItem(item_data)
+        extensions.Delete(item_data)
     else:
-        extensions.UpdateItem("servings = servings - %d" %(servings),
-                                item_data)
+        extensions.Update(item_data, "servings = servings - %d" %(servings))
 
     # guaranteed to exist because logged in with buyerid
-    user_data = extensions.QueryUsers([("userid", buyerid)])[0]
-    extensions.UpdateUserRole(user_data, "buyer")
+    user_data = extensions.Query(extensions.UserData, [("userid", buyerid)])[0]
+    extensions.Update(user_data, "role='buyer'")
+    user_data.role = "buyer"
 
     # add in the transaction data
     transaction = extensions.TransactionData(sellerid, buyerid, servings)
-    extensions.AddTransaction(transaction)
+    extensions.Insert(transaction)
     return messages.SUCCESS, 200
     

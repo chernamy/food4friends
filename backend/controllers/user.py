@@ -14,7 +14,7 @@ def GetUserData():
         return messages.MISSING_USERID, 400
 
     userid = request.json.get("userid")
-    user_data = extensions.QueryUsers([("userid", userid)])
+    user_data = extensions.Query(extensions.UserData, [("userid", userid)])
     if not user_data:
         return messages.NONEXISTENT_USER, 400
 

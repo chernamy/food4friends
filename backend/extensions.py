@@ -123,6 +123,12 @@ class Data(object):
         return insert_str + values_str
 
     def ToDeleteCommand(self):
+        """Creates the MySQL command to delete this data from the database.
+        
+        Returns:
+            (string) The MySQL command used to delete this data from the
+                database.
+        """
         delete_str = "DELETE FROM %s" %(self._TABLE)
         args = []
         for name in self._COL_NAMES:
@@ -130,6 +136,16 @@ class Data(object):
         return delete_str + BuildQueryArgs(args)
 
     def ToUpdateCommand(self, change):
+        """Creates the MySQL command to update this data entry with the
+        specified change.
+
+        Args:
+            change: (string) the change to make, e.g. "userid=2", to change
+                the userid property to 2.
+
+        Returns:
+            (string) The MySQL command used to update this data entry.
+        """
         update_str = "UPDATE %s SET %s " %(self._TABLE, change)
         args = []
         for name in self._COL_NAMES:
@@ -321,11 +337,13 @@ def SetUpTestDatabase():
                     "userid varchar(20) NOT NULL);")
     SetUpTestMembershipData()
 
+
 def SetUpProdDatabase():
     global conn
     conn = MySQLdb.connect(host="localhost", user=config.db_user,
                             passwd=config.db_passwd, db="prod")
-    
+
+
 def Init():
     """Reinitializes the database. If this is prod, the connection will just
     be reset. If this is test, the test data will be reset.
@@ -334,6 +352,7 @@ def Init():
         SetUpTestDatabase()
     else:
         SetUpProdDatabase()
+
 
 def Query(data_class, args=[]):
     """Returns data in the database with the specified properties.
@@ -350,7 +369,7 @@ def Query(data_class, args=[]):
     x.execute(query)
     return [data_class.FromDbData(result) for result in x.fetchall()]
 
-def AddData(data):
+def Insert(data):
     """Adds the given data to the database.
 
     Args:
@@ -358,7 +377,8 @@ def AddData(data):
     """
     ExecuteCommand(data.ToInsertCommand())
 
-def DeleteData(data):
+
+def Delete(data):
     """Deletes the given data from the database.
 
     Args:
@@ -366,107 +386,15 @@ def DeleteData(data):
     """
     ExecuteCommand(data.ToDeleteCommand())
 
-def QueryUsers(args=[]):
-    """Returns user data in the database with the specified properties.
-    Args:
-        args: A list of (property, value) or (property, value, op) tuples.
 
-    Returns:
-        (list of UserData) All users with the properties specified in args.
-    """
-    return Query(UserData, args)
-
-def UpdateUserRole(user_data, new_role):
-    """Updates the given user's role in the database.
+def Update(data, change):
+    """Updates the given data in the database. Note: the data object is not
+    changed. You will have to updated the attributes of the data object as well.
 
     Args:
-        user_data: (UserData) The user to update.
-        new_role: (string) "buyer", "seller" or "none" - the new role of the
-            user
+        data: (Data) Data to be updated in the database.
+        change: (string) The change to make (will be included in the MySQL
+            command)
     """
-    ExecuteCommand(user_data.GetUpdateRoleCommand(new_role))
-    user_data.role = new_role
+    ExecuteCommand(data.ToUpdateCommand(change))
 
-def QueryItems(args=[]):
-    """Returns item data in the database with the specified properties.
-
-    Args:
-        args: A list of (property, value) or (property, value, op) tuples.
-        
-    Returns:
-        (list of ItemData) All items with the properties specifid in args.
-    """
-    return Query(ItemData, args)
-
-def UpdateItem(change, item):
-    """Updates item data in the database with the specified change.
-
-    Args:
-        change: (string) A change to make
-        item: (ItemData) The item to change
-    """
-    command = item.ToUpdateCommand(change)
-    x = conn.cursor()
-    x.execute(command)
-
-def AddItem(item):
-    """Adds the given item to the database.
-
-    Args:
-        item: (ItemData) The item to insert.
-    """
-    AddData(item)
-
-def DeleteItem(item):
-    """Deletes the given item from the database.
-
-    Args:
-        item: (ItemData) The item to delete.
-    """
-    DeleteData(item)
-
-def QueryTransactions(args=[]):
-    """Returns transaction data in the database with the specified properties.
-    """
-    return Query(TransactionData, args)
-
-def AddTransaction(transaction_data):
-    """Adds the given transaction to the database.
-
-    Args:
-        transaction_data: (TransactionData) A transaction that needs to be
-            completed.
-    """
-    AddData(transaction_data)
-
-def CompleteTransaction(transaction_data):
-    """Deletes the given buying record from the database.
-
-    Args:
-        transaction_data: (TransactionData) The buying data to delete.
-    """
-    DeleteData(transaction_data)
-
-def QueryCommunities(args=[]):
-    return Query(CommunityData, args)
-
-def AddCommunity(community_data):
-    """Adds the given community to the database.
-
-    Args:
-        community_data: (CommunityData) The community to be added to the
-            database.
-    """
-    AddData(community_data)
-
-def QueryMembership(args=[]):
-    return Query(MembershipData, args)
-
-def AddMembership(membership_data):
-    """Adds the given membership data to the database.
-
-    Args:
-        membership_data: (MembershipData) The membership data to be added to
-            the database.
-    """
-    AddData(membership_data)
