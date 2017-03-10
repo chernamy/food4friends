@@ -84,10 +84,29 @@ class Data(object):
 
     @classmethod
     def FromDbData(cls, data):
+        """Creates this object from a list of data. This can be useful for
+        converting MySQL query results into object form.
+
+        Args:
+            data: (list) The data values in the same order as specified by
+                the _COL_NAMES field.
+
+        Returns:
+            (cls) The data object.
+        """
         return cls(*data)
 
     @classmethod
     def FromDict(cls, d):
+        """Creates this object from a dictionary of its data values. This can
+        be useful for converting JSON back into object form.
+
+        Args:
+            d: (dict) A dictionary of data values.
+
+        Returns:
+            (cls) The data object.
+        """
         data_values = []
         data_names = cls._COL_NAMES
         for name in data_names:
@@ -97,6 +116,20 @@ class Data(object):
 
     @classmethod
     def BuildQuery(cls, args):
+        """Creates the MySQL command to query for data with the specific
+        arguments in the database. See BuildQueryArgs() for details on
+        what to pass in for the args parameter.
+
+        Args:
+            args: list of (property, value) or (property, value, op) tuples.
+                If the tuple is (property, value), it represents the condition
+                "<property>='<value>'". If the tuple is (property, value, op),
+                it represents the condition "'<property><op>'<value>'". The
+                conditions are always ANDed together.
+
+        Returns:
+            (string) The MySQL query.
+        """
         if cls._TABLE is None:
             raise UnboundLocalError("Subclass " + str(cls) +
                                     " has not defined a _TABLE value")
