@@ -11,7 +11,7 @@ buy = Blueprint("/api/v1/buy", __name__)
 @buy.route("/api/v1/buy/", methods=["GET"])
 def ViewBuyList():
     if "userid" not in session:
-        return messages.NOT_LOGGED_IN
+        return messages.NOT_LOGGED_IN, 403
 
     item_data = extensions.Query(extensions.ItemData)
     curr_time = calendar.timegm(time.gmtime())
@@ -36,6 +36,9 @@ def ViewBuyList():
 def Purchase():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
+
+    if request.json is None:
+        return messages.NO_JSON_DATA, 400
 
     if "sellerid" not in request.json:
         return messages.MISSING_SELLERID, 400

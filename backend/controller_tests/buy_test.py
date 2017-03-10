@@ -126,6 +126,8 @@ class BuyTest(base_test.BaseTestCase):
 
     def testMissingFields(self):
         login_test.LoginTest.LoginAsUser(self, 3)
+        r = self.PostJSON(BuyTest.BUY_ROUTE)
+        self.assertEqual(r.data, messages.NO_JSON_DATA)
 
         data = {"buyerid": extensions.TEST_USER3.userid, "servings": 3}
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)

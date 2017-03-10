@@ -57,15 +57,15 @@ def UnwrapMembersListMessage(msg):
 SUCCESS = BuildInfoMessage("Success")
 
 # ---- General Error Messages ---- #
+NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")
 NO_JSON_DATA = BuildErrorMessage("Your request has no JSON data.")
-NO_FORM_DATA = BuildErrorMessage("Your request has no form data.")
 
 # ---- Login Request Error Messages ---- #
 MISSING_USERID = BuildErrorMessage("Missing userid")
 MISSING_ACCESS_TOKEN = BuildErrorMessage("Missing access token")
 INVALID_CREDENTIALS = BuildErrorMessage("Invalid credentials")
 ALREADY_LOGGED_IN = BuildErrorMessage("You're already logged in. Logout first.")
-NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")
+# Repeat: NOT_LOGGED_IN
 
 # ---- User Request Error Messages ---- #
 # Repeat: NOT_LOGGED_IN
