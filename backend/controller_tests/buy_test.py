@@ -162,6 +162,20 @@ class BuyTest(base_test.BaseTestCase):
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
         self.assertEqual(r.data, messages.BUY_WRONG_USERID)
 
+    def testBuyWrongCommunity(self):
+        login_test.LoginTest.LoginAsUser(self, 3)
+        initial_item = self.GetSellOfferForUser(extensions.TEST_ITEM1.userid)
+        initial_servings = initial_item.servings
+        login_test.LoginTest.Logout(self)
+
+        login_test.LoginTest.LoginAsUser(self, 6)
+
+        # buy 2 servings from user 1's sell offer
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": extensions.TEST_USER6.userid, "servings": 2}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.NOT_IN_SAME_COMMUNITY)
+
 
 if __name__ == "__main__":
     unittest.main()

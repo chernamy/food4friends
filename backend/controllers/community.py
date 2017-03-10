@@ -5,6 +5,7 @@ import messages
 community = Blueprint("/api/v1/community/", __name__)
 communities = Blueprint("/api/v1/communities/", __name__)
 
+
 @communities.route("/api/v1/communities/", methods=["GET"])
 def ViewCommunities():
     if "userid" not in session:
@@ -12,6 +13,7 @@ def ViewCommunities():
 
     community_data = extensions.Query(extensions.CommunityData)
     return messages.BuildCommunityListMessage(community_data), 200
+
 
 @communities.route("/api/v1/communities/", methods=["POST"])
 def CreateCommunity():
@@ -84,6 +86,19 @@ def GetUsersInCommunity():
                                     [("communityid", communityid)])
     return messages.BuildMembersListMessage(communities), 200
         
+
+def InSameCommunity(userid1, userid2):
+    user1_community_ids = set([community.communityid for community in
+                            extensions.Query(extensions.MembershipData,
+                            [("userid", userid1), ("status", "joined")])])
+    user2_communities = extensions.Query(extensions.MembershipData,
+            [("userid", userid2), ("status", "joined")])
+
+    for community in user2_communities:
+        if community.communityid in user1_community_ids:
+            return True
+
+    return False
 
 def AddUserToCommunity(userid, communityid, status):
     new_membership = extensions.MembershipData(userid, communityid, status)

@@ -232,6 +232,4 @@ def CompleteTransaction():
         seller_data.role = "none"
     
     return messages.SUCCESS, 200
-    
-    
 

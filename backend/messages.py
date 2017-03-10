@@ -83,6 +83,8 @@ INVALID_SERVINGS = BuildErrorMessage("Invalid servings field "\
 NONEXISTENT_SELLER = BuildErrorMessage("No sell offer for given sellerid field")
 TOO_MANY_SERVINGS = BuildErrorMessage("Servings field too large for sell offer")
 OFFER_EXPIRED = BuildErrorMessage("Offer has already expired")
+NOT_IN_SAME_COMMUNITY = BuildErrorMessage("You are not in the same community " \
+                                            "as the seller.")
 
 # ---- Sell Request Error Messages ---- #
 # Repeat: NOT_LOGGED_IN

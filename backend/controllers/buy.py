@@ -1,5 +1,6 @@
 from flask import *
 import calendar
+import community
 import extensions
 import messages
 import time
@@ -23,7 +24,10 @@ def ViewBuyList():
             extensions.Update(user, "role='none'")
             user.role = "none"
         else:
-            unexpired_items.append(item)
+            buyerid = session["userid"]
+            sellerid = item.userid
+            if community.InSameCommunity(buyerid, sellerid):
+                unexpired_items.append(item)
 
     return messages.BuildItemListMessage(unexpired_items), 200
 
@@ -72,6 +76,9 @@ def Purchase():
         extensions.Delete(item_data)
     else:
         extensions.Update(item_data, "servings = servings - %d" %(servings))
+
+    if not community.InSameCommunity(buyerid, sellerid):
+        return messages.NOT_IN_SAME_COMMUNITY, 403
 
     # guaranteed to exist because logged in with buyerid
     user_data = extensions.Query(extensions.UserData, [("userid", buyerid)])[0]
