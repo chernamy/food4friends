@@ -25,23 +25,54 @@ def CreateCommunity():
     new_community = extensions.CommunityData(0, communityname)
     extensions.Insert(new_community)
 
-    # TODO (mjchao): Add user to the community just created.
+    # Add user to the community just created.
+    # The new communityid is autoincremented, so its ID should 
+    userid = session["userid"]
+    new_community_id = extensions.GetLastAutoIncID()
+    AddUserToCommunity(userid, new_community_id)
     return messages.SUCCESS, 200
 
-@communities.route("/api/v1/community", methods=["GET"])
+@community.route("/api/v1/community/", methods=["GET"])
 def GetUsersInCommunity():
-    pass
-
-def AddUserToCommunity(userid, communityid):
-    pass
-    
-@communities.route("/api/v1/community/", methods=["POST"])
-def ProcessAddUserToCommunityRequest():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
+
+    if request.json is None:
+        return messages.NO_JSON_DATA, 400
+
+    if "communityid" not in request.json:
+        return messages.MISSING_COMMUNITYID, 400
+
+    communityid = request.json.get("communityid")
+    communities = extensions.Query(extensions.MembershipData,
+                                    [("communityid", communityid)])
+    return messages.BuildMembersListMessage(communities), 200
+        
+
+def AddUserToCommunity(userid, communityid):
+    new_membership = extensions.MembershipData(userid, communityid)
+    extensions.Insert(new_membership)
+    
+@community.route("/api/v1/community/", methods=["POST"])
+def ProcessAddUserToCommunityRequest():
+    # TODO (mjchao): Test this function
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    if request.json is None:
+        return messages.NO_JSON_DATA, 400
 
     if "userid" not in request.json:
         return messages.MISSING_ADD_USERID, 400
 
-    if "communityname" not in request.json:
-        return messages.MISSING_COMMUNITYNAME, 400
+    if "communityid" not in request.json:
+        return messages.MISSING_COMMUNITYID, 400
+
+    userid = request.json.get("userid")
+    communityid = request.json.get("communityid")
+
+    if extensions.Query(extensions.MEMBERSHIP_DATA,
+                        [("userid", userid), ("communityid", communityid)]):
+        return messages.DUPLICATE_MEMBERSHIP, 400
+
+    AddUserToCommunity(userid, communityid)

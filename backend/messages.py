@@ -41,11 +41,24 @@ def BuildCommunityListMessage(communities):
 
 def UnwrapCommunityListMessage(msg):
     communities = json.loads(msg)["communities"]
-    return [extensions.CommunityData(**community_dict) for
+    return [extensions.CommunityData.FromDict(community_dict) for
             community_dict in communities]
-    
+
+def BuildMembersListMessage(members):
+    msg = {
+        "members": [member.userid for member in members]
+    }
+    return json.dumps(msg)
+
+def UnwrapMembersListMessage(msg):
+    members = json.loads(msg)["members"]
+    return [member_userid for member_userid in members]
 
 SUCCESS = BuildInfoMessage("Success")
+
+# ---- General Error Messages ---- #
+NO_JSON_DATA = BuildErrorMessage("Your request has no JSON data.")
+NO_FORM_DATA = BuildErrorMessage("Your request has no form data.")
 
 # ---- Login Request Error Messages ---- #
 MISSING_USERID = BuildErrorMessage("Missing userid")
@@ -116,4 +129,7 @@ NEGATIVE_DURATION = BuildErrorMessage("You are not allowed to reduce the end " \
 # Repeat: NOT_LOGGED_IN
 MISSING_COMMUNITYNAME = BuildErrorMessage("Missing communityname")
 MISSING_ADD_USERID = BuildErrorMessage("Missing userid to be added")
+MISSING_COMMUNITYID = BuildErrorMessage("Missing communityid")
+DUPLICATE_MEMBERSHIP = BuildErrorMessage("The member is already in " \
+                                            "the community.")
 
