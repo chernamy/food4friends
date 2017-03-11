@@ -17,6 +17,9 @@ def EditOffer():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
+    if request.form is None:
+        return messages.NO_FORM_DATA, 400
+
     if "userid" not in request.form:
         return messages.MISSING_USERID, 400
 
@@ -184,10 +187,13 @@ def CompleteTransaction():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
+    if request.json is None:
+        return messages.NO_JSON_DATA, 400
+
     if "userid" not in request.json:
-        return messages.MISSING_USERID
+        return messages.MISSING_USERID, 400
     if "buyerid" not in request.json:
-        return messages.MISSING_BUYERID
+        return messages.MISSING_BUYERID, 400
 
     userid = request.json.get("userid")
 
@@ -232,6 +238,4 @@ def CompleteTransaction():
         seller_data.role = "none"
     
     return messages.SUCCESS, 200
-    
-    
 

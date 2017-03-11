@@ -373,6 +373,9 @@ class SellTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
         login_test.LoginTest.LoginAsUser(self, 1)
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE)
+        self.assertEquals(r.data, messages.NO_JSON_DATA)
+
         del data["userid"]
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_USERID)

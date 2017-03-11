@@ -57,15 +57,15 @@ def UnwrapMembersListMessage(msg):
 SUCCESS = BuildInfoMessage("Success")
 
 # ---- General Error Messages ---- #
+NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")
 NO_JSON_DATA = BuildErrorMessage("Your request has no JSON data.")
-NO_FORM_DATA = BuildErrorMessage("Your request has no form data.")
 
 # ---- Login Request Error Messages ---- #
 MISSING_USERID = BuildErrorMessage("Missing userid")
 MISSING_ACCESS_TOKEN = BuildErrorMessage("Missing access token")
 INVALID_CREDENTIALS = BuildErrorMessage("Invalid credentials")
 ALREADY_LOGGED_IN = BuildErrorMessage("You're already logged in. Logout first.")
-NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")
+# Repeat: NOT_LOGGED_IN
 
 # ---- User Request Error Messages ---- #
 # Repeat: NOT_LOGGED_IN
@@ -83,6 +83,8 @@ INVALID_SERVINGS = BuildErrorMessage("Invalid servings field "\
 NONEXISTENT_SELLER = BuildErrorMessage("No sell offer for given sellerid field")
 TOO_MANY_SERVINGS = BuildErrorMessage("Servings field too large for sell offer")
 OFFER_EXPIRED = BuildErrorMessage("Offer has already expired")
+NOT_IN_SAME_COMMUNITY = BuildErrorMessage("You are not in the same community " \
+                                            "as the seller.")
 
 # ---- Sell Request Error Messages ---- #
 # Repeat: NOT_LOGGED_IN
@@ -130,6 +132,9 @@ NEGATIVE_DURATION = BuildErrorMessage("You are not allowed to reduce the end " \
 MISSING_COMMUNITYNAME = BuildErrorMessage("Missing communityname")
 MISSING_ADD_USERID = BuildErrorMessage("Missing userid to be added")
 MISSING_COMMUNITYID = BuildErrorMessage("Missing communityid")
-DUPLICATE_MEMBERSHIP = BuildErrorMessage("The member is already in " \
-                                            "the community.")
+NOT_IN_COMMUNITY = BuildErrorMessage("You need to be in the community first.")
+DUPLICATE_MEMBERSHIP = BuildErrorMessage("The member is already in or has " \
+                                            "been invited to the community.")
+NOT_INVITED = BuildErrorMessage("You have not been invited to join this "\
+                                    "community")
 

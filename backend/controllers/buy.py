@@ -1,5 +1,6 @@
 from flask import *
 import calendar
+import community
 import extensions
 import messages
 import time
@@ -10,7 +11,7 @@ buy = Blueprint("/api/v1/buy", __name__)
 @buy.route("/api/v1/buy/", methods=["GET"])
 def ViewBuyList():
     if "userid" not in session:
-        return messages.NOT_LOGGED_IN
+        return messages.NOT_LOGGED_IN, 403
 
     item_data = extensions.Query(extensions.ItemData)
     curr_time = calendar.timegm(time.gmtime())
@@ -23,7 +24,10 @@ def ViewBuyList():
             extensions.Update(user, "role='none'")
             user.role = "none"
         else:
-            unexpired_items.append(item)
+            buyerid = session["userid"]
+            sellerid = item.userid
+            if community.InSameCommunity(buyerid, sellerid):
+                unexpired_items.append(item)
 
     return messages.BuildItemListMessage(unexpired_items), 200
 
@@ -32,6 +36,9 @@ def ViewBuyList():
 def Purchase():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
+
+    if request.json is None:
+        return messages.NO_JSON_DATA, 400
 
     if "sellerid" not in request.json:
         return messages.MISSING_SELLERID, 400
@@ -72,6 +79,9 @@ def Purchase():
         extensions.Delete(item_data)
     else:
         extensions.Update(item_data, "servings = servings - %d" %(servings))
+
+    if not community.InSameCommunity(buyerid, sellerid):
+        return messages.NOT_IN_SAME_COMMUNITY, 403
 
     # guaranteed to exist because logged in with buyerid
     user_data = extensions.Query(extensions.UserData, [("userid", buyerid)])[0]

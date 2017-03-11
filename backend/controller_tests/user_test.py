@@ -31,5 +31,15 @@ class UserTest(base_test.BaseTestCase):
         self.assertEquals(r.data,
             messages.BuildUserInfoMessage(extensions.TEST_USER1))
 
+    def testUserRouteMissingFields(self):
+        data = {"userid": extensions.TEST_USER1.userid}
+        r = self.GetJSON(UserTest.USER_ROUTE, data)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
+        login_test.LoginTest.LoginAsUser(self, 1)
+
+        r = self.GetJSON(UserTest.USER_ROUTE)
+        self.assertEquals(r.data, messages.NO_JSON_DATA)
+
 if __name__ == "__main__":
     unittest.main()
