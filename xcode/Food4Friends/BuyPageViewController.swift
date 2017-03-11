@@ -7,38 +7,6 @@
 //
 
 import UIKit
-import SwiftyJSON
-
-var image_data: [Data] = []
-
-struct buyItem {
-    var numServings: Int
-    var descriptions: String
-    var prices: Int
-    var addresses: Int
-    var ends: Int
-    var photos: String
-    var servings: Int
-    var userids: String
-
-}
-
-func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
-    URLSession.shared.dataTask(with: url) {
-        (data, response, error) in
-        completion(data, response, error)
-        }.resume()
-}
-
-func downloadImage(url: URL) {
-    print("Download Started")
-    getDataFromUrl(url: url) { (data, response, error)  in
-        guard let data = data, error == nil else { return }
-        print(response?.suggestedFilename ?? url.lastPathComponent)
-        print("Download Finished")
-        image_data.append(data)
-    }
-}
 
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     
@@ -54,32 +22,30 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var photos: [String] = []
     var servings: [Int] = []
     var userids: [String] = []
+    var image_data: [Data] = []
     
-    func downloadPics() {
-        var i = 0
-        while (i < self.photos.count) {
-            //let path = "/Users/Amy/Documents/eecs441/food4friends/xcode/images/" + self.photos[i]
-//            let imageURL = URL(fileURLWithPath: "https://img.clipartfest.com/79e2a61004f0a37c72f5220eadbfe242_death-apple-at-skyrim-nexus-apple_894-893.jpeg")
-//            var data = downloadImage(url: imageURL)
-            
-            if let url = NSURL(string: "https://img.clipartfest.com/79e2a61004f0a37c72f5220eadbfe242_death-apple-at-skyrim-nexus-apple_894-893.jpeg"), let data = NSData(contentsOf: url as URL) {
-                print (data)
+    func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
+        URLSession.shared.dataTask(with: url) {
+            (data, response, error) in
+            completion(data, response, error)
+            }.resume()
+    }
+    
+    func downloadImage(url: URL) {
+        print("Download Started")
+        getDataFromUrl(url: url) { (data, response, error)  in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download Finished")
+            self.image_data.append(data)
+            DispatchQueue.main.async() { () -> Void in
+                self.tableView.reloadData()
             }
-            
-            i += 1
-        }
-        
-        
-        DispatchQueue.main.async() {
-            self.tableView.reloadData()
-            
         }
     }
     
     func makeGETCall() {
-        let json = JSON(data: "http://0.0.0.0:3000/api/v1/buy")
-        
-        let todoEndpoint: String = "http://0.0.0.0:3000/api/v1/buy"
+        let todoEndpoint: String = "http://35.1.119.53:3000/api/v1/buy"
         guard let url = URL(string: todoEndpoint) else {
             print("Error: cannot create URL")
             return
@@ -94,7 +60,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             // do stuff with response, data & error here
             // check for any errors
             guard error == nil else {
-                print("error calling GET on /todos/1")
+                print("error calling GET on /api/v1/buy")
                 print(error)
                 return
             }
@@ -108,30 +74,20 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     print("error trying to convert data to JSON")
                     return
                 }
-                //print("userid: " + food.userid)
-                //print("photo: " + food.photo)
-                //print("servings: " + todo.description)
-                //print("end: " + todo.description)
-                //print("price: " + todo.description)
-                if let arrJSON = todo["items"] {
+
+                if let arrJSON = todo["items"] as? NSArray{
                     print(arrJSON.count)
-                    print ("arrJSON: ")
                     if(arrJSON.count != 0) {
                         var i: Int = 0
-                        while (i < arrJSON.count) {
-                        
-                            //TODO: FIX
-                            if let aObject = arrJSON[i] as? [String: AnyObject] {
-                                self.descriptions.append(aObject["description"] as! String)
-                                self.prices.append(aObject["price"] as! Int)
-                                //addresses.append(aObject["address"] as! String)
-                                self.ends.append(aObject["end"] as! Int)
-                                self.photos.append(aObject["photo"] as! String)
-                                self.servings.append(aObject["servings"] as! Int)
-                                self.userids.append(aObject["userid"] as! String)
- 
-                            }
-                        
+                        for item in (arrJSON as? [[String:Any]])!{
+                            print(item)
+                            self.descriptions.append(item["description"] as! String)
+                            self.prices.append(item["price"] as! Int)
+                            //self.addresses.append(item["address"] as! Int)
+                            self.ends.append(item["end"] as! Int)
+                            self.photos.append(item["photo"] as! String)
+                            self.servings.append(item["servings"] as! Int)
+                            self.userids.append(item["userid"] as! String)
                         }
                     }
                 }
@@ -144,13 +100,14 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                 print(self.servings)
                 print(self.userids)
                 
-                //for index in 0...self.photos.count-1 {
-                    //print(self.photos[index])
-                    //self.images.append(UIImage(named: self.photos[index])!)
-                //}
-                //print("description: " + todo.description)
-                
-                self.downloadPics()
+                DispatchQueue.main.async() {
+//                    for 0...self.photos.count {
+//                        let url = URL(string: "/Users/Amy/Documents/eecs441/food4friends/xcode/images/1.png")
+//                        self.downloadImage(url: url!)
+//                    }
+                    let url = URL(string: "https://www.thecheesecakefactory.com/assets/images/Menu-Import/CCF_FreshStrawberryCheesecake.jpg")
+                    self.downloadImage(url: url!)
+                }
             } catch {
                 print("error trying to convert data to JSON")
                 return
@@ -159,18 +116,54 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         
         task.resume()
     }
+
+    func makePOSTCall() {
+        let jsonDict = ["userid": "166392330540730", "token":"EAAFhbcIKPLABAKfLFMZALX6dlQpc7bkYA7UU6mjBCUY1vqzZAZC7wyAzOGlJSucDeOeXpjHEZCm2s4Xz1tr12QATf2oZBHaLL3cJd9299EbcpUTS5JzSIcIug6wfGILYdY92PzyDZCcbPVvXR3uctssiHa9PDiJIYZA8u0RIheHxX22grFKSjCulDsk8lm133BkL29Ej1HWvd7Wn0hARizghqKG9bjBv5qGEVFfM7ZBJaAZDZD"]
+        //let data = try JSONSerialization.data(withJSONObject: jsonData, options: [])
+        
+        let valid = JSONSerialization.isValidJSONObject(jsonDict)
+        if (valid == true) {
+            print("true")
+        }
+        
+        let loginurl = URL(string: "http://35.1.119.53:3000/api/v1/login/")!
+        
+        let request = NSMutableURLRequest(url: loginurl)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        if let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) {
+            request.httpBody = jsonData
+        }
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
+            if error != nil{
+                print(error?.localizedDescription)
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary {
+                    let resultValue:String = json["info"] as! String;
+                    print("result: \(resultValue)")
+                }
+            } catch let error as NSError {
+                print(error)
+            }
+            DispatchQueue.main.async() {
+                self.makeGETCall()
+            }
+        }          
+        task.resume()
+    }
     
-    // Things you should query for
-    //var names = ["Enchilada", "Cheesecake", "Wings"]
-    //var images = [UIImage(named: "enchilada"), UIImage(named: "cheesecake"), UIImage(named: "wings")]
-    var images: [UIImage] = []
+    
     // default view controller stuff
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         popupView.isHidden = true
-        makeGETCall()
-        
+        makePOSTCall()
     }
     
     override func didReceiveMemoryWarning() {
@@ -205,49 +198,9 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         print(indexPath.row)
         print(self.photos.count)
         if (self.photos.count != 0) {
-            for index in 0...self.photos.count-1 {
-                print(self.photos[index])
-                let FoodPicURL = URL(fileURLWithPath: "../images/1.png") // We can force unwrap because we are 100% certain the constructor will not return nil in this case.
+            for index in 0...self.image_data.count {
+                cell.photo.image = UIImage(data: image_data[0])
                 
-//                let filePath = Bundle.main.path(forResource: "/Users/Amy/Documents/eecs441/food4friends/xcode/images/1", ofType: "png")
-                //let image = UIImage(contentsOfFile: "/Users/Amy/Documents/eecs441/food4friends/xcode/images/1")
-                //cell.photo.image = image
-                
-                //let FoodPicURL = URL(fileURLWithPath: "https://img.clipartfest.com/79e2a61004f0a37c72f5220eadbfe242_death-apple-at-skyrim-nexus-apple_894-893.jpeg")
-
-                
-                //let data = try? Data(contentsOf: FoodPicURL)
-                //let picture = UIImage(data: data!)
-//                DispatchQueue.main.sync(){
-//                    cell.photo.image = picture
-//                }
-                
-                
-//                let session = URLSession(configuration: .default)
-//                let downloadPicTask = session.dataTask(with: FoodPicURL) { (data, response, error) in
-//                    // The download has finished.
-//                    if let e = error {
-//                        print("Error downloading cat picture: \(e)")
-//                    } else {
-//                        // No errors found.
-//                        // It would be weird if we didn't have a response, so check for that too.
-//                        if let res = response as? HTTPURLResponse {
-//                            print("Downloaded cat picture with response code \(res.statusCode)")
-//                            if let imageData = data {
-//                                // Finally convert that Data into an image and do what you wish with it.
-//                                let image = UIImage(data: imageData)
-//                                // Do something with your image.
-//                            } else {
-//                                print("Couldn't get image: Image is nil")
-//                            }
-//                        } else {
-//                            print("Couldn't get response code for some reason")
-//                        }
-//                    }
-//                }
-//                downloadPicTask.resume()
-
-               // images.append(UIImage(named: self.photos[index]))
             }
         }
 //        cell.photo.image = UIImage(named: self.photos[indexPath.row])
