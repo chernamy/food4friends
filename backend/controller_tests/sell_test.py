@@ -434,8 +434,9 @@ class SellTest(base_test.BaseTestCase):
         expected_item.servings += 100
         expected_item.end += 10 * 60
         expected_item.description = "cake"
-        self.assertEquals(r.data,
-            messages.BuildItemListMessage([expected_item]))
+        self.assertEquals(set(messages.UnwrapItemListMessage(r.data)),
+                set([expected_item, extensions.TEST_ITEM3,
+                        extensions.TEST_ITEM4]))
 
         # check that file was updated
         self.assertTrue(filecmp.cmp(SellTest.TEST_UPDATE_IMAGE_PATH,

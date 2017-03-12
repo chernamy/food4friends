@@ -82,6 +82,12 @@ class Data(object):
             # example, test_user_data.userid will now return the userid.
             self.__dict__ = data_dict
 
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def __hash__(self):
+        return hash(frozenset(self.__dict__))
+
     @classmethod
     def FromDbData(cls, data):
         """Creates this object from a list of data. This can be useful for
@@ -215,6 +221,8 @@ TEST_USER3 = UserData(fb_test.FBTest.TEST_USER_IDS[2], "none", "-")
 TEST_USER4 = UserData(fb_test.FBTest.TEST_USER_IDS[3], "none", "-")
 TEST_USER5 = UserData(fb_test.FBTest.TEST_USER_IDS[4], "buyer", "-")
 TEST_USER6 = UserData(fb_test.FBTest.TEST_USER_IDS[5], "none", "-")
+TEST_USER7 = UserData(fb_test.FBTest.TEST_USER_IDS[6], "seller", "-")
+TEST_USER8 = UserData(fb_test.FBTest.TEST_USER_IDS[7], "seller", "-")
 
 
 class ItemData(Data):
@@ -229,12 +237,18 @@ class ItemData(Data):
 
 CURR_TIME_SECS = calendar.timegm(time.gmtime())
 # This is a test item that will expire in 10 minutes
-TEST_ITEM1 = ItemData(TEST_USER1.userid, "1.png", 10, CURR_TIME_SECS + 600,
-                        12.25, "42.28, -83.73","tasty")
+TEST_ITEM1 = ItemData(TEST_USER1.userid, "%s.png" %(TEST_USER1.userid), 10,
+                        CURR_TIME_SECS + 600, 12.25, "42.28, -83.73","tasty")
 
 # This is a test item that expired 10 minutes ago
-TEST_ITEM2 = ItemData(TEST_USER2.userid, "2.png", 20, CURR_TIME_SECS - 600,
-                        25.00, "42.30, -83.73", "yummy")
+TEST_ITEM2 = ItemData(TEST_USER2.userid, "%s.png" %(TEST_USER2.userid), 20,
+                        CURR_TIME_SECS - 600, 25.00, "42.30, -83.73", "yummy")
+
+TEST_ITEM3 = ItemData(TEST_USER7.userid, "%s.png" %(TEST_USER7.userid), 20,
+                        CURR_TIME_SECS + 1200, 25.00, "42.30, -83.73", "yummy7")
+
+TEST_ITEM4 = ItemData(TEST_USER8.userid, "%s.png" %(TEST_USER8.userid), 20,
+                        CURR_TIME_SECS + 1200, 25.00, "42.30, -83.73", "yummy8")
 
 
 class TransactionData(Data):
@@ -292,6 +306,8 @@ TEST_MEMBERSHIP2 = MembershipData(TEST_USER2.userid, 1, "joined")
 TEST_MEMBERSHIP3 = MembershipData(TEST_USER3.userid, 1, "joined")
 TEST_MEMBERSHIP4 = MembershipData(TEST_USER4.userid, 1, "joined")
 TEST_MEMBERSHIP5 = MembershipData(TEST_USER5.userid, 1, "joined")
+TEST_MEMBERSHIP6 = MembershipData(TEST_USER7.userid, 1, "joined")
+TEST_MEMBERSHIP7 = MembershipData(TEST_USER8.userid, 1, "joined")
 
 
 conn = None
@@ -310,11 +326,15 @@ def SetUpTestUserData():
     ExecuteCommand(TEST_USER4.ToInsertCommand())
     ExecuteCommand(TEST_USER5.ToInsertCommand())
     ExecuteCommand(TEST_USER6.ToInsertCommand())
+    ExecuteCommand(TEST_USER7.ToInsertCommand())
+    ExecuteCommand(TEST_USER8.ToInsertCommand())
 
 
 def SetUpTestItemData():
     ExecuteCommand(TEST_ITEM1.ToInsertCommand())
     ExecuteCommand(TEST_ITEM2.ToInsertCommand())
+    ExecuteCommand(TEST_ITEM3.ToInsertCommand())
+    ExecuteCommand(TEST_ITEM4.ToInsertCommand())
 
 
 def SetUpTestTransactionData():
@@ -332,6 +352,8 @@ def SetUpTestMembershipData():
     ExecuteCommand(TEST_MEMBERSHIP3.ToInsertCommand())
     ExecuteCommand(TEST_MEMBERSHIP4.ToInsertCommand())
     ExecuteCommand(TEST_MEMBERSHIP5.ToInsertCommand())
+    ExecuteCommand(TEST_MEMBERSHIP6.ToInsertCommand())
+    ExecuteCommand(TEST_MEMBERSHIP7.ToInsertCommand())
 
 
 def SetUpTestDatabase():

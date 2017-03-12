@@ -13,8 +13,9 @@ class BuyTest(base_test.BaseTestCase):
     def testBuyViewRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 3)
         r = self.GetJSON(BuyTest.BUY_ROUTE)
-        self.assertEquals(r.data,
-            messages.BuildItemListMessage([extensions.TEST_ITEM1]))
+        self.assertEquals(set(messages.UnwrapItemListMessage(r.data)),
+                set([extensions.TEST_ITEM1, extensions.TEST_ITEM3,
+                        extensions.TEST_ITEM4]))
 
     def testBuyViewRouteNotLoggedIn(self):
         r = self.GetJSON(BuyTest.BUY_ROUTE)
@@ -76,7 +77,8 @@ class BuyTest(base_test.BaseTestCase):
         # check that the seller no longer has any of that item we just bought
         # for sale.
         r = self.GetJSON(BuyTest.BUY_ROUTE)
-        self.assertEquals(r.data, messages.BuildItemListMessage([]))
+        self.assertEquals(set(messages.UnwrapItemListMessage(r.data)), 
+                set([extensions.TEST_ITEM3, extensions.TEST_ITEM4]))
 
     def testBuyRoleChanged(self):
         login_test.LoginTest.LoginAsUser(self, 3)

@@ -6,7 +6,8 @@ import requests
 class FBTest(unittest.TestCase):
 
     TEST_USER_IDS = ["106477066550909", "114360749093811", "116914598837407",
-                        "121248135069937", "166392330540730", "115614082302215"]
+                        "121248135069937", "166392330540730", "115614082302215",
+                        "103294363539139", "100142490522610"]
 
     @staticmethod
     def GetTestUsers():
@@ -24,8 +25,8 @@ class FBTest(unittest.TestCase):
 
     @staticmethod
     def GetTestUserData(user_num):
-        if not (1 <= user_num and user_num <= 6):
-            raise ValueError("There are only 6 test users numbered 1..5")
+        if not (1 <= user_num and user_num <= 8):
+            raise ValueError("There are only 6 test users numbered 1..8")
 
         _, user_data = FBTest.GetTestUsers()
         for user in user_data:
