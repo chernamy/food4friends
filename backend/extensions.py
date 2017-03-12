@@ -237,18 +237,21 @@ class ItemData(Data):
 
 CURR_TIME_SECS = calendar.timegm(time.gmtime())
 # This is a test item that will expire in 10 minutes
-TEST_ITEM1 = ItemData(TEST_USER1.userid, "%s.png" %(TEST_USER1.userid), 10,
-                        CURR_TIME_SECS + 600, 12.25, "42.28, -83.73","tasty")
+TEST_ITEM1 = ItemData(TEST_USER1.userid, "images/%s.png" %(TEST_USER1.userid),
+                        10, CURR_TIME_SECS + 600, 12.25, "42.28, -83.73","tasty")
 
 # This is a test item that expired 10 minutes ago
-TEST_ITEM2 = ItemData(TEST_USER2.userid, "%s.png" %(TEST_USER2.userid), 20,
-                        CURR_TIME_SECS - 600, 25.00, "42.30, -83.73", "yummy")
+TEST_ITEM2 = ItemData(TEST_USER2.userid, "images%s.png" %(TEST_USER2.userid),
+                        20, CURR_TIME_SECS - 600, 25.00, "42.30, -83.73",
+                        "yummy")
 
-TEST_ITEM3 = ItemData(TEST_USER7.userid, "%s.png" %(TEST_USER7.userid), 20,
-                        CURR_TIME_SECS + 1200, 25.00, "42.30, -83.73", "yummy7")
+TEST_ITEM3 = ItemData(TEST_USER7.userid, "images/%s.png" %(TEST_USER7.userid),
+                        20, CURR_TIME_SECS + 1200, 25.00, "42.30, -83.73",
+                        "yummy7")
 
-TEST_ITEM4 = ItemData(TEST_USER8.userid, "%s.png" %(TEST_USER8.userid), 20,
-                        CURR_TIME_SECS + 1200, 25.00, "42.30, -83.73", "yummy8")
+TEST_ITEM4 = ItemData(TEST_USER8.userid, "images/%s.png" %(TEST_USER8.userid),
+                        20, CURR_TIME_SECS + 1200, 25.00, "42.30, -83.73",
+                        "yummy8")
 
 
 class TransactionData(Data):
