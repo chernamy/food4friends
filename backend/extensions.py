@@ -238,7 +238,8 @@ class ItemData(Data):
 CURR_TIME_SECS = calendar.timegm(time.gmtime())
 # This is a test item that will expire in 10 minutes
 TEST_ITEM1 = ItemData(TEST_USER1.userid, "images/%s.jpg" %(TEST_USER1.userid),
-                        10, CURR_TIME_SECS + 600, 12.25, "42.28, -83.73","tasty")
+                        10, CURR_TIME_SECS + 600, 12.25, "42.28, -83.73",
+                        "tasty")
 
 # This is a test item that expired 10 minutes ago
 TEST_ITEM2 = ItemData(TEST_USER2.userid, "images%s.jpg" %(TEST_USER2.userid),
@@ -361,8 +362,8 @@ def SetUpTestMembershipData():
 
 def SetUpTestDatabase():
     global conn
-    conn = MySQLdb.connect(host="localhost", user="root", passwd="root",
-                            db="test")
+    conn = MySQLdb.connect(host="localhost", user=config.env["db_user"],
+                            passwd=config.env["db_passwd"], db="test")
 
     ExecuteCommand("DROP TABLE IF EXISTS USER;")
     ExecuteCommand("CREATE TABLE USER("\
@@ -408,8 +409,8 @@ def SetUpTestDatabase():
 
 def SetUpProdDatabase():
     global conn
-    conn = MySQLdb.connect(host="localhost", user=config.db_user,
-                            passwd=config.db_passwd, db="prod")
+    conn = MySQLdb.connect(host="localhost", user=config.env["db_user"],
+                            passwd=config.env["db_passwd"], db="prod")
 
 
 def Init():
