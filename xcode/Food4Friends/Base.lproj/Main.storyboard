@@ -52,10 +52,10 @@
             </objects>
             <point key="canvasLocation" x="-815" y="2435"/>
         </scene>
-        <!--View Controller-->
+        <!--Sell Description View Controller-->
         <scene sceneID="kRI-bm-K6a">
             <objects>
-                <viewController id="d3S-FZ-pjP" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SellDescription" id="d3S-FZ-pjP" customClass="SellDescriptionViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ifM-pF-0wc"/>
                         <viewControllerLayoutGuide type="bottom" id="Dg0-aR-KHp"/>
@@ -131,7 +131,7 @@
         <!--Sell-->
         <scene sceneID="dNd-Wc-xjq">
             <objects>
-                <viewController id="qee-NX-nXa" sceneMemberID="viewController">
+                <viewController id="qee-NX-nXa" customClass="SellViewController" customModule="Food4Friends" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yLF-k1-KuW"/>
                         <viewControllerLayoutGuide type="bottom" id="cFB-aW-6bT"/>

@@ -8,7 +8,7 @@
 
 import UIKit
 
-var server = "http://192.168.1.130:3000"
+var server = "http://35.2.232.71:3000"
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     
     @IBOutlet weak var tableView: UITableView!
@@ -23,6 +23,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var servings: [Int] = []
     var userids: [String] = []
     var image_data: [Data] = []
+    
+    var itemNumberBought = -1
     
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) {
@@ -159,11 +161,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
-    // Popup functions
-    @IBAction func buyItem(_ sender: UIButton) {
-        popupView.isHidden = false
-    }
-    
     @IBAction func cancelPopup(_ sender: Any) {
         popupView.isHidden = true
     }
@@ -182,9 +179,24 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BuyPageCell
         cell.photo.image = UIImage(data: image_data[indexPath.row])
         cell.name.text = self.descriptions[indexPath.row]
+        cell.price.text = "Price: $" + String(self.prices[indexPath.row])
+        cell.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
+
+        
         return cell
     }
     
-
+    @IBAction func buyItemFinal(_ sender: Any) {
+        
+    }
+    
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        popupView.isHidden = false
+        itemNumberBought = indexPath.row
+        print(indexPath.row)
+        return indexPath
+    }
+    
 }
 
