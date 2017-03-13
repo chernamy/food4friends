@@ -48,20 +48,20 @@ class SellViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        imageTaken = true
-        print(image)
-        
-        self.dismiss(animated: true, completion: nil)
-        
-        let sellDescriptionViewController : SellDescriptionViewController = self.storyboard?.instantiateViewController(withIdentifier: "SellDescription") as! SellDescriptionViewController
-        self.present(sellDescriptionViewController, animated: true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.dismiss(animated: true, completion: nil)
-    }
+//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+//        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+//        imageTaken = true
+//        print(image)
+//        
+//        self.dismiss(animated: true, completion: nil)
+//        
+//        let sellDescriptionViewController : SellDescriptionViewController = self.storyboard?.instantiateViewController(withIdentifier: "SellDescription") as! SellDescriptionViewController
+//        self.present(sellDescriptionViewController, animated: true, completion: nil)
+//    }
+//    
+//    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+//        self.dismiss(animated: true, completion: nil)
+//    }
     
     
 }
