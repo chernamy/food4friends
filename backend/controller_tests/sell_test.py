@@ -429,7 +429,7 @@ class SellTest(base_test.BaseTestCase):
         r = self.GetJSON(buy_test.BuyTest.BUY_ROUTE)
         expected_item = extensions.ItemData.FromDict(
                             extensions.TEST_ITEM1.__dict__)
-        expected_item.photo = os.path.join("images",
+        expected_item.photo = os.path.join(SellTest.IMAGE_DIR,
                 "%s.jpg" %(extensions.TEST_USER1.userid))
         expected_item.servings += 100
         expected_item.end += 10 * 60

@@ -3,7 +3,7 @@ TESTS = $(subst .py,,$(subst /,.,$(TEST_FILES)))
 
 db_setup:
 	@read -p "Database username: " username; \
-	echo $$username; \
+	echo Username: $$username; \
 	mysql -u $$username -p < db_setup.sql; \
 
 run:
