@@ -8,13 +8,13 @@
 
 import UIKit
 
+var server = "http://192.168.1.130:3000"
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var popupView: UIView!
     @IBOutlet weak var confirmLabel: UILabel!
     
-    var numServings = 2
     var descriptions: [String] = []
     var prices: [Int] = []
     var addresses: [Int] = []
@@ -45,7 +45,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func makeGETCall() {
-        let todoEndpoint: String = "http://35.1.119.53:3000/api/v1/buy"
+        let todoEndpoint: String = server + "/api/v1/buy"
         guard let url = URL(string: todoEndpoint) else {
             print("Error: cannot create URL")
             return
@@ -75,10 +75,10 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     return
                 }
 
+                //TODO: add to addresses array
                 if let arrJSON = todo["items"] as? NSArray{
                     print(arrJSON.count)
                     if(arrJSON.count != 0) {
-                        var i: Int = 0
                         for item in (arrJSON as? [[String:Any]])!{
                             print(item)
                             self.descriptions.append(item["description"] as! String)
@@ -92,21 +92,16 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                 }
                 
-                print(self.descriptions)
-                print(self.prices)
-                print(self.addresses)
-                print(self.ends)
-                print(self.photos)
-                print(self.servings)
-                print(self.userids)
-                
                 DispatchQueue.main.async() {
-//                    for 0...self.photos.count {
-//                        let url = URL(string: "/Users/Amy/Documents/eecs441/food4friends/xcode/images/1.png")
-//                        self.downloadImage(url: url!)
-//                    }
-                    let url = URL(string: "https://www.thecheesecakefactory.com/assets/images/Menu-Import/CCF_FreshStrawberryCheesecake.jpg")
-                    self.downloadImage(url: url!)
+                    var i = 0
+                    while (i < self.photos.count) {
+                        print("image names: " + self.photos[i])
+                        let url_string = server + "/static/" + self.photos[i]
+                        print("url: " + url_string)
+                        let url = URL(string: url_string)
+                        self.downloadImage(url: url!)
+                        i += 1
+                    }
                 }
             } catch {
                 print("error trying to convert data to JSON")
@@ -119,14 +114,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
 
     func makePOSTCall() {
         let jsonDict = ["userid": "166392330540730", "token":"EAAFhbcIKPLABAKfLFMZALX6dlQpc7bkYA7UU6mjBCUY1vqzZAZC7wyAzOGlJSucDeOeXpjHEZCm2s4Xz1tr12QATf2oZBHaLL3cJd9299EbcpUTS5JzSIcIug6wfGILYdY92PzyDZCcbPVvXR3uctssiHa9PDiJIYZA8u0RIheHxX22grFKSjCulDsk8lm133BkL29Ej1HWvd7Wn0hARizghqKG9bjBv5qGEVFfM7ZBJaAZDZD"]
-        //let data = try JSONSerialization.data(withJSONObject: jsonData, options: [])
         
-        let valid = JSONSerialization.isValidJSONObject(jsonDict)
-        if (valid == true) {
-            print("true")
-        }
-        
-        let loginurl = URL(string: "http://35.1.119.53:3000/api/v1/login/")!
+        let loginurl = URL(string: server + "/api/v1/login/")!
         
         let request = NSMutableURLRequest(url: loginurl)
         request.httpMethod = "POST"
@@ -157,7 +146,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         task.resume()
     }
     
-    
     // default view controller stuff
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,13 +159,10 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
-    
     // Popup functions
     @IBAction func buyItem(_ sender: UIButton) {
-        
         popupView.isHidden = false
     }
-    
     
     @IBAction func cancelPopup(_ sender: Any) {
         popupView.isHidden = true
@@ -191,21 +176,12 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         return self.photos.count
     }
+    
     //TODO: make a callback function
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BuyPageCell
-        print(indexPath.row)
-        print(self.photos.count)
-        if (self.photos.count != 0) {
-            for index in 0...self.image_data.count {
-                cell.photo.image = UIImage(data: image_data[0])
-                
-            }
-        }
-//        cell.photo.image = UIImage(named: self.photos[indexPath.row])
-//        cell.name.text = names[indexPath.row]
-        
+        cell.photo.image = UIImage(data: image_data[indexPath.row])
+        cell.name.text = self.descriptions[indexPath.row]
         return cell
     }
     
