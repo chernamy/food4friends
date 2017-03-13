@@ -401,9 +401,16 @@ def SetUpTestDatabase():
 
     ExecuteCommand("DROP TABLE IF EXISTS MEMBERSHIP;")
     ExecuteCommand("CREATE TABLE MEMBERSHIP("\
-                    "userid varchar(20) NOT NULL,"\
-                    "communityid int NOT NULL,"\
+                    "userid varchar(20) NOT NULL, "\
+                    "communityid int NOT NULL, "\
                     "status ENUM('pending', 'joined') NOT NULL);")
+
+    ExecuteCommand("DROP TABLE IF EXISTS RATING;")
+    ExecuteCommand("CREATE TABLE RATING("\
+                    "sellerid varchar(20) NOT NULL, "\
+                    "buyerid varchar(20) NOT NULL, "\
+                    "rating ENUM('1', '2', '3', '4', '5') NOT NULL, "\
+                    "description varchar(255));")
     SetUpTestMembershipData()
 
 
