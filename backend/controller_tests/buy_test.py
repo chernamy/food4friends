@@ -9,6 +9,7 @@ import user_test
 class BuyTest(base_test.BaseTestCase):
 
     BUY_ROUTE = "/api/v1/buy/"
+    CURR_BUY_OFFERS_ROUTE = "/api/v1/buy/current/"
 
     def testBuyViewRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 3)
@@ -180,6 +181,20 @@ class BuyTest(base_test.BaseTestCase):
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
         self.assertEqual(r.data, messages.NOT_IN_SAME_COMMUNITY)
 
+    def testCurrBuyOffersRoute(self):
+        login_test.LoginTest.LoginAsUser(self, 5)
+        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        self.assertEqual(r.data,
+                messages.BuildItemListMessage([extensions.TEST_ITEM1]))
+        login_test.LoginTest.Logout(self)
+
+        login_test.LoginTest.LoginAsUser(self, 1)
+        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        self.assertEqual(r.data, messages.BuildItemListMessage([]))
+
+    def testCurrBuyOffersInvalid(self):
+        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        self.assertEqual(r.data, messages.NOT_LOGGED_IN)
 
 if __name__ == "__main__":
     unittest.main()
