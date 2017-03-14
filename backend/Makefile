@@ -32,3 +32,6 @@ fb_test:
 
 community_test:
 	python -m controller_tests.community_test
+
+rating_test:
+	python -m controller_tests.rating_test
