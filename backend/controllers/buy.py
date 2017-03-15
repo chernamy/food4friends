@@ -53,6 +53,10 @@ def Purchase():
     if buyerid != session["userid"]:
         return messages.BUY_WRONG_USERID, 403
 
+    if not extensions.Query(extensions.UserData,
+                            [("userid", buyerid), ("role", "none")]):
+        return messages.INVALID_USER_ROLE
+
     try:
         servings = int(request.json.get("servings"))
     except:

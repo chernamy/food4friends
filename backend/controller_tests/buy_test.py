@@ -181,6 +181,19 @@ class BuyTest(base_test.BaseTestCase):
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
         self.assertEqual(r.data, messages.NOT_IN_SAME_COMMUNITY)
 
+    def testBuyMultipleTransactions(self):
+        login_test.LoginTest.LoginAsUser(self, 3)
+
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": extensions.TEST_USER3.userid, "servings": 2}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.SUCCESS)
+
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": extensions.TEST_USER3.userid, "servings": 2}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.INVALID_USER_ROLE)
+
     def testCurrBuyOffersRoute(self):
         login_test.LoginTest.LoginAsUser(self, 5)
         r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)

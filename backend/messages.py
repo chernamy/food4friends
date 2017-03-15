@@ -107,6 +107,8 @@ TOO_MANY_SERVINGS = BuildErrorMessage("Servings field too large for sell offer")
 OFFER_EXPIRED = BuildErrorMessage("Offer has already expired")
 NOT_IN_SAME_COMMUNITY = BuildErrorMessage("You are not in the same community " \
                                             "as the seller.")
+INVALID_USER_ROLE = BuildErrorMessage("You are already a buyer or seller. " \
+                    "Finish that transaction before making a new sell offer.")
 
 # ---- Sell Request Error Messages ---- #
 # Repeat: MISSING_USERID
@@ -123,8 +125,8 @@ INVALID_DURATION = BuildErrorMessage("Invalid duration field " \
                                         "(must be positive integer)")
 INVALID_PRICE = BuildErrorMessage("Invalid price (must be nonnegative decimal" \
                             " with at most two digits after the decimal place)")
-INVALID_USER_ROLE = BuildErrorMessage("You are already a buyer or seller. " \
-                    "Finish that transaction before making a new sell offer.")
+# Repeat: INVALID_USER_ROLE
+
 
 # ---- Complete Transaction Error Messages ---- #
 # Repeat: MISSING_USERID
