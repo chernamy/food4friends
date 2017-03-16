@@ -12,8 +12,11 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import Foundation
 
-class FacebookLoginController: UIViewController {
+var userToken = ""
+var userid = ""
 
+class FacebookLoginController: UIViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -38,6 +41,9 @@ class FacebookLoginController: UIViewController {
     func onTokenUpdated(notification: NotificationCenter) {
         if (FBSDKAccessToken.current() != nil ) {
             // User is logged in, do work such as go to next view controller.
+            // Store user id and token
+            userToken = FBSDKAccessToken.current().tokenString
+            userid = FBSDKAccessToken.current().userID
             let viewController = self.storyboard!.instantiateViewController(withIdentifier: "tabView") as UIViewController
             self.present(viewController, animated: true, completion: nil)
         }
