@@ -314,6 +314,35 @@ TEST_MEMBERSHIP6 = MembershipData(TEST_USER7.userid, 1, "joined")
 TEST_MEMBERSHIP7 = MembershipData(TEST_USER8.userid, 1, "joined")
 
 
+class RatingData(Data):
+
+    _TABLE = "RATING"
+    _COL_NAMES = ["ratingid", "sellerid", "buyerid", "rating", "description"]
+
+    def __init__(self, *data_values):
+        super(RatingData, self).__init__(data_values)
+
+    def ToInsertCommand(self):
+        """Creates the command to insert this community into the database.
+
+        Returns:
+            (string) The MySQL command to insert this community into the
+                database.
+        """
+        # Have to override parent insert command because
+        # we can't insert the communityid value since the database
+        # autoincrements it
+        return "INSERT INTO RATING (sellerid, buyerid, rating, description) " \
+                "VALUES('%s', '%s', '%s', '%s')" %(self.sellerid,
+                self.buyerid, self.rating, self.description)
+
+
+TEST_RATING1 = RatingData(1, TEST_USER1.userid, TEST_USER2.userid, "5", "good")
+TEST_RATING2 = RatingData(2, TEST_USER1.userid, TEST_USER3.userid, "1", "bad")
+TEST_RATING3 = RatingData(3, TEST_USER1.userid, TEST_USER3.userid, "2", "bad")
+TEST_RATING4 = RatingData(4, TEST_USER1.userid, TEST_USER4.userid, "pending",
+                            "")
+
 conn = None
 
 
@@ -360,6 +389,13 @@ def SetUpTestMembershipData():
     ExecuteCommand(TEST_MEMBERSHIP7.ToInsertCommand())
 
 
+def SetUpTestRatingData():
+    ExecuteCommand(TEST_RATING1.ToInsertCommand())
+    ExecuteCommand(TEST_RATING2.ToInsertCommand())
+    ExecuteCommand(TEST_RATING3.ToInsertCommand())
+    ExecuteCommand(TEST_RATING4.ToInsertCommand())
+
+
 def SetUpTestDatabase():
     global conn
     conn = MySQLdb.connect(host="localhost", user=config.env["db_user"],
@@ -404,14 +440,17 @@ def SetUpTestDatabase():
                     "userid varchar(20) NOT NULL, "\
                     "communityid int NOT NULL, "\
                     "status ENUM('pending', 'joined') NOT NULL);")
+    SetUpTestMembershipData()
 
     ExecuteCommand("DROP TABLE IF EXISTS RATING;")
     ExecuteCommand("CREATE TABLE RATING("\
+                    "ratingid int NOT NULL AUTO_INCREMENT, "\
                     "sellerid varchar(20) NOT NULL, "\
                     "buyerid varchar(20) NOT NULL, "\
-                    "rating ENUM('1', '2', '3', '4', '5') NOT NULL, "\
-                    "description varchar(255));")
-    SetUpTestMembershipData()
+                    "rating ENUM('1', '2', '3', '4', '5', 'pending') NOT NULL,"\
+                    "description varchar(255), " \
+                    "PRIMARY KEY(ratingid));")
+    SetUpTestRatingData()
 
 
 def SetUpProdDatabase():

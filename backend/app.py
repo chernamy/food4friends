@@ -12,6 +12,7 @@ app.register_blueprint(controllers.sell)
 app.register_blueprint(controllers.user)
 app.register_blueprint(controllers.community)
 app.register_blueprint(controllers.communities)
+app.register_blueprint(controllers.rating)
 
 if __name__ == '__main__':
     # listen on external IPs

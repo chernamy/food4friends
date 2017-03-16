@@ -53,6 +53,10 @@ def Purchase():
     if buyerid != session["userid"]:
         return messages.BUY_WRONG_USERID, 403
 
+    if not extensions.Query(extensions.UserData,
+                            [("userid", buyerid), ("role", "none")]):
+        return messages.INVALID_USER_ROLE
+
     try:
         servings = int(request.json.get("servings"))
     except:
@@ -93,3 +97,22 @@ def Purchase():
     extensions.Insert(transaction)
     return messages.SUCCESS, 200
     
+@buy.route("/api/v1/buy/current/", methods=["GET"])
+def GetCurrentBuyOffer():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    userid = session["userid"]
+    curr_buy_request = extensions.Query(extensions.TransactionData,
+                                         [("buyerid", userid)])
+
+    buy_offers = []
+    if curr_buy_request:
+        curr_buy_request = curr_buy_request[0]
+        sellerid = curr_buy_request.sellerid
+        seller_item = extensions.Query(extensions.ItemData,
+                                        [("userid", sellerid)])[0]
+        seller_item.servings = curr_buy_request.servings
+        buy_offers.append(seller_item)
+
+    return messages.BuildItemListMessage(buy_offers), 200

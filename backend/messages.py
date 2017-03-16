@@ -54,9 +54,33 @@ def UnwrapMembersListMessage(msg):
     members = json.loads(msg)["members"]
     return [member_userid for member_userid in members]
 
-SUCCESS = BuildInfoMessage("Success")
+def BuildRatingsListMessage(ratings):
+    rating_sum = 0
+    for rating in ratings:
+        rating_sum += int(rating.rating)
+    
+    if len(ratings) == 0:
+        average_rating = 0
+    else:
+        average_rating = float(rating_sum) / len(ratings)
+
+    last_five_ratings = ratings[-5:]
+
+    msg = {
+        "average": average_rating,
+        "ratings": [rating.__dict__ for rating in last_five_ratings]
+    }
+    return json.dumps(msg)
+
+def UnwrapRatingListMessage(msg):
+    msg_dict = json.loads(msg)
+    return (msg_dict["average"],
+            [extensions.RatingData.FromDict(rating_dict) for
+            rating_dict in msg_dict(["ratings"])])
+
 
 # ---- General Error Messages ---- #
+SUCCESS = BuildInfoMessage("Success")
 NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")
 NO_JSON_DATA = BuildErrorMessage("Your request has no JSON data.")
 
@@ -65,10 +89,8 @@ MISSING_USERID = BuildErrorMessage("Missing userid")
 MISSING_ACCESS_TOKEN = BuildErrorMessage("Missing access token")
 INVALID_CREDENTIALS = BuildErrorMessage("Invalid credentials")
 ALREADY_LOGGED_IN = BuildErrorMessage("You're already logged in. Logout first.")
-# Repeat: NOT_LOGGED_IN
 
 # ---- User Request Error Messages ---- #
-# Repeat: NOT_LOGGED_IN
 # Repeat: MISSING_USERID
 NONEXISTENT_USER = BuildErrorMessage("User does not exist")
 
@@ -85,9 +107,10 @@ TOO_MANY_SERVINGS = BuildErrorMessage("Servings field too large for sell offer")
 OFFER_EXPIRED = BuildErrorMessage("Offer has already expired")
 NOT_IN_SAME_COMMUNITY = BuildErrorMessage("You are not in the same community " \
                                             "as the seller.")
+INVALID_USER_ROLE = BuildErrorMessage("You are already a buyer or seller. " \
+                    "Finish that transaction before making a new sell offer.")
 
 # ---- Sell Request Error Messages ---- #
-# Repeat: NOT_LOGGED_IN
 # Repeat: MISSING_USERID
 MISSING_PHOTO = BuildErrorMessage("Missing photo")
 # Repeat: MISSING_SERVINGS
@@ -102,11 +125,10 @@ INVALID_DURATION = BuildErrorMessage("Invalid duration field " \
                                         "(must be positive integer)")
 INVALID_PRICE = BuildErrorMessage("Invalid price (must be nonnegative decimal" \
                             " with at most two digits after the decimal place)")
-INVALID_USER_ROLE = BuildErrorMessage("You are already a buyer or seller. " \
-                    "Finish that transaction before making a new sell offer.")
+# Repeat: INVALID_USER_ROLE
+
 
 # ---- Complete Transaction Error Messages ---- #
-# Repeat: NOT_LOGGED_IN
 # Repeat: MISSING_USERID
 # Repeat: MISSING_BUYERID
 NOT_SELLER = BuildErrorMessage("You must be a seller to perform this action.")
@@ -128,7 +150,6 @@ NEGATIVE_DURATION = BuildErrorMessage("You are not allowed to reduce the end " \
                                         "time.")
 
 # ---- Community Error Messages ---- #
-# Repeat: NOT_LOGGED_IN
 MISSING_COMMUNITYNAME = BuildErrorMessage("Missing communityname")
 MISSING_ADD_USERID = BuildErrorMessage("Missing userid to be added")
 MISSING_COMMUNITYID = BuildErrorMessage("Missing communityid")
@@ -138,3 +159,5 @@ DUPLICATE_MEMBERSHIP = BuildErrorMessage("The member is already in or has " \
 NOT_INVITED = BuildErrorMessage("You have not been invited to join this "\
                                     "community")
 
+# ---- Rating Error Messages ---- #
+# Repeat: MISSING_SELLERID
