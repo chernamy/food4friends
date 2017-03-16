@@ -239,7 +239,10 @@ def CompleteTransaction():
 
     # Add in a new pending rating for the transaction
     pending_rating = extensions.RatingData(0, userid, buyerid, "pending", "")
-    extensions.Insert(pending_rating)
+    if not extensions.Query(extensions.RatingData,
+                            ([("sellerid", userid), ("buyerid", buyerid),
+                                ("rating", "pending")])):
+        extensions.Insert(pending_rating)
     
     return messages.SUCCESS, 200
 

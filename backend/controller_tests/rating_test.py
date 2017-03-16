@@ -114,6 +114,72 @@ class RatingTest(base_test.BaseTestCase):
         self.assertEquals(r.data,
                             messages.BuildRatingsListMessage([new_rating]))
 
+    def testBuySellRatingMultiple(self):
+        # User 3 buys from user 7
+        login_test.LoginTest.LoginAsUser(self, 3)
+        buy_data = {"sellerid": extensions.TEST_USER7.userid,
+                    "buyerid": extensions.TEST_USER3.userid,
+                    "servings": 10}
+        r = self.PostJSON(buy_test.BuyTest.BUY_ROUTE, buy_data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
+
+        # User 7 completes transaction
+        login_test.LoginTest.LoginAsUser(self, 7)
+        complete_data = {"userid": extensions.TEST_USER7.userid,
+                            "buyerid": extensions.TEST_USER3.userid}
+        r = self.PostJSON(sell_test.SellTest.COMPLETE_ROUTE, complete_data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
+
+        # User 3 buys from user 7 again
+        login_test.LoginTest.LoginAsUser(self, 3)
+        buy_data = {"sellerid": extensions.TEST_USER7.userid,
+                    "buyerid": extensions.TEST_USER3.userid,
+                    "servings": 10}
+        r = self.PostJSON(buy_test.BuyTest.BUY_ROUTE, buy_data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
+
+        # User 7 completes transaction again
+        login_test.LoginTest.LoginAsUser(self, 7)
+        complete_data = {"userid": extensions.TEST_USER7.userid,
+                            "buyerid": extensions.TEST_USER3.userid}
+        r = self.PostJSON(sell_test.SellTest.COMPLETE_ROUTE, complete_data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
+
+        # User 3 checks there is a pending rating
+        login_test.LoginTest.LoginAsUser(self, 3)
+        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        pending_rating = extensions.RatingData(5, extensions.TEST_USER7.userid,
+                                                extensions.TEST_USER3.userid,
+                                                "pending", "")
+        self.assertEquals(r.data, messages.BuildPendingRatingsListMessage(
+                [pending_rating]))
+
+        # User 3 submits rating
+        rating_data = {"sellerid": extensions.TEST_USER7.userid, "rating": 5,
+                        "description": "fantastic"}
+        r = self.PostJSON(RatingTest.RATING_ROUTE, rating_data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        # User 3 cannot submit a second rating
+        rating_data = {"sellerid": extensions.TEST_USER7.userid, "rating": 5,
+                        "description": "fantastic"}
+        r = self.PostJSON(RatingTest.RATING_ROUTE, rating_data)
+        self.assertEquals(r.data, messages.NO_RECENT_TRANSACTION)
+
+        # Check updated rating
+        rating_data = {"sellerid": extensions.TEST_USER7.userid}
+        new_rating = extensions.RatingData(5, extensions.TEST_USER7.userid,
+                                            extensions.TEST_USER3.userid, "5",
+                                            "fantastic")
+        r = self.GetJSON(RatingTest.RATING_ROUTE, rating_data)
+        self.assertEquals(r.data,
+                            messages.BuildRatingsListMessage([new_rating]))
+
+        
     
     def testSubmitRatingRouteInvalid(self):
         data = {"sellerid": extensions.TEST_USER1.userid, "rating": 3}
