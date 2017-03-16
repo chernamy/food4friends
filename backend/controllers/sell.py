@@ -236,6 +236,10 @@ def CompleteTransaction():
                                 [("sellerid", userid)])):
         extensions.Update(seller_data, "role='none'")
         seller_data.role = "none"
+
+    # Add in a new pending rating for the transaction
+    pending_rating = extensions.RatingData(0, userid, buyerid, "pending", "")
+    extensions.Insert(pending_rating)
     
     return messages.SUCCESS, 200
 

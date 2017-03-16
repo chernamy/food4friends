@@ -61,6 +61,7 @@ def SubmitRating():
         return messages.NO_RECENT_TRANSACTION, 403
 
     rating_to_submit = rating_to_submit[0]
-    extensions.Update(rating_to_submit, "rating='%d'" %(rating))
+    extensions.Update(rating_to_submit, "rating='%d', description='%s'"
+                        %(rating, description))
     return messages.SUCCESS, 200
 
