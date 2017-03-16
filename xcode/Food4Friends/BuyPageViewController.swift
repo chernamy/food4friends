@@ -8,9 +8,9 @@
 
 import UIKit
 
-var server = "http://35.2.232.71:3000"
+var server = "http://35.2.255.166:3000"
+
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var popupView: UIView!
     @IBOutlet weak var confirmLabel: UILabel!
@@ -23,7 +23,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var servings: [Int] = []
     var userids: [String] = []
     var image_data: [Data] = []
-    
+    var totalNumItems = 0
+    var servingsBought = -1
     var itemNumberBought = -1
     
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
@@ -80,6 +81,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                 //TODO: add to addresses array
                 if let arrJSON = todo["items"] as? NSArray{
                     print(arrJSON.count)
+                    self.totalNumItems = arrJSON.count
                     if(arrJSON.count != 0) {
                         for item in (arrJSON as? [[String:Any]])!{
                             print(item)
@@ -96,7 +98,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 DispatchQueue.main.async() {
                     var i = 0
-                    while (i < self.photos.count) {
+                    while (i < self.totalNumItems) {
                         print("image names: " + self.photos[i])
                         let url_string = server + "/static/" + self.photos[i]
                         print("url: " + url_string)
@@ -114,10 +116,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         task.resume()
     }
 
-    func makePOSTCall() {
-        let jsonDict = ["userid": "166392330540730", "token":"EAAFhbcIKPLABAKfLFMZALX6dlQpc7bkYA7UU6mjBCUY1vqzZAZC7wyAzOGlJSucDeOeXpjHEZCm2s4Xz1tr12QATf2oZBHaLL3cJd9299EbcpUTS5JzSIcIug6wfGILYdY92PzyDZCcbPVvXR3uctssiHa9PDiJIYZA8u0RIheHxX22grFKSjCulDsk8lm133BkL29Ej1HWvd7Wn0hARizghqKG9bjBv5qGEVFfM7ZBJaAZDZD"]
-        
-        let loginurl = URL(string: server + "/api/v1/login/")!
+    func makePOSTCall(jsonDict: Dictionary<String, Any>, api_route: String, login: Bool) {
+        let loginurl = URL(string: server + api_route)!
         
         let request = NSMutableURLRequest(url: loginurl)
         request.httpMethod = "POST"
@@ -141,11 +141,31 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             } catch let error as NSError {
                 print(error)
             }
-            DispatchQueue.main.async() {
-                self.makeGETCall()
+            if (login == true) {
+                DispatchQueue.main.async() {
+                    self.makeGETCall()
+                }
+            } else {
+                self.tableView.reloadData()
             }
         }          
         task.resume()
+    }
+    
+    func refreshView() {
+        self.descriptions = []
+        self.prices = []
+        self.addresses = []
+        self.ends = []
+        self.photos = []
+        self.servings = []
+        self.userids = []
+        self.image_data = []
+        self.totalNumItems = 0
+        self.servingsBought = -1
+        self.itemNumberBought = -1
+        
+        self.makeGETCall()
     }
     
     // default view controller stuff
@@ -153,7 +173,9 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         popupView.isHidden = true
-        makePOSTCall()
+        // post to login route
+        let jsonDict = ["userid": "166392330540730", "token":"EAAFhbcIKPLABAKfLFMZALX6dlQpc7bkYA7UU6mjBCUY1vqzZAZC7wyAzOGlJSucDeOeXpjHEZCm2s4Xz1tr12QATf2oZBHaLL3cJd9299EbcpUTS5JzSIcIug6wfGILYdY92PzyDZCcbPVvXR3uctssiHa9PDiJIYZA8u0RIheHxX22grFKSjCulDsk8lm133BkL29Ej1HWvd7Wn0hARizghqKG9bjBv5qGEVFfM7ZBJaAZDZD"]
+        makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/login/", login: true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -174,29 +196,31 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         return self.photos.count
     }
     
-    //TODO: make a callback function
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BuyPageCell
+        popupView.isHidden = true
         cell.photo.image = UIImage(data: image_data[indexPath.row])
         cell.name.text = self.descriptions[indexPath.row]
         cell.price.text = "Price: $" + String(self.prices[indexPath.row])
         cell.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
-
-        
+        cell.servingsBought.text = ""
         return cell
     }
     
     @IBAction func buyItemFinal(_ sender: Any) {
-        
+        let sellerid = self.userids[itemNumberBought]
+        let buyerid = "166392330540730"
+        let jsonDict = ["sellerid": sellerid, "buyerid": buyerid, "servings": self.servingsBought] as [String : Any]
+        makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/buy/", login: false)
     }
-    
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         popupView.isHidden = false
         itemNumberBought = indexPath.row
+        let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
+        self.servingsBought = Int(cell.servingsBought.text!)!
         print(indexPath.row)
         return indexPath
     }
-    
 }
 
