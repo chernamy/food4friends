@@ -161,3 +161,7 @@ NOT_INVITED = BuildErrorMessage("You have not been invited to join this "\
 
 # ---- Rating Error Messages ---- #
 # Repeat: MISSING_SELLERID
+MISSING_RATING = BuildErrorMessage("Missing rating field")
+INVALID_RATING = BuildErrorMessage("Rating must be integer from 1 to 5")
+NO_RECENT_TRANSACTION = BuildErrorMessage("You do not have a recent " \
+        "transaction to rate for this seller")
