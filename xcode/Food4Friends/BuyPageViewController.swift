@@ -8,7 +8,7 @@
 
 import UIKit
 
-var server = "http://35.2.255.166:3000"
+var server = "http://35.1.142.128:3000"
 
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet weak var tableView: UITableView!
@@ -77,7 +77,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     print("error trying to convert data to JSON")
                     return
                 }
-
+                
                 //TODO: add to addresses array
                 if let arrJSON = todo["items"] as? NSArray{
                     print(arrJSON.count)
@@ -115,7 +115,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         
         task.resume()
     }
-
+    
     func makePOSTCall(jsonDict: Dictionary<String, Any>, api_route: String, login: Bool) {
         let loginurl = URL(string: server + api_route)!
         
@@ -148,7 +148,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             } else {
                 self.tableView.reloadData()
             }
-        }          
+        }
         task.resume()
     }
     

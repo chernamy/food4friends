@@ -14,15 +14,14 @@ import Foundation
 
 class FacebookLoginController: UIViewController {
 
-    @IBOutlet weak var loginButton: FBSDKLoginButton!
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
         if (FBSDKAccessToken.current() != nil ) {
             // User is logged in, do work such as go to next view controller.
-            
+            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "homePage") as UIViewController
+            self.present(viewController, animated: true, completion: nil)
         }
         else {
             let loginButton = FBSDKLoginButton()
@@ -31,13 +30,31 @@ class FacebookLoginController: UIViewController {
             loginButton.center = self.view.center
             self.view.addSubview(loginButton)
             FBSDKProfile.enableUpdates(onAccessTokenChange: true)
-            NotificationCenter.default.addObserver(self, selector: Selector(("onProfileUpdated:")), name:NSNotification.Name.FBSDKProfileDidChange, object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(onTokenUpdated), name: NSNotification.Name.FBSDKAccessTokenDidChange, object: nil)
+        }
+        
+    }
+    
+    func onTokenUpdated(notification: NotificationCenter) {
+        if (FBSDKAccessToken.current() != nil ) {
+            // User is logged in, do work such as go to next view controller.
+            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "tabView") as UIViewController
+            self.present(viewController, animated: true, completion: nil)
         }
     }
     
-    func onProfileUpdated() {
-        print("profile updated called")
-    }
+//    override func viewDidAppear(_ animated: Bool) {
+//        sleep(2)
+//        print("view appears")
+//        if (FBSDKAccessToken.current() != nil ) {
+//            // User is logged in, do work such as go to next view controller.
+//            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "homePage") as UIViewController
+//            self.present(viewController, animated: true, completion: nil)
+//        }
+//        else {
+//            print("not logged in")
+//        }
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
