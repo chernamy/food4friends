@@ -78,6 +78,17 @@ def UnwrapRatingListMessage(msg):
             [extensions.RatingData.FromDict(rating_dict) for
             rating_dict in msg_dict(["ratings"])])
 
+def BuildPendingRatingsListMessage(ratings):
+    pending_userids = [rating.sellerid for rating in ratings]
+    msg = {
+        "userids": pending_userids
+    }
+    return json.dumps(msg)
+
+def UnwrapPendingRatingsListMessage(msg):
+    userids = json.loads(msg)["userids"]
+    return set([userids])
+
 
 # ---- General Error Messages ---- #
 SUCCESS = BuildInfoMessage("Success")

@@ -21,6 +21,16 @@ def ViewRatings():
             [("sellerid", sellerid), ("rating", "pending", "!=")])
 
     return messages.BuildRatingsListMessage(ratings), 200
+
+@rating.route("/api/v1/rating/pending/", methods=["GET"])
+def GetYourPendingRatings():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    pending_ratings = extensions.Query(extensions.RatingData,
+                                        [("buyerid", session["userid"]),
+                                        ("rating", "pending")])
+    return messages.BuildPendingRatingsListMessage(pending_ratings)
     
 ALLOWED_RATINGS = set([1, 2, 3, 4, 5])
 

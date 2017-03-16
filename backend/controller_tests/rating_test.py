@@ -9,6 +9,7 @@ import sell_test
 class RatingTest(base_test.BaseTestCase):
 
     RATING_ROUTE = "/api/v1/rating/"
+    PENDING_RATINGS_ROUTE = "/api/v1/rating/pending/"
 
     def testGetRatingsRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
@@ -38,6 +39,21 @@ class RatingTest(base_test.BaseTestCase):
         data = {}
         r = self.GetJSON(RatingTest.RATING_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_SELLERID)
+
+    def testGetPendingRatingsRouteExists(self):
+        login_test.LoginTest.LoginAsUser(self, 1)
+        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        self.assertEqual(r.data, messages.BuildPendingRatingsListMessage([]))
+        login_test.LoginTest.Logout(self)
+
+        login_test.LoginTest.LoginAsUser(self, 4)
+        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        self.assertEqual(r.data, messages.BuildPendingRatingsListMessage(
+                [extensions.TEST_RATING4]))
+        
+    def testGetPendingRatingsInvalid(self):
+        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        self.assertEqual(r.data, messages.NOT_LOGGED_IN)
 
     def testSubmitRatingRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 4)
@@ -74,8 +90,16 @@ class RatingTest(base_test.BaseTestCase):
         self.assertEquals(r.data, messages.SUCCESS)
         login_test.LoginTest.Logout(self)
 
-        # User 6 submits rating
+        # User 3 checks there is a pending rating
         login_test.LoginTest.LoginAsUser(self, 3)
+        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        pending_rating = extensions.RatingData(5, extensions.TEST_USER7.userid,
+                                                extensions.TEST_USER3.userid,
+                                                "pending", "")
+        self.assertEquals(r.data, messages.BuildPendingRatingsListMessage(
+                [pending_rating]))
+
+        # User 3 submits rating
         rating_data = {"sellerid": extensions.TEST_USER7.userid, "rating": 5,
                         "description": "fantastic"}
         r = self.PostJSON(RatingTest.RATING_ROUTE, rating_data)
