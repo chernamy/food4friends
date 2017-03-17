@@ -5,7 +5,7 @@
 ### Instructions for setting up environment
 1. Install VirtualBox for setting up a virtual environment on the virtual machine.
 2. Install Vagrant which will be used to creating a virtual machine.
-3. `cd backend`.
+3. `cd backend`
 4. Run `vagrant up` to create the virtual machine.
 5. `vagrant ssh` to get on to the virtual machine.
 6. `cd /vagrant`
