@@ -55,7 +55,7 @@ def Purchase():
 
     if not extensions.Query(extensions.UserData,
                             [("userid", buyerid), ("role", "none")]):
-        return messages.INVALID_USER_ROLE
+        return messages.INVALID_USER_ROLE, 400
 
     try:
         servings = int(request.json.get("servings"))
