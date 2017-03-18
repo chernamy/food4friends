@@ -44,6 +44,7 @@ class FacebookLoginController: UIViewController {
             // Store user id and token
             userToken = FBSDKAccessToken.current().tokenString
             userid = FBSDKAccessToken.current().userID
+            print(userid)
             let viewController = self.storyboard!.instantiateViewController(withIdentifier: "tabView") as UIViewController
             self.present(viewController, animated: true, completion: nil)
         }

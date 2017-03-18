@@ -8,7 +8,7 @@
 
 import UIKit
 
-var server = "http://35.1.142.128:3000"
+var server = "http://35.2.33.224:3000"
 
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet weak var tableView: UITableView!
@@ -48,7 +48,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func makeGETCall() {
-        let todoEndpoint: String = server + "/api/v1/buy"
+        let todoEndpoint: String = server + "/api/v1/buy/"
         guard let url = URL(string: todoEndpoint) else {
             print("Error: cannot create URL")
             return
@@ -63,7 +63,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             // do stuff with response, data & error here
             // check for any errors
             guard error == nil else {
-                print("error calling GET on /api/v1/buy")
+                print("error calling GET on /api/v1/buy/")
                 print(error)
                 return
             }
@@ -135,8 +135,12 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             
             do {
                 if let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary {
-                    let resultValue:String = json["info"] as! String;
-                    print("result: \(resultValue)")
+                    if (json["error"] != nil) {
+                        print(json["error"])
+                    } else {
+                        let resultValue:String = json["info"] as! String;
+                        print("result: \(resultValue)")
+                    }
                 }
             } catch let error as NSError {
                 print(error)
@@ -168,14 +172,24 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         self.makeGETCall()
     }
     
+    //Calls this function when the tap is recognized.
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
+    
     // default view controller stuff
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         popupView.isHidden = true
         // post to login route
-        let jsonDict = ["userid": "166392330540730", "token":"EAAFhbcIKPLABAKfLFMZALX6dlQpc7bkYA7UU6mjBCUY1vqzZAZC7wyAzOGlJSucDeOeXpjHEZCm2s4Xz1tr12QATf2oZBHaLL3cJd9299EbcpUTS5JzSIcIug6wfGILYdY92PzyDZCcbPVvXR3uctssiHa9PDiJIYZA8u0RIheHxX22grFKSjCulDsk8lm133BkL29Ej1HWvd7Wn0hARizghqKG9bjBv5qGEVFfM7ZBJaAZDZD"]
+        let jsonDict = ["userid": userid, "token": userToken] as [String : Any]
         makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/login/", login: true)
+        
+        //Looks for single or multiple taps.
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        tap.cancelsTouchesInView = false 
+        view.addGestureRecognizer(tap)
     }
     
     override func didReceiveMemoryWarning() {
@@ -186,6 +200,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBAction func cancelPopup(_ sender: Any) {
         popupView.isHidden = true
     }
+    
     
     // For creating the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -204,6 +219,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.price.text = "Price: $" + String(self.prices[indexPath.row])
         cell.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
         cell.servingsBought.text = ""
+        
         return cell
     }
     
@@ -215,12 +231,18 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        popupView.isHidden = false
-        itemNumberBought = indexPath.row
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
-        self.servingsBought = Int(cell.servingsBought.text!)!
-        print(indexPath.row)
-        return indexPath
+        if (cell.servingsBought.text != "") {
+            print("nil detected")
+            popupView.isHidden = false
+            itemNumberBought = indexPath.row
+            self.servingsBought = Int(cell.servingsBought.text!)!
+            print(indexPath.row)
+            return indexPath
+        } else {
+            print("row selected with no input data")
+            return nil
+        }
     }
 }
 
