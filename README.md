@@ -20,4 +20,5 @@
 
 ### Instructions for running backend
 1. In `config.py` change `state` to `prod` and set `db_user` to your MySQL database username and `db_passwd` to your MySQL database password.
-2. Run `make run`
+2. Make sure the secret `fb.token` file is in the `backend` directory.
+3. Run `make run`
