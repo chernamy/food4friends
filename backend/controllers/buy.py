@@ -18,11 +18,20 @@ def ViewBuyList():
     unexpired_items = []
     for item in item_data:
         if curr_time > item.end:
-            extensions.Delete(item)
+
+            # Can't delete the item's data if there are still incomplete
+            # transactions.
+            if not extensions.Query(extensions.TransactionData,
+                                    [("sellerid", item.userid)]):
+                extensions.Delete(item)
             user = extensions.Query(extensions.UserData,
                                     [("userid", item.userid)])[0]
             extensions.Update(user, "role='none'")
             user.role = "none"
+        elif item.servings == 0:
+            if not extensions.Query(extensions.TransactionData,
+                                    [("sellerid", item.userid)]):
+                extensions.Delete(item)
         else:
             buyerid = session["userid"]
             sellerid = item.userid
@@ -79,10 +88,7 @@ def Purchase():
     if servings > seller_servings:
         return messages.TOO_MANY_SERVINGS, 400
     
-    if servings == seller_servings:
-        extensions.Delete(item_data)
-    else:
-        extensions.Update(item_data, "servings = servings - %d" %(servings))
+    extensions.Update(item_data, "servings = servings - %d" %(servings))
 
     if not community.InSameCommunity(buyerid, sellerid):
         return messages.NOT_IN_SAME_COMMUNITY, 403

@@ -229,11 +229,20 @@ def CompleteTransaction():
     extensions.Update(buyer_data, "role='none'")
     buyer_data.role = "none"
 
-    # if the seller has completed all transactions and has no sell offer
-    # remaining, then the seller also goes back to having no role
-    if (not extensions.Query(extensions.ItemData, [("userid", userid)]) and
+    # if the seller has completed all transactions and offer is complete,
+    # then the seller also goes back to having no role.
+
+    sell_offer = extensions.Query(extensions.ItemData, [("userid", userid)])[0]
+    curr_time = calendar.timegm(time.gmtime())
+
+    # the offer is complete if the offer is expired or all servings have been
+    # bought.
+    sell_offer_complete = (curr_time > sell_offer.end or
+                            sell_offer.servings == 0)
+    if (sell_offer_complete and
         not extensions.Query(extensions.TransactionData,
                                 [("sellerid", userid)])):
+        extensions.Delete(sell_offer)
         extensions.Update(seller_data, "role='none'")
         seller_data.role = "none"
 
