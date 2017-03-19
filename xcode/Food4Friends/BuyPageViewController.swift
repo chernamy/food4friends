@@ -8,13 +8,14 @@
 
 import UIKit
 
-var server = "http://35.2.105.11:3000"
-
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var popupView: UIView!
     @IBOutlet weak var confirmLabel: UILabel!
     
+    @IBOutlet weak var errorView: UIView!
+    
+    //@IBOutlet weak var ErrorView: UIView!
     var descriptions: [String] = []
     var prices: [Int] = []
     var addresses: [Int] = []
@@ -26,6 +27,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var totalNumItems = 0
     var servingsBought = -1
     var itemNumberBought = -1
+    var ConfirmClickResponse: String = "error"
+    var firstLoad: Bool = true
     
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) {
@@ -41,9 +44,10 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             print(response?.suggestedFilename ?? url.lastPathComponent)
             print("Download Finished")
             self.image_data.append(data)
-            DispatchQueue.main.async() { () -> Void in
-                self.tableView.reloadData()
-            }
+//            DispatchQueue.main.async() { () -> Void in
+//                self.firstLoad = false
+//                self.tableView.reloadData()
+//            }
         }
     }
     
@@ -107,6 +111,12 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                         i += 1
                     }
                 }
+                DispatchQueue.main.async() { () -> Void in
+                    self.firstLoad = false
+                    self.tableView.reloadData()
+                }
+
+                
             } catch {
                 print("error trying to convert data to JSON")
                 return
@@ -129,6 +139,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
             if error != nil{
+                print("buypageviewcontroller POST session creation error: ")
                 print(error?.localizedDescription)
                 return
             }
@@ -136,14 +147,21 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             do {
                 if let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary {
                     if (json["error"] != nil) {
+                        print("jsonseriaization error: ")
                         print(json["error"])
+                        self.errorView.isHidden = false
+                        
                     } else {
                         let resultValue:String = json["info"] as! String;
                         print("result: \(resultValue)")
+                        self.tabBarController?.selectedIndex = 3
+                        self.ConfirmClickResponse = ""
                     }
                 }
             } catch let error as NSError {
+                print("buypageviewcontroller POST catch error: ")
                 print(error)
+                self.ConfirmClickResponse = "error"
             }
             if (login == true) {
                 DispatchQueue.main.async() {
@@ -156,75 +174,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         task.resume()
     }
     
-    func refreshView() {
-        self.descriptions = []
-        self.prices = []
-        self.addresses = []
-        self.ends = []
-        self.photos = []
-        self.servings = []
-        self.userids = []
-        self.image_data = []
-        self.totalNumItems = 0
-        self.servingsBought = -1
-        self.itemNumberBought = -1
-        
-        self.makeGETCall()
-    }
-    
-    //------start keyboard code-----//
-    
-//    func registerForKeyboardNotifications(){
-//        //Adding notifies on keyboard appearing
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-//    }
-//    
-//    func deregisterFromKeyboardNotifications(){
-//        //Removing notifies on keyboard appearing
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-//    }
-//    
-//    func keyboardWasShown(notification: NSNotification){
-//        //Need to calculate keyboard exact size due to Apple suggestions
-//        self.scrollView.isScrollEnabled = true
-//        var info = notification.userInfo!
-//        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
-//        let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize!.height, 0.0)
-//        
-//        self.scrollView.contentInset = contentInsets
-//        self.scrollView.scrollIndicatorInsets = contentInsets
-//        
-//        var aRect : CGRect = self.view.frame
-//        aRect.size.height -= keyboardSize!.height
-//        if let activeField = self.activeField {
-//            if (!aRect.contains(activeField.frame.origin)){
-//                self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
-//            }
-//        }
-//    }
-//    
-//    func keyboardWillBeHidden(notification: NSNotification){
-//        //Once keyboard disappears, restore original positions
-//        var info = notification.userInfo!
-//        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
-//        let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, -keyboardSize!.height, 0.0)
-//        self.scrollView.contentInset = contentInsets
-//        self.scrollView.scrollIndicatorInsets = contentInsets
-//        self.view.endEditing(true)
-//        self.scrollView.isScrollEnabled = false
-//    }
-//    
-//    func textFieldDidBeginEditing(_ textField: UITextField){
-//        activeField = textField
-//    }
-//    
-//    func textFieldDidEndEditing(_ textField: UITextField){
-//        activeField = nil
-//    }
-    //----END keyboard code---------//
-    
     //Calls this function when the tap is recognized.
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
@@ -235,10 +184,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         popupView.isHidden = true
-        // post to login route
-        let jsonDict = ["userid": userid, "token": userToken] as [String : Any]
-        makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/login/", login: true)
-        
+        self.errorView.isHidden = true
+        self.makeGETCall()
         //Looks for single or multiple taps.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         tap.cancelsTouchesInView = false 
@@ -258,32 +205,29 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     // For creating the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // return how many rows in the table
-        if self.photos.count == 0 {
-            return 0
-        }
-        return self.photos.count
+        return self.totalNumItems
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BuyPageCell
-        popupView.isHidden = true
-        cell.photo.image = UIImage(data: image_data[indexPath.row])
-        cell.name.text = self.descriptions[indexPath.row]
-        cell.price.text = "Price: $" + String(self.prices[indexPath.row])
-        cell.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
-        cell.servingsBought.text = ""
-        
-        return cell
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? BuyPageCell
+        if (self.firstLoad == false) {
+            popupView.isHidden = true
+            cell?.photo.image = UIImage(data: image_data[indexPath.row])
+            cell?.name.text = self.descriptions[indexPath.row]
+            cell?.price.text = "Price: $" + String(self.prices[indexPath.row])
+            cell?.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
+            cell?.servingsBought.text = ""
+        }
+        return cell!
     }
-    
+   
     @IBAction func buyItemFinal(_ sender: Any) {
         let sellerid = self.userids[itemNumberBought]
         let buyerid = userid
         let jsonDict = ["sellerid": sellerid, "buyerid": buyerid, "servings": self.servingsBought] as [String : Any]
-        print(jsonDict)
         self.makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/buy/", login: false)
     }
-    
+
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
         if (cell.servingsBought.text != "") {
