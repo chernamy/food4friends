@@ -33,6 +33,17 @@ def UnwrapItemListMessage(msg):
     items = json.loads(msg)["items"]
     return [extensions.ItemData.FromDict(item_dict) for item_dict in items]
 
+def BuildTransactionsListMessage(transactions):
+    msg = {
+        "transactions": [transaction.__dict__ for transaction in transactions]
+    }
+    return json.dumps(msg)
+
+def UnwrapTransactionsListMessage(msg):
+    transactions = json.loads(msg)["transactions"]
+    return [extensions.TransactionData.FromDict(transaction_dict) for
+            transaction_dict in transactions]
+
 def BuildCommunityListMessage(communities):
     msg = {
         "communities": [community.__dict__ for community in communities]
@@ -77,6 +88,17 @@ def UnwrapRatingListMessage(msg):
     return (msg_dict["average"],
             [extensions.RatingData.FromDict(rating_dict) for
             rating_dict in msg_dict(["ratings"])])
+
+def BuildPendingRatingsListMessage(ratings):
+    pending_userids = [rating.sellerid for rating in ratings]
+    msg = {
+        "userids": pending_userids
+    }
+    return json.dumps(msg)
+
+def UnwrapPendingRatingsListMessage(msg):
+    userids = json.loads(msg)["userids"]
+    return set([userids])
 
 
 # ---- General Error Messages ---- #
@@ -161,3 +183,7 @@ NOT_INVITED = BuildErrorMessage("You have not been invited to join this "\
 
 # ---- Rating Error Messages ---- #
 # Repeat: MISSING_SELLERID
+MISSING_RATING = BuildErrorMessage("Missing rating field")
+INVALID_RATING = BuildErrorMessage("Rating must be integer from 1 to 5")
+NO_RECENT_TRANSACTION = BuildErrorMessage("You do not have a recent " \
+        "transaction to rate for this seller")

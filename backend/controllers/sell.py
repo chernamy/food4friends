@@ -181,6 +181,18 @@ def CreateOffer():
     extensions.Insert(new_item)
     return messages.SUCCESS, 200
 
+
+@sell.route("/api/v1/sell/complete", methods=["GET"])
+@sell.route("/api/v1/sell/complete/", methods=["GET"])
+def ViewIncompleteTransactions():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    incomplete_transactions = extensions.Query(extensions.TransactionData,
+            [("sellerid", session["userid"])])
+    return messages.BuildTransactionsListMessage(incomplete_transactions), 200
+
+
 @sell.route("/api/v1/sell/complete", methods=["POST"])
 @sell.route("/api/v1/sell/complete/", methods=["POST"])
 def CompleteTransaction():
@@ -229,13 +241,29 @@ def CompleteTransaction():
     extensions.Update(buyer_data, "role='none'")
     buyer_data.role = "none"
 
-    # if the seller has completed all transactions and has no sell offer
-    # remaining, then the seller also goes back to having no role
-    if (not extensions.Query(extensions.ItemData, [("userid", userid)]) and
+    # if the seller has completed all transactions and offer is complete,
+    # then the seller also goes back to having no role.
+
+    sell_offer = extensions.Query(extensions.ItemData, [("userid", userid)])[0]
+    curr_time = calendar.timegm(time.gmtime())
+
+    # the offer is complete if the offer is expired or all servings have been
+    # bought.
+    sell_offer_complete = (curr_time > sell_offer.end or
+                            sell_offer.servings == 0)
+    if (sell_offer_complete and
         not extensions.Query(extensions.TransactionData,
                                 [("sellerid", userid)])):
+        extensions.Delete(sell_offer)
         extensions.Update(seller_data, "role='none'")
         seller_data.role = "none"
+
+    # Add in a new pending rating for the transaction
+    pending_rating = extensions.RatingData(0, userid, buyerid, "pending", "")
+    if not extensions.Query(extensions.RatingData,
+                            ([("sellerid", userid), ("buyerid", buyerid),
+                                ("rating", "pending")])):
+        extensions.Insert(pending_rating)
     
     return messages.SUCCESS, 200
 

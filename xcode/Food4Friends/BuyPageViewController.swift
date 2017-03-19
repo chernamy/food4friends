@@ -48,7 +48,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func makeGETCall() {
-        let todoEndpoint: String = server + "/api/v1/buy"
+        let todoEndpoint: String = server + "/api/v1/buy/"
         guard let url = URL(string: todoEndpoint) else {
             print("Error: cannot create URL")
             return
@@ -63,7 +63,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             // do stuff with response, data & error here
             // check for any errors
             guard error == nil else {
-                print("error calling GET on /api/v1/buy")
+                print("error calling GET on /api/v1/buy/")
                 print(error)
                 return
             }
@@ -135,8 +135,12 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             
             do {
                 if let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary {
-                    let resultValue:String = json["info"] as! String;
-                    print("result: \(resultValue)")
+                    if (json["error"] != nil) {
+                        print(json["error"])
+                    } else {
+                        let resultValue:String = json["info"] as! String;
+                        print("result: \(resultValue)")
+                    }
                 }
             } catch let error as NSError {
                 print(error)
@@ -168,14 +172,77 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         self.makeGETCall()
     }
     
+    //------start keyboard code-----//
+    
+//    func registerForKeyboardNotifications(){
+//        //Adding notifies on keyboard appearing
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//    }
+//    
+//    func deregisterFromKeyboardNotifications(){
+//        //Removing notifies on keyboard appearing
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//    }
+//    
+//    func keyboardWasShown(notification: NSNotification){
+//        //Need to calculate keyboard exact size due to Apple suggestions
+//        self.scrollView.isScrollEnabled = true
+//        var info = notification.userInfo!
+//        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
+//        let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize!.height, 0.0)
+//        
+//        self.scrollView.contentInset = contentInsets
+//        self.scrollView.scrollIndicatorInsets = contentInsets
+//        
+//        var aRect : CGRect = self.view.frame
+//        aRect.size.height -= keyboardSize!.height
+//        if let activeField = self.activeField {
+//            if (!aRect.contains(activeField.frame.origin)){
+//                self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
+//            }
+//        }
+//    }
+//    
+//    func keyboardWillBeHidden(notification: NSNotification){
+//        //Once keyboard disappears, restore original positions
+//        var info = notification.userInfo!
+//        let keyboardSize = (info[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue.size
+//        let contentInsets : UIEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, -keyboardSize!.height, 0.0)
+//        self.scrollView.contentInset = contentInsets
+//        self.scrollView.scrollIndicatorInsets = contentInsets
+//        self.view.endEditing(true)
+//        self.scrollView.isScrollEnabled = false
+//    }
+//    
+//    func textFieldDidBeginEditing(_ textField: UITextField){
+//        activeField = textField
+//    }
+//    
+//    func textFieldDidEndEditing(_ textField: UITextField){
+//        activeField = nil
+//    }
+    //----END keyboard code---------//
+    
+    //Calls this function when the tap is recognized.
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
+    
     // default view controller stuff
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         popupView.isHidden = true
         // post to login route
-        let jsonDict = ["userid": "166392330540730", "token":"EAAFhbcIKPLABAKfLFMZALX6dlQpc7bkYA7UU6mjBCUY1vqzZAZC7wyAzOGlJSucDeOeXpjHEZCm2s4Xz1tr12QATf2oZBHaLL3cJd9299EbcpUTS5JzSIcIug6wfGILYdY92PzyDZCcbPVvXR3uctssiHa9PDiJIYZA8u0RIheHxX22grFKSjCulDsk8lm133BkL29Ej1HWvd7Wn0hARizghqKG9bjBv5qGEVFfM7ZBJaAZDZD"]
+        let jsonDict = ["userid": userid, "token": userToken] as [String : Any]
         makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/login/", login: true)
+        
+        //Looks for single or multiple taps.
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        tap.cancelsTouchesInView = false 
+        view.addGestureRecognizer(tap)
     }
     
     override func didReceiveMemoryWarning() {
@@ -186,6 +253,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBAction func cancelPopup(_ sender: Any) {
         popupView.isHidden = true
     }
+    
     
     // For creating the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -204,23 +272,31 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.price.text = "Price: $" + String(self.prices[indexPath.row])
         cell.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
         cell.servingsBought.text = ""
+        
         return cell
     }
     
     @IBAction func buyItemFinal(_ sender: Any) {
         let sellerid = self.userids[itemNumberBought]
-        let buyerid = "166392330540730"
+        let buyerid = userid
         let jsonDict = ["sellerid": sellerid, "buyerid": buyerid, "servings": self.servingsBought] as [String : Any]
-        makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/buy/", login: false)
+        print(jsonDict)
+        self.makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/buy/", login: false)
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        popupView.isHidden = false
-        itemNumberBought = indexPath.row
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
-        self.servingsBought = Int(cell.servingsBought.text!)!
-        print(indexPath.row)
-        return indexPath
+        if (cell.servingsBought.text != "") {
+            print("nil detected")
+            popupView.isHidden = false
+            itemNumberBought = indexPath.row
+            self.servingsBought = Int(cell.servingsBought.text!)!
+            print(indexPath.row)
+            return indexPath
+        } else {
+            print("row selected with no input data")
+            return nil
+        }
     }
 }
 

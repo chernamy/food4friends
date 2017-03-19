@@ -311,6 +311,43 @@ class SellTest(base_test.BaseTestCase):
                 "%s.jpeg" %(extensions.TEST_USER2.userid))
         self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
 
+    def testViewIncompleteTransactionsRouteExists(self):
+        login_test.LoginTest.LoginAsUser(self, 1)
+        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        self.assertEquals(r.data, messages.BuildTransactionsListMessage(
+                [extensions.TEST_TRANSACTION1]))
+        login_test.LoginTest.Logout(self)
+
+        # test no transactions
+        login_test.LoginTest.LoginAsUser(self, 2)
+        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        self.assertEquals(r.data, messages.BuildTransactionsListMessage([]))
+        login_test.LoginTest.Logout(self)
+
+        # test multiple transactions
+        # user 3 will now make a buy offer for item 1, so that user 1
+        # has two incomplete transactions
+        login_test.LoginTest.LoginAsUser(self, 3)
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": extensions.TEST_USER3.userid, "servings": 5}
+        r = self.PostJSON(buy_test.BuyTest.BUY_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
+
+        # user 1 will now ask for his incomplete transactions and there should
+        # be two of them
+        login_test.LoginTest.LoginAsUser(self, 1)
+        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        transaction_data1 = extensions.TEST_TRANSACTION1
+        transaction_data2 = extensions.TransactionData(
+                extensions.TEST_USER1.userid, extensions.TEST_USER3.userid, 5)
+        self.assertEquals(set(messages.UnwrapTransactionsListMessage(r.data)),
+                            set([transaction_data1, transaction_data2]))
+
+    def testViewIncompleteTransactionsRouteInvalid(self):
+        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
     def testCompleteRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
 
@@ -416,6 +453,53 @@ class SellTest(base_test.BaseTestCase):
                 "buyerid": extensions.TEST_USER5.userid}
         r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
         self.assertEquals(r.data, messages.NONEXISTENT_TRANSACTION)
+
+    def testCompleteRouteDeletesItemDataWithNoMoreServings(self):
+        # test old item data gets removed when all servings have been bought
+        # and completed
+        # first, user 3 buys all the remaining servings from item 1
+        login_test.LoginTest.LoginAsUser(self, 3)
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": extensions.TEST_USER3.userid,
+                "servings": extensions.TEST_ITEM1.servings}
+        r = self.PostJSON(buy_test.BuyTest.BUY_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
+
+        # then user 1 completes all transactions
+        login_test.LoginTest.LoginAsUser(self, 1)
+        data = {"userid": extensions.TEST_USER1.userid,
+                "buyerid": extensions.TEST_USER5.userid}
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        data = {"userid": extensions.TEST_USER1.userid,
+                "buyerid": extensions.TEST_USER3.userid}
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        # now that the offer is complete and all transactions finished, the
+        # item data should be removed from the database.
+        self.assertEquals(len(extensions.Query(extensions.ItemData,
+                [("userid", extensions.TEST_USER1.userid)])), 0)
+
+    def testCompleteRouteDeletesExpiredItemData(self):
+        # inject an artificial transaction where user 3 bought item 2, which is
+        # now expired. Once user 3's transaction is complete, the expired
+        # ItemData should be removed
+        incomplete_transaction = extensions.TransactionData(
+                extensions.TEST_ITEM2.userid, extensions.TEST_USER3.userid, 10)
+        extensions.Insert(incomplete_transaction)
+        extensions.Update(extensions.TEST_USER3, "role = 'buyer'")
+
+        login_test.LoginTest.LoginAsUser(self, 2)
+        data = {"userid": extensions.TEST_USER2.userid,
+                "buyerid": extensions.TEST_USER3.userid}
+        r = self.PostJSON(SellTest.COMPLETE_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+
+        self.assertEquals(len(extensions.Query(extensions.ItemData,
+                [("userid", extensions.TEST_USER2.userid)])), 0)
+
 
     def testUpdateRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)

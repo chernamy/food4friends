@@ -197,8 +197,10 @@ class BuyTest(base_test.BaseTestCase):
     def testCurrBuyOffersRoute(self):
         login_test.LoginTest.LoginAsUser(self, 5)
         r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        buy_offer = extensions.ItemData.FromDict(extensions.TEST_ITEM1.__dict__)
+        buy_offer.servings = extensions.TEST_TRANSACTION1.servings
         self.assertEqual(r.data,
-                messages.BuildItemListMessage([extensions.TEST_ITEM1]))
+                messages.BuildItemListMessage([buy_offer]))
         login_test.LoginTest.Logout(self)
 
         login_test.LoginTest.LoginAsUser(self, 1)
@@ -208,6 +210,44 @@ class BuyTest(base_test.BaseTestCase):
     def testCurrBuyOffersInvalid(self):
         r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
         self.assertEqual(r.data, messages.NOT_LOGGED_IN)
+
+    def testCurrBuyOffersNoServingsLeft(self):
+        login_test.LoginTest.LoginAsUser(self, 3)
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": extensions.TEST_USER3.userid,
+                "servings": extensions.TEST_ITEM1.servings}
+        r = self.PostJSON(BuyTest.BUY_ROUTE, data)
+        self.assertEqual(r.data, messages.SUCCESS)
+
+        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        buy_offer = extensions.ItemData.FromDict(extensions.TEST_ITEM1.__dict__)
+        buy_offer.servings = extensions.TEST_ITEM1.servings
+        self.assertEqual(r.data, messages.BuildItemListMessage([buy_offer]))
+
+        login_test.LoginTest.Logout(self)
+        login_test.LoginTest.LoginAsUser(self, 5)
+        buy_offer = extensions.ItemData.FromDict(extensions.TEST_ITEM1.__dict__)
+        buy_offer.servings = extensions.TEST_TRANSACTION1.servings
+        self.assertEqual(r.data,
+                messages.BuildItemListMessage([buy_offer]))
+        login_test.LoginTest.Logout(self)
+
+    def testCurrBuyOffersAfterExpiration(self):
+        # artificially insert an incomplete buy offer for expired test item 2
+        incomplete_transaction = extensions.TransactionData(
+                extensions.TEST_ITEM2.userid, extensions.TEST_USER3.userid, 10)
+        extensions.Insert(incomplete_transaction)
+        extensions.Update(extensions.TEST_USER3, "role = 'buyer'")
+
+        login_test.LoginTest.LoginAsUser(self, 3)
+        # Make sure the buy route doesn't lazily delete the offer data for an
+        # item that still has incomplete transactions.
+        r = self.GetJSON(BuyTest.BUY_ROUTE)
+        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        buy_offer = extensions.ItemData.FromDict(extensions.TEST_ITEM2.__dict__)
+        buy_offer.servings = 10
+        self.assertEqual(r.data, messages.BuildItemListMessage([buy_offer]))
+         
 
 if __name__ == "__main__":
     unittest.main()

@@ -20,7 +20,7 @@ class SellnfoViewController: UIViewController {
     @IBAction func sellFood(_ sender: Any) {
         var request = URLRequest(url: URL(string: server + "/api/v1/sell/")!)
         request.httpMethod = "POST"
-        let postString = "userid=" + LoginSession.sharedInstance.userId! + "&servings=" + servings.text! + "&duration=" + durationMin.text! + "&price=" + price.text! + "&address=" + address.text! + "&description" + itemDescription.text!
+        let postString = "userid=" + userid + "&servings=" + servings.text! + "&duration=" + durationMin.text! + "&price=" + price.text! + "&address=" + address.text! + "&description" + itemDescription.text!
         request.httpBody = postString.data(using: .utf8)
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
