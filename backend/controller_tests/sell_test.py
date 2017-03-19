@@ -311,6 +311,43 @@ class SellTest(base_test.BaseTestCase):
                 "%s.jpeg" %(extensions.TEST_USER2.userid))
         self.assertTrue(SellTest.AreItemsEqual(expected_item, found_item))
 
+    def testViewIncompleteTransactionsRouteExists(self):
+        login_test.LoginTest.LoginAsUser(self, 1)
+        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        self.assertEquals(r.data, messages.BuildTransactionsListMessage(
+                [extensions.TEST_TRANSACTION1]))
+        login_test.LoginTest.Logout(self)
+
+        # test no transactions
+        login_test.LoginTest.LoginAsUser(self, 2)
+        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        self.assertEquals(r.data, messages.BuildTransactionsListMessage([]))
+        login_test.LoginTest.Logout(self)
+
+        # test multiple transactions
+        # user 3 will now make a buy offer for item 1, so that user 1
+        # has two incomplete transactions
+        login_test.LoginTest.LoginAsUser(self, 3)
+        data = {"sellerid": extensions.TEST_ITEM1.userid,
+                "buyerid": extensions.TEST_USER3.userid, "servings": 5}
+        r = self.PostJSON(buy_test.BuyTest.BUY_ROUTE, data)
+        self.assertEquals(r.data, messages.SUCCESS)
+        login_test.LoginTest.Logout(self)
+
+        # user 1 will now ask for his incomplete transactions and there should
+        # be two of them
+        login_test.LoginTest.LoginAsUser(self, 1)
+        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        transaction_data1 = extensions.TEST_TRANSACTION1
+        transaction_data2 = extensions.TransactionData(
+                extensions.TEST_USER1.userid, extensions.TEST_USER3.userid, 5)
+        self.assertEquals(set(messages.UnwrapTransactionsListMessage(r.data)),
+                            set([transaction_data1, transaction_data2]))
+
+    def testViewIncompleteTransactionsRouteInvalid(self):
+        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        self.assertEquals(r.data, messages.NOT_LOGGED_IN)
+
     def testCompleteRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
 
