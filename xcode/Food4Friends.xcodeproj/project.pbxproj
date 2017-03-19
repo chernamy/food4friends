@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6E0CDD811E7DD3F600EAF2D9 /* SellCartCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0CDD801E7DD3F600EAF2D9 /* SellCartCell.swift */; };
 		6E19B0C21E3EE8220012E756 /* BuyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E19B0C11E3EE8220012E756 /* BuyPageViewController.swift */; };
 		6E19B0C41E3EEBAE0012E756 /* BuyPageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E19B0C31E3EEBAE0012E756 /* BuyPageCell.swift */; };
 		6E2E52F51E4A7F100001B91D /* SellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2E52F41E4A7F100001B91D /* SellViewController.swift */; };
+		6E4D64121E7F0C32005ACC77 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D64111E7F0C32005ACC77 /* ProfileViewController.swift */; };
 		6E60E29D1E7A35A2004CFFBE /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60E29C1E7A35A2004CFFBE /* CartViewController.swift */; };
 		6E60E2A11E7A3849004CFFBE /* BuyerCartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60E2A01E7A3849004CFFBE /* BuyerCartViewController.swift */; };
 		6E60E2A31E7A38D0004CFFBE /* SellCartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60E2A21E7A38D0004CFFBE /* SellCartViewController.swift */; };
@@ -54,9 +56,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6E0CDD801E7DD3F600EAF2D9 /* SellCartCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellCartCell.swift; sourceTree = "<group>"; };
 		6E19B0C11E3EE8220012E756 /* BuyPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyPageViewController.swift; sourceTree = "<group>"; };
 		6E19B0C31E3EEBAE0012E756 /* BuyPageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyPageCell.swift; sourceTree = "<group>"; };
 		6E2E52F41E4A7F100001B91D /* SellViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellViewController.swift; sourceTree = "<group>"; };
+		6E4D64111E7F0C32005ACC77 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		6E60E29C1E7A35A2004CFFBE /* CartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		6E60E2A01E7A3849004CFFBE /* BuyerCartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyerCartViewController.swift; sourceTree = "<group>"; };
 		6E60E2A21E7A38D0004CFFBE /* SellCartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellCartViewController.swift; sourceTree = "<group>"; };
@@ -173,6 +177,8 @@
 				6EE26B141E41A8CB00188F85 /* FacebookLoginController.swift */,
 				6E19B0C31E3EEBAE0012E756 /* BuyPageCell.swift */,
 				6ED7B8951E3BAB8900B2B0EC /* Main.storyboard */,
+				6E4D64111E7F0C32005ACC77 /* ProfileViewController.swift */,
+				6E0CDD801E7DD3F600EAF2D9 /* SellCartCell.swift */,
 				6E60E2A21E7A38D0004CFFBE /* SellCartViewController.swift */,
 				6E60E29C1E7A35A2004CFFBE /* CartViewController.swift */,
 				6E19B0C11E3EE8220012E756 /* BuyPageViewController.swift */,
@@ -346,8 +352,10 @@
 				6E2E52F51E4A7F100001B91D /* SellViewController.swift in Sources */,
 				6E60E29D1E7A35A2004CFFBE /* CartViewController.swift in Sources */,
 				6E82E6A81E7766E5007E5BDB /* SellnfoViewController.swift in Sources */,
+				6E4D64121E7F0C32005ACC77 /* ProfileViewController.swift in Sources */,
 				6EE26B151E41A8CB00188F85 /* FacebookLoginController.swift in Sources */,
 				6E60E2A11E7A3849004CFFBE /* BuyerCartViewController.swift in Sources */,
+				6E0CDD811E7DD3F600EAF2D9 /* SellCartCell.swift in Sources */,
 				6E60E2A31E7A38D0004CFFBE /* SellCartViewController.swift in Sources */,
 				6E19B0C21E3EE8220012E756 /* BuyPageViewController.swift in Sources */,
 			);

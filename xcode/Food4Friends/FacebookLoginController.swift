@@ -12,6 +12,12 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import Foundation
 
+class LoginSession {
+    static let sharedInstance = LoginSession()
+    var FBToken: FBSDKAccessToken?
+    var userId: String?
+}
+
 class FacebookLoginController: UIViewController {
 
     override func viewDidLoad() {
@@ -19,6 +25,7 @@ class FacebookLoginController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         if (FBSDKAccessToken.current() != nil ) {
+            LoginSession.sharedInstance.FBToken = FBSDKAccessToken.current()
             // User is logged in, do work such as go to next view controller.
             let viewController = self.storyboard!.instantiateViewController(withIdentifier: "homePage") as UIViewController
             self.present(viewController, animated: true, completion: nil)
@@ -32,7 +39,6 @@ class FacebookLoginController: UIViewController {
             FBSDKProfile.enableUpdates(onAccessTokenChange: true)
             NotificationCenter.default.addObserver(self, selector: #selector(onTokenUpdated), name: NSNotification.Name.FBSDKAccessTokenDidChange, object: nil)
         }
-        
     }
     
     func onTokenUpdated(notification: NotificationCenter) {
@@ -42,19 +48,6 @@ class FacebookLoginController: UIViewController {
             self.present(viewController, animated: true, completion: nil)
         }
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        sleep(2)
-//        print("view appears")
-//        if (FBSDKAccessToken.current() != nil ) {
-//            // User is logged in, do work such as go to next view controller.
-//            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "homePage") as UIViewController
-//            self.present(viewController, animated: true, completion: nil)
-//        }
-//        else {
-//            print("not logged in")
-//        }
-//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

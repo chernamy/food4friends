@@ -15,12 +15,12 @@ class SellnfoViewController: UIViewController {
     @IBOutlet weak var servings: UITextField!
     @IBOutlet weak var price: UITextField!
     @IBOutlet weak var address: UITextField!
-    @IBOutlet weak var durationHours: UITextField!
+    @IBOutlet weak var durationMin: UITextField!
     
-    @IBAction func sellFoodButton(_ sender: Any) {
-        var request = URLRequest(url: URL(string:"http://35.1.142.128:3000/api/v1/sell/")!)
+    @IBAction func sellFood(_ sender: Any) {
+        var request = URLRequest(url: URL(string: server + "/api/v1/sell/")!)
         request.httpMethod = "POST"
-        let postString = "servings=" + servings.text!
+        let postString = "userid=" + LoginSession.sharedInstance.userId! + "&servings=" + servings.text! + "&duration=" + durationMin.text! + "&price=" + price.text! + "&address=" + address.text! + "&description" + itemDescription.text!
         request.httpBody = postString.data(using: .utf8)
         request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -33,14 +33,13 @@ class SellnfoViewController: UIViewController {
                 httpStatus.statusCode != 200 {
                 print("statusCode should be 200, but is \(httpStatus.statusCode)")
                 print("response = \(response)")
-                
+                self.tabBarController?.selectedIndex = 3;
             }
             let responseString = String(data: data, encoding: .utf8)
             print ("response String")
             print (responseString ?? "No string")
         }
         task.resume()
-        
         
     }
     

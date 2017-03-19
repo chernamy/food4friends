@@ -8,14 +8,15 @@
 
 import UIKit
 
-class SellCartViewController: UIViewController {
 
-    @IBOutlet weak var testlabel: UILabel!
+class SellCartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        testlabel.text = "sell" 
-
-        // Do any additional setup after loading the view.
+        tableView.delegate = self;
+        tableView.dataSource = self;
     }
 
     override func didReceiveMemoryWarning() {
@@ -23,15 +24,18 @@ class SellCartViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // For creating the table view
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // return how many rows in the table
+        return 3
     }
-    */
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "sellCell", for: indexPath) as! SellCartCell
+        cell.servings?.text = "servings: 3"
+        cell.buyerImage?.image = #imageLiteral(resourceName: "enchilada")
+        return cell
+    }
 
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-var server = "http://35.1.142.128:3000"
+var server = "http://35.2.105.11:3000"
 
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet weak var tableView: UITableView!

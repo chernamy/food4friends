@@ -18,18 +18,21 @@ class CartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if (true) {
+        if (false) {
             sellSubview.isHidden = true
             buySubview.isHidden = false
         }
         else {
+            // Sell Cart Page
             sellSubview.isHidden = false
             buySubview.isHidden = true
+            
+            
+            cartTitle.text = "ITEMS SOLD: "
+            servingsInfo.text = "Servings Left: "
+            timeLeft.text = "Time Remaining: "
         }
         
-        
-        cartTitle.text = "ITEMS SOLD: "
-
         // Do any additional setup after loading the view.
     }
 
