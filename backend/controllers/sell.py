@@ -181,6 +181,18 @@ def CreateOffer():
     extensions.Insert(new_item)
     return messages.SUCCESS, 200
 
+
+@sell.route("/api/v1/sell/complete", methods=["GET"])
+@sell.route("/api/v1/sell/complete/", methods=["GET"])
+def ViewIncompleteTransactions():
+    if "userid" not in session:
+        return messages.NOT_LOGGED_IN, 403
+
+    incomplete_transactions = extensions.Query(extensions.TransactionData,
+            [("sellerid", session["userid"])])
+    return messages.BuildTransactionsListMessage(incomplete_transactions), 200
+
+
 @sell.route("/api/v1/sell/complete", methods=["POST"])
 @sell.route("/api/v1/sell/complete/", methods=["POST"])
 def CompleteTransaction():

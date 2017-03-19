@@ -33,6 +33,17 @@ def UnwrapItemListMessage(msg):
     items = json.loads(msg)["items"]
     return [extensions.ItemData.FromDict(item_dict) for item_dict in items]
 
+def BuildTransactionsListMessage(transactions):
+    msg = {
+        "transactions": [transaction.__dict__ for transaction in transactions]
+    }
+    return json.dumps(msg)
+
+def UnwrapTransactionsListMessage(msg):
+    transactions = json.loads(msg)["transactions"]
+    return [extensions.TransactionData.FromDict(transaction_dict) for
+            transaction_dict in transactions]
+
 def BuildCommunityListMessage(communities):
     msg = {
         "communities": [community.__dict__ for community in communities]
