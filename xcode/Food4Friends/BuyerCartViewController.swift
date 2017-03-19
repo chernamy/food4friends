@@ -77,6 +77,7 @@ class BuyerCartViewController: UIViewController {
                     }
                     DispatchQueue.main.async() {
                         self.populatePage()
+                        print("successfully populated labels")
                     }
                 }
                 
