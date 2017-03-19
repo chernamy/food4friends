@@ -111,6 +111,10 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                         i += 1
                     }
                 }
+                while (self.image_data.count != self.totalNumItems) {
+                    sleep(1)
+                }
+                
                 DispatchQueue.main.async() { () -> Void in
                     self.firstLoad = false
                     self.tableView.reloadData()
@@ -210,7 +214,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? BuyPageCell
-        if (self.firstLoad == false) {
+        if (image_data.count == self.totalNumItems && self.descriptions.count == self.totalNumItems && self.prices.count == self.totalNumItems && self.servings.count == self.totalNumItems) {
             popupView.isHidden = true
             cell?.photo.image = UIImage(data: image_data[indexPath.row])
             cell?.name.text = self.descriptions[indexPath.row]

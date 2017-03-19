@@ -14,6 +14,7 @@ import Foundation
 
 var userToken = ""
 var userid = ""
+var server = "http://35.2.62.149:3000"
 
 class FacebookLoginController: UIViewController {
     var ConfirmClickResponse = ""
