@@ -7,7 +7,7 @@ class FBTest(unittest.TestCase):
 
     TEST_USER_IDS = ["106477066550909", "114360749093811", "116914598837407",
                         "121248135069937", "166392330540730", "115614082302215",
-                        "103294363539139", "100142490522610"]
+                        "103294363539139", "100142490522610", "108998629637466"]
 
     @staticmethod
     def GetTestUsers():
@@ -25,8 +25,9 @@ class FBTest(unittest.TestCase):
 
     @staticmethod
     def GetTestUserData(user_num):
-        if not (1 <= user_num and user_num <= 8):
-            raise ValueError("There are only 6 test users numbered 1..8")
+        if not (1 <= user_num and user_num <= len(FBTest.TEST_USER_IDS)):
+            raise ValueError("There are only 9 test users numbered 1..%d"
+                                %(len(FBTest.TEST_USER_IDS)))
 
         _, user_data = FBTest.GetTestUsers()
         for user in user_data:
@@ -41,6 +42,7 @@ class FBTest(unittest.TestCase):
         self.assertTrue(fb.VerifyAccessToken(user_id, access_token))
         access_token = "Wrong access token"
         self.assertFalse(fb.VerifyAccessToken(user_id, access_token))
+
 
 if __name__ == "__main__":
     unittest.main()

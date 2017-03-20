@@ -223,6 +223,7 @@ TEST_USER5 = UserData(fb_test.FBTest.TEST_USER_IDS[4], "buyer", "-")
 TEST_USER6 = UserData(fb_test.FBTest.TEST_USER_IDS[5], "none", "-")
 TEST_USER7 = UserData(fb_test.FBTest.TEST_USER_IDS[6], "seller", "-")
 TEST_USER8 = UserData(fb_test.FBTest.TEST_USER_IDS[7], "seller", "-")
+TEST_USER9 = UserData(fb_test.FBTest.TEST_USER_IDS[8], "none", "-")
 
 
 class ItemData(Data):
@@ -361,6 +362,7 @@ def SetUpTestUserData():
     ExecuteCommand(TEST_USER6.ToInsertCommand())
     ExecuteCommand(TEST_USER7.ToInsertCommand())
     ExecuteCommand(TEST_USER8.ToInsertCommand())
+    ExecuteCommand(TEST_USER9.ToInsertCommand())
 
 
 def SetUpTestItemData():
