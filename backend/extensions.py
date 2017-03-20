@@ -313,6 +313,7 @@ TEST_MEMBERSHIP4 = MembershipData(TEST_USER4.userid, 1, "joined")
 TEST_MEMBERSHIP5 = MembershipData(TEST_USER5.userid, 1, "joined")
 TEST_MEMBERSHIP6 = MembershipData(TEST_USER7.userid, 1, "joined")
 TEST_MEMBERSHIP7 = MembershipData(TEST_USER8.userid, 1, "joined")
+TEST_MEMBERSHIP8 = MembershipData(TEST_USER9.userid, 1, "joined")
 
 
 class RatingData(Data):
@@ -389,6 +390,7 @@ def SetUpTestMembershipData():
     ExecuteCommand(TEST_MEMBERSHIP5.ToInsertCommand())
     ExecuteCommand(TEST_MEMBERSHIP6.ToInsertCommand())
     ExecuteCommand(TEST_MEMBERSHIP7.ToInsertCommand())
+    ExecuteCommand(TEST_MEMBERSHIP8.ToInsertCommand())
 
 
 def SetUpTestRatingData():
