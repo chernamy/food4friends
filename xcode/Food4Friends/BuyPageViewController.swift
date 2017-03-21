@@ -12,10 +12,9 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var popupView: UIView!
     @IBOutlet weak var confirmLabel: UILabel!
-    
+    @IBOutlet weak var errorMessage: UILabel!
     @IBOutlet weak var errorView: UIView!
     
-    //@IBOutlet weak var ErrorView: UIView!
     var descriptions: [String] = []
     var prices: [Int] = []
     var addresses: [Int] = []
@@ -146,11 +145,21 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     if (json["error"] != nil) {
                         print("jsonseriaization error: ")
                         print(json["error"])
-                        self.errorView.isHidden = false
+                        DispatchQueue.main.async() {
+                            self.popupView.isHidden = true
+                            self.errorView.isHidden = false
+                            self.errorMessage.text = json["error"] as! String?
+                            self.errorMessage.lineBreakMode = .byWordWrapping
+                            self.errorMessage.numberOfLines = 0
+//                            self.tableView.backgroundColor = UIColor.black
+//                            self.view.backgroundColor = UIColor.black
+                        }
                         
                     } else {
                         let resultValue:String = json["info"] as! String;
                         print("result: \(resultValue)")
+                        self.refreshData()
+                        self.popupView.isHidden = true
                         self.tabBarController?.selectedIndex = 3
                     }
                 }
@@ -158,15 +167,24 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                 print("buypageviewcontroller POST catch error: ")
                 print(error)
             }
-            if (login == true) {
-                DispatchQueue.main.async() {
-                    self.makeGETCall()
-                }
-            } else {
-                self.tableView.reloadData()
-            }
+            //self.tableView.reloadData()
         }
         task.resume()
+    }
+    
+    func refreshData() {
+        self.descriptions = []
+        self.prices = []
+        self.addresses = []
+        self.ends = []
+        self.photos = []
+        self.servings = []
+        self.userids = []
+        self.image_data = []
+        self.totalNumItems = 0
+        self.servingsBought = -1
+        self.itemNumberBought = -1
+        self.makeGETCall()
     }
     
     //Calls this function when the tap is recognized.
@@ -178,8 +196,10 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     // default view controller stuff
     override func viewDidLoad() {
         super.viewDidLoad()
-        popupView.isHidden = true
+        self.popupView.isHidden = true
         self.errorView.isHidden = true
+        self.popupView.layer.cornerRadius = 8.0
+        self.errorView.layer.cornerRadius = 8.0
         self.makeGETCall()
         //Looks for single or multiple taps.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
@@ -226,7 +246,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
         if (cell.servingsBought.text != "") {
-            print("nil detected")
             popupView.isHidden = false
             itemNumberBought = indexPath.row
             self.servingsBought = Int(cell.servingsBought.text!)!
@@ -236,6 +255,18 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             print("row selected with no input data")
             return nil
         }
+    }
+    
+    @IBAction func errorConfirmation(_ sender: Any) {
+        self.errorView.isHidden = true
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //Change the selected background view of the cell.
+        tableView.deselectRow(at: indexPath, animated: true)
+        let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
+        cell.servingsBought.text = ""
+        
     }
 }
 
