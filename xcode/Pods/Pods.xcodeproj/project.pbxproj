@@ -1,0 +1,660 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A9467D9DD9263F86089F52FA0D26C79 /* Pods-Food4FriendsTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = BF5F8DDCDDE65884DA5D1851DCB4F01E /* Pods-Food4FriendsTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27F8C1D547FA0D1ADC97662F5FC4212E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
+		422D8D979D97734EED37F986D1126938 /* Pods-Food4Friends-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 35CDE41AE757287D7E57743E242B2C66 /* Pods-Food4Friends-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		42AFEDA37F7D7B9CCD1E67329BA48019 /* Pods-Food4FriendsTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6AC6FEEAE9F4C537B3A39B0CC41F44 /* Pods-Food4FriendsTests-dummy.m */; };
+		52691AF3626AB133204FCF339BA4BB0E /* Pods-Food4FriendsUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F902C525C3FDB3AF9E89D6725EEC054C /* Pods-Food4FriendsUITests-dummy.m */; };
+		5AA750D55E5DB8D649376DED56C788A4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
+		720E9880894DED509084F3FE30FDB78A /* Pods-Food4FriendsUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E48A06966A76A85426D5B497B2481501 /* Pods-Food4FriendsUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D401084D64A5AA3964F0C1C8684CEF6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */; };
+		E84A96E3CDA8D272B151DE00A7FB4F87 /* Pods-Food4Friends-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 766BE4340328A99274E977B19F64C537 /* Pods-Food4Friends-dummy.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		05FF76D87F1BDF098515F34CAC06BDEE /* Pods-Food4FriendsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Food4FriendsUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		1B38EF37AB32851140075E51C48FB0A3 /* Pods-Food4FriendsUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Food4FriendsUITests.modulemap"; sourceTree = "<group>"; };
+		1EDAE57DBF1448179BBE7BB57ED78ED9 /* Pods-Food4FriendsTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Food4FriendsTests-acknowledgements.plist"; sourceTree = "<group>"; };
+		235282CC923DC34B1D38AE7D09D0F455 /* Pods-Food4FriendsTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Food4FriendsTests.modulemap"; sourceTree = "<group>"; };
+		2636195DF9304870F83CA4024C7704C5 /* Pods-Food4FriendsTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Food4FriendsTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		28844A89948EDAAABAF24799A4BABCB7 /* Pods_Food4Friends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Food4Friends.framework; path = "Pods-Food4Friends.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B218322BB1C6F4963DECAEB33F81A77 /* Pods-Food4FriendsUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Food4FriendsUITests-frameworks.sh"; sourceTree = "<group>"; };
+		2F9E5E3F7A338B123E83B48ED4263232 /* Pods-Food4FriendsUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Food4FriendsUITests-acknowledgements.plist"; sourceTree = "<group>"; };
+		35CDE41AE757287D7E57743E242B2C66 /* Pods-Food4Friends-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Food4Friends-umbrella.h"; sourceTree = "<group>"; };
+		44C97AC7B47D3CCA274E3572250061A8 /* Pods-Food4FriendsUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Food4FriendsUITests-resources.sh"; sourceTree = "<group>"; };
+		4A6AC6FEEAE9F4C537B3A39B0CC41F44 /* Pods-Food4FriendsTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Food4FriendsTests-dummy.m"; sourceTree = "<group>"; };
+		54A35A2A9428CB5702EC18586C3FE824 /* Pods_Food4FriendsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Food4FriendsTests.framework; path = "Pods-Food4FriendsTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B584BB3B96E128EB7B91DCA01227AF8 /* Pods-Food4FriendsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Food4FriendsTests.release.xcconfig"; sourceTree = "<group>"; };
+		66845F327BB905CDAEF0D8FF72D0D188 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7346416B5FC78C924D5391BF35C40C3F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		73F0632763B76B49F029EB139FFCFA95 /* Pods-Food4Friends-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Food4Friends-frameworks.sh"; sourceTree = "<group>"; };
+		766BE4340328A99274E977B19F64C537 /* Pods-Food4Friends-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Food4Friends-dummy.m"; sourceTree = "<group>"; };
+		889675761768895BB0918412E5D0D480 /* Pods-Food4FriendsTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Food4FriendsTests-frameworks.sh"; sourceTree = "<group>"; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A45A9B89CD9DBBF8C8A3412DE8646179 /* Pods-Food4Friends-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Food4Friends-acknowledgements.plist"; sourceTree = "<group>"; };
+		A990830F44696C7A0D45EC48820ECC5C /* Pods-Food4FriendsTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Food4FriendsTests-resources.sh"; sourceTree = "<group>"; };
+		B5706C5CA2F8ED4DA0F2AC5A172E0B36 /* Pods_Food4FriendsUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Food4FriendsUITests.framework; path = "Pods-Food4FriendsUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB7E4DF06C696861BA40F84BDDE50C39 /* Pods-Food4Friends-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Food4Friends-resources.sh"; sourceTree = "<group>"; };
+		BF5F8DDCDDE65884DA5D1851DCB4F01E /* Pods-Food4FriendsTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Food4FriendsTests-umbrella.h"; sourceTree = "<group>"; };
+		C1585B07D4FB0C07FA761ED8FD60C05B /* Pods-Food4FriendsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Food4FriendsUITests.release.xcconfig"; sourceTree = "<group>"; };
+		CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		CD65FD60ED648657E56D954C7EB15C14 /* Pods-Food4Friends.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Food4Friends.modulemap"; sourceTree = "<group>"; };
+		D0023978B15EB6E1EC89D85F9B295A5E /* Pods-Food4FriendsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Food4FriendsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D0BBA7D22CE7D4A9C0A3980E9EF2BA79 /* Pods-Food4Friends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Food4Friends.debug.xcconfig"; sourceTree = "<group>"; };
+		D6DA4F78BA8D930805361E62283952B7 /* Pods-Food4FriendsUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Food4FriendsUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		DC9745E382EAD7B19ABB40FF08059D1C /* Pods-Food4Friends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Food4Friends.release.xcconfig"; sourceTree = "<group>"; };
+		E48A06966A76A85426D5B497B2481501 /* Pods-Food4FriendsUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Food4FriendsUITests-umbrella.h"; sourceTree = "<group>"; };
+		EB4DB4E27436F1758AEA8B1EB010984D /* Pods-Food4Friends-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Food4Friends-acknowledgements.markdown"; sourceTree = "<group>"; };
+		F87CF26C4EBF8C992FF8A42AD2A88A56 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F902C525C3FDB3AF9E89D6725EEC054C /* Pods-Food4FriendsUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Food4FriendsUITests-dummy.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4D9AE429054C436DD6EDE2A3AD1F7B68 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5AA750D55E5DB8D649376DED56C788A4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74091CF2295421F72ADBD5ACCC5FDFA3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27F8C1D547FA0D1ADC97662F5FC4212E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CA5103FE73541B20E2117DA84E7B4A5F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D401084D64A5AA3964F0C1C8684CEF6A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1F1899268E5F4FDA286D21A7DBB67773 /* Pods-Food4Friends */ = {
+			isa = PBXGroup;
+			children = (
+				F87CF26C4EBF8C992FF8A42AD2A88A56 /* Info.plist */,
+				CD65FD60ED648657E56D954C7EB15C14 /* Pods-Food4Friends.modulemap */,
+				EB4DB4E27436F1758AEA8B1EB010984D /* Pods-Food4Friends-acknowledgements.markdown */,
+				A45A9B89CD9DBBF8C8A3412DE8646179 /* Pods-Food4Friends-acknowledgements.plist */,
+				766BE4340328A99274E977B19F64C537 /* Pods-Food4Friends-dummy.m */,
+				73F0632763B76B49F029EB139FFCFA95 /* Pods-Food4Friends-frameworks.sh */,
+				BB7E4DF06C696861BA40F84BDDE50C39 /* Pods-Food4Friends-resources.sh */,
+				35CDE41AE757287D7E57743E242B2C66 /* Pods-Food4Friends-umbrella.h */,
+				D0BBA7D22CE7D4A9C0A3980E9EF2BA79 /* Pods-Food4Friends.debug.xcconfig */,
+				DC9745E382EAD7B19ABB40FF08059D1C /* Pods-Food4Friends.release.xcconfig */,
+			);
+			name = "Pods-Food4Friends";
+			path = "Target Support Files/Pods-Food4Friends";
+			sourceTree = "<group>";
+		};
+		7531C8F8DE19F1AA3C8A7AC97A91DC29 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
+				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
+				CA04619F21336AF706DB86CCA00831DE /* Products */,
+				F4A9F73828F988ACA2A5E45BB4C32CF1 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7531C8F8DE19F1AA3C8A7AC97A91DC29 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CA04619F21336AF706DB86CCA00831DE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				28844A89948EDAAABAF24799A4BABCB7 /* Pods_Food4Friends.framework */,
+				54A35A2A9428CB5702EC18586C3FE824 /* Pods_Food4FriendsTests.framework */,
+				B5706C5CA2F8ED4DA0F2AC5A172E0B36 /* Pods_Food4FriendsUITests.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CADD31F7B84A7552455530510FC34541 /* Pods-Food4FriendsTests */ = {
+			isa = PBXGroup;
+			children = (
+				66845F327BB905CDAEF0D8FF72D0D188 /* Info.plist */,
+				235282CC923DC34B1D38AE7D09D0F455 /* Pods-Food4FriendsTests.modulemap */,
+				2636195DF9304870F83CA4024C7704C5 /* Pods-Food4FriendsTests-acknowledgements.markdown */,
+				1EDAE57DBF1448179BBE7BB57ED78ED9 /* Pods-Food4FriendsTests-acknowledgements.plist */,
+				4A6AC6FEEAE9F4C537B3A39B0CC41F44 /* Pods-Food4FriendsTests-dummy.m */,
+				889675761768895BB0918412E5D0D480 /* Pods-Food4FriendsTests-frameworks.sh */,
+				A990830F44696C7A0D45EC48820ECC5C /* Pods-Food4FriendsTests-resources.sh */,
+				BF5F8DDCDDE65884DA5D1851DCB4F01E /* Pods-Food4FriendsTests-umbrella.h */,
+				D0023978B15EB6E1EC89D85F9B295A5E /* Pods-Food4FriendsTests.debug.xcconfig */,
+				5B584BB3B96E128EB7B91DCA01227AF8 /* Pods-Food4FriendsTests.release.xcconfig */,
+			);
+			name = "Pods-Food4FriendsTests";
+			path = "Target Support Files/Pods-Food4FriendsTests";
+			sourceTree = "<group>";
+		};
+		F4A9F73828F988ACA2A5E45BB4C32CF1 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				1F1899268E5F4FDA286D21A7DBB67773 /* Pods-Food4Friends */,
+				CADD31F7B84A7552455530510FC34541 /* Pods-Food4FriendsTests */,
+				F9073FC07BD8949C19C95B5400F74B70 /* Pods-Food4FriendsUITests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		F9073FC07BD8949C19C95B5400F74B70 /* Pods-Food4FriendsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7346416B5FC78C924D5391BF35C40C3F /* Info.plist */,
+				1B38EF37AB32851140075E51C48FB0A3 /* Pods-Food4FriendsUITests.modulemap */,
+				D6DA4F78BA8D930805361E62283952B7 /* Pods-Food4FriendsUITests-acknowledgements.markdown */,
+				2F9E5E3F7A338B123E83B48ED4263232 /* Pods-Food4FriendsUITests-acknowledgements.plist */,
+				F902C525C3FDB3AF9E89D6725EEC054C /* Pods-Food4FriendsUITests-dummy.m */,
+				2B218322BB1C6F4963DECAEB33F81A77 /* Pods-Food4FriendsUITests-frameworks.sh */,
+				44C97AC7B47D3CCA274E3572250061A8 /* Pods-Food4FriendsUITests-resources.sh */,
+				E48A06966A76A85426D5B497B2481501 /* Pods-Food4FriendsUITests-umbrella.h */,
+				05FF76D87F1BDF098515F34CAC06BDEE /* Pods-Food4FriendsUITests.debug.xcconfig */,
+				C1585B07D4FB0C07FA761ED8FD60C05B /* Pods-Food4FriendsUITests.release.xcconfig */,
+			);
+			name = "Pods-Food4FriendsUITests";
+			path = "Target Support Files/Pods-Food4FriendsUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		0D3F54D72DBBC267835E74E167C59ACF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				422D8D979D97734EED37F986D1126938 /* Pods-Food4Friends-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		258B41F943B40C0871A8F7D986538D06 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				720E9880894DED509084F3FE30FDB78A /* Pods-Food4FriendsUITests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D49FC220E39B0248019E421B18B6F498 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A9467D9DD9263F86089F52FA0D26C79 /* Pods-Food4FriendsTests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8B3903A14118009FA89C2BF037C453F9 /* Pods-Food4FriendsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 03925F0AA2891A1DB5DFD98C39F7756B /* Build configuration list for PBXNativeTarget "Pods-Food4FriendsUITests" */;
+			buildPhases = (
+				F929926DD0739BF185A1DF6D7C69AF23 /* Sources */,
+				4D9AE429054C436DD6EDE2A3AD1F7B68 /* Frameworks */,
+				258B41F943B40C0871A8F7D986538D06 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Food4FriendsUITests";
+			productName = "Pods-Food4FriendsUITests";
+			productReference = B5706C5CA2F8ED4DA0F2AC5A172E0B36 /* Pods_Food4FriendsUITests.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		A435F982F8FD59985C13696BCB1A5203 /* Pods-Food4Friends */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D51632739E29D9E8BE5707329529A34F /* Build configuration list for PBXNativeTarget "Pods-Food4Friends" */;
+			buildPhases = (
+				62C05DCCCBEBB8DF5453B555024F8343 /* Sources */,
+				74091CF2295421F72ADBD5ACCC5FDFA3 /* Frameworks */,
+				0D3F54D72DBBC267835E74E167C59ACF /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Food4Friends";
+			productName = "Pods-Food4Friends";
+			productReference = 28844A89948EDAAABAF24799A4BABCB7 /* Pods_Food4Friends.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		F234E66A26EB3CB991AB875C4EA459F1 /* Pods-Food4FriendsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF081662058A2076337DCD20878610A8 /* Build configuration list for PBXNativeTarget "Pods-Food4FriendsTests" */;
+			buildPhases = (
+				C5FC5D5956C94F3839E37338CAD80F34 /* Sources */,
+				CA5103FE73541B20E2117DA84E7B4A5F /* Frameworks */,
+				D49FC220E39B0248019E421B18B6F498 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-Food4FriendsTests";
+			productName = "Pods-Food4FriendsTests";
+			productReference = 54A35A2A9428CB5702EC18586C3FE824 /* Pods_Food4FriendsTests.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0700;
+			};
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = CA04619F21336AF706DB86CCA00831DE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A435F982F8FD59985C13696BCB1A5203 /* Pods-Food4Friends */,
+				F234E66A26EB3CB991AB875C4EA459F1 /* Pods-Food4FriendsTests */,
+				8B3903A14118009FA89C2BF037C453F9 /* Pods-Food4FriendsUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		62C05DCCCBEBB8DF5453B555024F8343 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E84A96E3CDA8D272B151DE00A7FB4F87 /* Pods-Food4Friends-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C5FC5D5956C94F3839E37338CAD80F34 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				42AFEDA37F7D7B9CCD1E67329BA48019 /* Pods-Food4FriendsTests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F929926DD0739BF185A1DF6D7C69AF23 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52691AF3626AB133204FCF339BA4BB0E /* Pods-Food4FriendsUITests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5A7ABC9F7913AA2DB519B0351FF68927 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C1585B07D4FB0C07FA761ED8FD60C05B /* Pods-Food4FriendsUITests.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Food4FriendsUITests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Food4FriendsUITests/Pods-Food4FriendsUITests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Food4FriendsUITests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		673254EEAF0B5BF4596080C749645884 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7878E601C50DB6B3A3BBBAFD9843802A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0BBA7D22CE7D4A9C0A3980E9EF2BA79 /* Pods-Food4Friends.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Food4Friends/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Food4Friends/Pods-Food4Friends.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Food4Friends;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		88EE95EA2EF5DA34736F65761CACE33D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5B584BB3B96E128EB7B91DCA01227AF8 /* Pods-Food4FriendsTests.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Food4FriendsTests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Food4FriendsTests/Pods-Food4FriendsTests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Food4FriendsTests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		C7744BCD9FEE01D6B92DEFF888A7210E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC9745E382EAD7B19ABB40FF08059D1C /* Pods-Food4Friends.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Food4Friends/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Food4Friends/Pods-Food4Friends.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Food4Friends;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		CF628DC3CDE776C0F748BB7FF26F7B6E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05FF76D87F1BDF098515F34CAC06BDEE /* Pods-Food4FriendsUITests.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Food4FriendsUITests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Food4FriendsUITests/Pods-Food4FriendsUITests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Food4FriendsUITests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		E4F26E6EB105713A6A7E7E2E283AC2DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		E59C317BE03199159A8D4E1503FBE8FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0023978B15EB6E1EC89D85F9B295A5E /* Pods-Food4FriendsTests.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-Food4FriendsTests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Food4FriendsTests/Pods-Food4FriendsTests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Food4FriendsTests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		03925F0AA2891A1DB5DFD98C39F7756B /* Build configuration list for PBXNativeTarget "Pods-Food4FriendsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CF628DC3CDE776C0F748BB7FF26F7B6E /* Debug */,
+				5A7ABC9F7913AA2DB519B0351FF68927 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4F26E6EB105713A6A7E7E2E283AC2DF /* Debug */,
+				673254EEAF0B5BF4596080C749645884 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF081662058A2076337DCD20878610A8 /* Build configuration list for PBXNativeTarget "Pods-Food4FriendsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E59C317BE03199159A8D4E1503FBE8FD /* Debug */,
+				88EE95EA2EF5DA34736F65761CACE33D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D51632739E29D9E8BE5707329529A34F /* Build configuration list for PBXNativeTarget "Pods-Food4Friends" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7878E601C50DB6B3A3BBBAFD9843802A /* Debug */,
+				C7744BCD9FEE01D6B92DEFF888A7210E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+}

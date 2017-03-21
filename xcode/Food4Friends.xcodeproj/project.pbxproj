@@ -11,6 +11,10 @@
 		6E19B0C21E3EE8220012E756 /* BuyPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E19B0C11E3EE8220012E756 /* BuyPageViewController.swift */; };
 		6E19B0C41E3EEBAE0012E756 /* BuyPageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E19B0C31E3EEBAE0012E756 /* BuyPageCell.swift */; };
 		6E2E52F51E4A7F100001B91D /* SellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2E52F41E4A7F100001B91D /* SellViewController.swift */; };
+		6E3F30891E819F8D00C81FA0 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3F307D1E819F1700C81FA0 /* Alamofire.framework */; };
+		6E3F308A1E819F8D00C81FA0 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3F307D1E819F1700C81FA0 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6E3F308E1E819FA300C81FA0 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3F30791E819F1700C81FA0 /* Alamofire.framework */; };
+		6E3F308F1E819FA300C81FA0 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 6E3F30791E819F1700C81FA0 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6E4D64121E7F0C32005ACC77 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E4D64111E7F0C32005ACC77 /* ProfileViewController.swift */; };
 		6E60E29D1E7A35A2004CFFBE /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60E29C1E7A35A2004CFFBE /* CartViewController.swift */; };
 		6E60E2A11E7A3849004CFFBE /* BuyerCartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E60E2A01E7A3849004CFFBE /* BuyerCartViewController.swift */; };
@@ -39,6 +43,90 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6E3F30781E819F1700C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3319A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS";
+		};
+		6E3F307A1E819F1700C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3E19A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS Tests";
+		};
+		6E3F307C1E819F1700C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4DD67C0B1A5C55C900ED2280;
+			remoteInfo = "Alamofire macOS";
+		};
+		6E3F307E1E819F1700C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F829C6B21A7A94F100A2CD59;
+			remoteInfo = "Alamofire macOS Tests";
+		};
+		6E3F30801E819F1700C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF626EF1BA7CB3E0011A099;
+			remoteInfo = "Alamofire tvOS";
+		};
+		6E3F30821E819F1700C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4CF626F81BA7CB3E0011A099;
+			remoteInfo = "Alamofire tvOS Tests";
+		};
+		6E3F30841E819F1700C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4202FE01B667AA100C997FB;
+			remoteInfo = "Alamofire watchOS";
+		};
+		6E3F308B1E819F8D00C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4DD67C0A1A5C55C900ED2280;
+			remoteInfo = "Alamofire macOS";
+		};
+		6E3F30901E819FA300C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS";
+		};
+		6E3F30A01E81A13D00C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F30941E81A13D00C81FA0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 28844A89948EDAAABAF24799A4BABCB7;
+			remoteInfo = "Pods-Food4Friends";
+		};
+		6E3F30A21E81A13D00C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F30941E81A13D00C81FA0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 54A35A2A9428CB5702EC18586C3FE824;
+			remoteInfo = "Pods-Food4FriendsTests";
+		};
+		6E3F30A41E81A13D00C81FA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6E3F30941E81A13D00C81FA0 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B5706C5CA2F8ED4DA0F2AC5A172E0B36;
+			remoteInfo = "Pods-Food4FriendsUITests";
+		};
 		6ED7B8A31E3BAB8900B2B0EC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6ED7B8861E3BAB8900B2B0EC /* Project object */;
@@ -55,11 +143,30 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		6E3F308D1E819F8D00C81FA0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6E3F308A1E819F8D00C81FA0 /* Alamofire.framework in Embed Frameworks */,
+				6E3F308F1E819FA300C81FA0 /* Alamofire.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		3F71C001F0865B51DA69BC17 /* Pods-Food4Friends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Food4Friends.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Food4Friends/Pods-Food4Friends.debug.xcconfig"; sourceTree = "<group>"; };
+		4C595D4BA91101D51208DE17 /* Pods-Food4FriendsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Food4FriendsUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Food4FriendsUITests/Pods-Food4FriendsUITests.release.xcconfig"; sourceTree = "<group>"; };
 		6E0CDD801E7DD3F600EAF2D9 /* SellCartCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellCartCell.swift; sourceTree = "<group>"; };
 		6E19B0C11E3EE8220012E756 /* BuyPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyPageViewController.swift; sourceTree = "<group>"; };
 		6E19B0C31E3EEBAE0012E756 /* BuyPageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyPageCell.swift; sourceTree = "<group>"; };
 		6E2E52F41E4A7F100001B91D /* SellViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SellViewController.swift; sourceTree = "<group>"; };
+		6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = ../../../Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+		6E3F30941E81A13D00C81FA0 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
 		6E4D64111E7F0C32005ACC77 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		6E60E29C1E7A35A2004CFFBE /* CartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		6E60E2A01E7A3849004CFFBE /* BuyerCartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BuyerCartViewController.swift; sourceTree = "<group>"; };
@@ -81,6 +188,9 @@
 		6EE26B051E41A47A00188F85 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		6EE26B061E41A47A00188F85 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		6EE26B141E41A8CB00188F85 /* FacebookLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookLoginController.swift; sourceTree = "<group>"; };
+		9E1FE46DBBBB889A9E018E1B /* Pods-Food4FriendsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Food4FriendsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Food4FriendsTests/Pods-Food4FriendsTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9F44AFE93B02A99C31BAAC77 /* Pods-Food4FriendsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Food4FriendsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Food4FriendsTests/Pods-Food4FriendsTests.release.xcconfig"; sourceTree = "<group>"; };
+		A2E8D6BE0ACBEBF08C9A48A3 /* Pods-Food4Friends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Food4Friends.release.xcconfig"; path = "Pods/Target Support Files/Pods-Food4Friends/Pods-Food4Friends.release.xcconfig"; sourceTree = "<group>"; };
 		E1527D011E725ABA003C6805 /* AccountKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AccountKit.framework; path = Frameworks/AccountKit.framework; sourceTree = "<group>"; };
 		E1527D021E725ABA003C6805 /* AccountKitStrings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = AccountKitStrings.bundle; path = Frameworks/AccountKitStrings.bundle; sourceTree = "<group>"; };
 		E1527D031E725ABA003C6805 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Frameworks/Bolts.framework; sourceTree = "<group>"; };
@@ -91,6 +201,7 @@
 		E1527D081E725ABA003C6805 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Frameworks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		E1527D091E725ABA003C6805 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKMessengerShareKit.framework; path = Frameworks/FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
 		E1527D0A1E725ABA003C6805 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = Frameworks/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		F6E135A0597C303209963056 /* Pods-Food4FriendsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Food4FriendsUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Food4FriendsUITests/Pods-Food4FriendsUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,9 +212,11 @@
 				E1527D111E725ABA003C6805 /* FBSDKCoreKit.framework in Frameworks */,
 				E1527D141E725ABA003C6805 /* FBSDKShareKit.framework in Frameworks */,
 				E1527D0F1E725ABA003C6805 /* FBAudienceNetwork.framework in Frameworks */,
+				6E3F30891E819F8D00C81FA0 /* Alamofire.framework in Frameworks */,
 				E1527D131E725ABA003C6805 /* FBSDKMessengerShareKit.framework in Frameworks */,
 				E1527D121E725ABA003C6805 /* FBSDKLoginKit.framework in Frameworks */,
 				E1527D0B1E725ABA003C6805 /* AccountKit.framework in Frameworks */,
+				6E3F308E1E819FA300C81FA0 /* Alamofire.framework in Frameworks */,
 				E1527D0D1E725ABA003C6805 /* Bolts.framework in Frameworks */,
 				E1527D101E725ABA003C6805 /* FBNotifications.framework in Frameworks */,
 			);
@@ -126,9 +239,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6E3F306E1E819F1700C81FA0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E3F30791E819F1700C81FA0 /* Alamofire.framework */,
+				6E3F307B1E819F1700C81FA0 /* Alamofire iOS Tests.xctest */,
+				6E3F307D1E819F1700C81FA0 /* Alamofire.framework */,
+				6E3F307F1E819F1700C81FA0 /* Alamofire macOS Tests.xctest */,
+				6E3F30811E819F1700C81FA0 /* Alamofire.framework */,
+				6E3F30831E819F1700C81FA0 /* Alamofire tvOS Tests.xctest */,
+				6E3F30851E819F1700C81FA0 /* Alamofire.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E3F30951E81A13D00C81FA0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6E3F30A11E81A13D00C81FA0 /* Pods_Food4Friends.framework */,
+				6E3F30A31E81A13D00C81FA0 /* Pods_Food4FriendsTests.framework */,
+				6E3F30A51E81A13D00C81FA0 /* Pods_Food4FriendsUITests.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		6E918DCC1E419FDD00E52614 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6E3F30941E81A13D00C81FA0 /* Pods.xcodeproj */,
 				E1527D011E725ABA003C6805 /* AccountKit.framework */,
 				E1527D021E725ABA003C6805 /* AccountKitStrings.bundle */,
 				E1527D031E725ABA003C6805 /* Bolts.framework */,
@@ -153,6 +291,7 @@
 				6ED7B8B01E3BAB8A00B2B0EC /* Food4FriendsUITests */,
 				6ED7B88F1E3BAB8900B2B0EC /* Products */,
 				6E918DCC1E419FDD00E52614 /* Frameworks */,
+				DC957AD6140659B380F32265 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,6 +324,7 @@
 				6ED7B8981E3BAB8900B2B0EC /* Assets.xcassets */,
 				6ED7B89A1E3BAB8900B2B0EC /* LaunchScreen.storyboard */,
 				6ED7B89D1E3BAB8900B2B0EC /* Info.plist */,
+				6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */,
 			);
 			path = Food4Friends;
 			sourceTree = "<group>";
@@ -207,6 +347,19 @@
 			path = Food4FriendsUITests;
 			sourceTree = "<group>";
 		};
+		DC957AD6140659B380F32265 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3F71C001F0865B51DA69BC17 /* Pods-Food4Friends.debug.xcconfig */,
+				A2E8D6BE0ACBEBF08C9A48A3 /* Pods-Food4Friends.release.xcconfig */,
+				9E1FE46DBBBB889A9E018E1B /* Pods-Food4FriendsTests.debug.xcconfig */,
+				9F44AFE93B02A99C31BAAC77 /* Pods-Food4FriendsTests.release.xcconfig */,
+				F6E135A0597C303209963056 /* Pods-Food4FriendsUITests.debug.xcconfig */,
+				4C595D4BA91101D51208DE17 /* Pods-Food4FriendsUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -214,13 +367,19 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6ED7B8B61E3BAB8A00B2B0EC /* Build configuration list for PBXNativeTarget "Food4Friends" */;
 			buildPhases = (
+				87ED376CCA9C3D4BEAD80FB8 /* [CP] Check Pods Manifest.lock */,
 				6ED7B88A1E3BAB8900B2B0EC /* Sources */,
 				6ED7B88B1E3BAB8900B2B0EC /* Frameworks */,
 				6ED7B88C1E3BAB8900B2B0EC /* Resources */,
+				44E535C98C044E14F1798397 /* [CP] Embed Pods Frameworks */,
+				D950BC5AFA62BE0074310F67 /* [CP] Copy Pods Resources */,
+				6E3F308D1E819F8D00C81FA0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6E3F308C1E819F8D00C81FA0 /* PBXTargetDependency */,
+				6E3F30911E819FA300C81FA0 /* PBXTargetDependency */,
 			);
 			name = Food4Friends;
 			productName = Food4Friends;
@@ -231,9 +390,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6ED7B8B91E3BAB8A00B2B0EC /* Build configuration list for PBXNativeTarget "Food4FriendsTests" */;
 			buildPhases = (
+				529FC60E1E5CC73068D5FB30 /* [CP] Check Pods Manifest.lock */,
 				6ED7B89E1E3BAB8900B2B0EC /* Sources */,
 				6ED7B89F1E3BAB8900B2B0EC /* Frameworks */,
 				6ED7B8A01E3BAB8900B2B0EC /* Resources */,
+				996E9CED1ED582124030C9A6 /* [CP] Embed Pods Frameworks */,
+				0A23C89AA9F0CD8F5CEF1611 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -249,9 +411,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6ED7B8BC1E3BAB8A00B2B0EC /* Build configuration list for PBXNativeTarget "Food4FriendsUITests" */;
 			buildPhases = (
+				406A031A9872F9A5F0900342 /* [CP] Check Pods Manifest.lock */,
 				6ED7B8A91E3BAB8A00B2B0EC /* Sources */,
 				6ED7B8AA1E3BAB8A00B2B0EC /* Frameworks */,
 				6ED7B8AB1E3BAB8A00B2B0EC /* Resources */,
+				D2B35F9C692DA84BAA1C027A /* [CP] Embed Pods Frameworks */,
+				329E219CB10E45AC36B3F625 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -301,6 +466,16 @@
 			mainGroup = 6ED7B8851E3BAB8900B2B0EC;
 			productRefGroup = 6ED7B88F1E3BAB8900B2B0EC /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 6E3F306E1E819F1700C81FA0 /* Products */;
+					ProjectRef = 6E3F306D1E819F1700C81FA0 /* Alamofire.xcodeproj */;
+				},
+				{
+					ProductGroup = 6E3F30951E81A13D00C81FA0 /* Products */;
+					ProjectRef = 6E3F30941E81A13D00C81FA0 /* Pods.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				6ED7B88D1E3BAB8900B2B0EC /* Food4Friends */,
@@ -309,6 +484,79 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		6E3F30791E819F1700C81FA0 /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 6E3F30781E819F1700C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E3F307B1E819F1700C81FA0 /* Alamofire iOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire iOS Tests.xctest";
+			remoteRef = 6E3F307A1E819F1700C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E3F307D1E819F1700C81FA0 /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 6E3F307C1E819F1700C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E3F307F1E819F1700C81FA0 /* Alamofire macOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire macOS Tests.xctest";
+			remoteRef = 6E3F307E1E819F1700C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E3F30811E819F1700C81FA0 /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 6E3F30801E819F1700C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E3F30831E819F1700C81FA0 /* Alamofire tvOS Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Alamofire tvOS Tests.xctest";
+			remoteRef = 6E3F30821E819F1700C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E3F30851E819F1700C81FA0 /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 6E3F30841E819F1700C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E3F30A11E81A13D00C81FA0 /* Pods_Food4Friends.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_Food4Friends.framework;
+			remoteRef = 6E3F30A01E81A13D00C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E3F30A31E81A13D00C81FA0 /* Pods_Food4FriendsTests.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_Food4FriendsTests.framework;
+			remoteRef = 6E3F30A21E81A13D00C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6E3F30A51E81A13D00C81FA0 /* Pods_Food4FriendsUITests.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Pods_Food4FriendsUITests.framework;
+			remoteRef = 6E3F30A41E81A13D00C81FA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6ED7B88C1E3BAB8900B2B0EC /* Resources */ = {
@@ -340,6 +588,144 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0A23C89AA9F0CD8F5CEF1611 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Food4FriendsTests/Pods-Food4FriendsTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		329E219CB10E45AC36B3F625 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Food4FriendsUITests/Pods-Food4FriendsUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		406A031A9872F9A5F0900342 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		44E535C98C044E14F1798397 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Food4Friends/Pods-Food4Friends-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		529FC60E1E5CC73068D5FB30 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		87ED376CCA9C3D4BEAD80FB8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		996E9CED1ED582124030C9A6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Food4FriendsTests/Pods-Food4FriendsTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D2B35F9C692DA84BAA1C027A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Food4FriendsUITests/Pods-Food4FriendsUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D950BC5AFA62BE0074310F67 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Food4Friends/Pods-Food4Friends-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6ED7B88A1E3BAB8900B2B0EC /* Sources */ = {
@@ -380,6 +766,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6E3F308C1E819F8D00C81FA0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Alamofire macOS";
+			targetProxy = 6E3F308B1E819F8D00C81FA0 /* PBXContainerItemProxy */;
+		};
+		6E3F30911E819FA300C81FA0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Alamofire iOS";
+			targetProxy = 6E3F30901E819FA300C81FA0 /* PBXContainerItemProxy */;
+		};
 		6ED7B8A41E3BAB8900B2B0EC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6ED7B88D1E3BAB8900B2B0EC /* Food4Friends */;
@@ -507,7 +903,9 @@
 		};
 		6ED7B8B71E3BAB8A00B2B0EC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F71C001F0865B51DA69BC17 /* Pods-Food4Friends.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = ENGRG675W3;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -526,7 +924,9 @@
 		};
 		6ED7B8B81E3BAB8A00B2B0EC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2E8D6BE0ACBEBF08C9A48A3 /* Pods-Food4Friends.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = ENGRG675W3;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -551,6 +951,7 @@
 		};
 		6ED7B8BA1E3BAB8A00B2B0EC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9E1FE46DBBBB889A9E018E1B /* Pods-Food4FriendsTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -565,6 +966,7 @@
 		};
 		6ED7B8BB1E3BAB8A00B2B0EC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F44AFE93B02A99C31BAAC77 /* Pods-Food4FriendsTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -579,6 +981,7 @@
 		};
 		6ED7B8BD1E3BAB8A00B2B0EC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6E135A0597C303209963056 /* Pods-Food4FriendsUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = Food4FriendsUITests/Info.plist;
@@ -592,6 +995,7 @@
 		};
 		6ED7B8BE1E3BAB8A00B2B0EC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C595D4BA91101D51208DE17 /* Pods-Food4FriendsUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = Food4FriendsUITests/Info.plist;

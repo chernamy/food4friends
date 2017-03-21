@@ -1,0 +1,20 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Food4Friends' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for Food4Friends
+
+  target 'Food4FriendsTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'Food4FriendsUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

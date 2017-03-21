@@ -27,7 +27,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var totalNumItems = 0
     var servingsBought = -1
     var itemNumberBought = -1
-    var ConfirmClickResponse: String = "error"
     var firstLoad: Bool = true
     
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
@@ -44,10 +43,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             print(response?.suggestedFilename ?? url.lastPathComponent)
             print("Download Finished")
             self.image_data.append(data)
-//            DispatchQueue.main.async() { () -> Void in
-//                self.firstLoad = false
-//                self.tableView.reloadData()
-//            }
         }
     }
     
@@ -119,8 +114,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     self.firstLoad = false
                     self.tableView.reloadData()
                 }
-
-                
             } catch {
                 print("error trying to convert data to JSON")
                 return
@@ -159,13 +152,11 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                         let resultValue:String = json["info"] as! String;
                         print("result: \(resultValue)")
                         self.tabBarController?.selectedIndex = 3
-                        self.ConfirmClickResponse = ""
                     }
                 }
             } catch let error as NSError {
                 print("buypageviewcontroller POST catch error: ")
                 print(error)
-                self.ConfirmClickResponse = "error"
             }
             if (login == true) {
                 DispatchQueue.main.async() {
@@ -189,6 +180,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
         popupView.isHidden = true
         self.makeGETCall()
+        errorView.isHidden = true
         //Looks for single or multiple taps.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(BuyPageViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false 
