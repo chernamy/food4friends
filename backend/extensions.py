@@ -223,6 +223,7 @@ TEST_USER5 = UserData(fb_test.FBTest.TEST_USER_IDS[4], "buyer", "-")
 TEST_USER6 = UserData(fb_test.FBTest.TEST_USER_IDS[5], "none", "-")
 TEST_USER7 = UserData(fb_test.FBTest.TEST_USER_IDS[6], "seller", "-")
 TEST_USER8 = UserData(fb_test.FBTest.TEST_USER_IDS[7], "seller", "-")
+TEST_USER9 = UserData(fb_test.FBTest.TEST_USER_IDS[8], "none", "-")
 
 
 class ItemData(Data):
@@ -242,7 +243,7 @@ TEST_ITEM1 = ItemData(TEST_USER1.userid, "images/%s.jpg" %(TEST_USER1.userid),
                         "tasty")
 
 # This is a test item that expired 10 minutes ago
-TEST_ITEM2 = ItemData(TEST_USER2.userid, "images%s.jpg" %(TEST_USER2.userid),
+TEST_ITEM2 = ItemData(TEST_USER2.userid, "images/%s.jpg" %(TEST_USER2.userid),
                         20, CURR_TIME_SECS - 600, 25.00, "42.30, -83.73",
                         "yummy")
 
@@ -312,6 +313,7 @@ TEST_MEMBERSHIP4 = MembershipData(TEST_USER4.userid, 1, "joined")
 TEST_MEMBERSHIP5 = MembershipData(TEST_USER5.userid, 1, "joined")
 TEST_MEMBERSHIP6 = MembershipData(TEST_USER7.userid, 1, "joined")
 TEST_MEMBERSHIP7 = MembershipData(TEST_USER8.userid, 1, "joined")
+TEST_MEMBERSHIP8 = MembershipData(TEST_USER9.userid, 1, "joined")
 
 
 class RatingData(Data):
@@ -361,6 +363,7 @@ def SetUpTestUserData():
     ExecuteCommand(TEST_USER6.ToInsertCommand())
     ExecuteCommand(TEST_USER7.ToInsertCommand())
     ExecuteCommand(TEST_USER8.ToInsertCommand())
+    ExecuteCommand(TEST_USER9.ToInsertCommand())
 
 
 def SetUpTestItemData():
@@ -387,6 +390,7 @@ def SetUpTestMembershipData():
     ExecuteCommand(TEST_MEMBERSHIP5.ToInsertCommand())
     ExecuteCommand(TEST_MEMBERSHIP6.ToInsertCommand())
     ExecuteCommand(TEST_MEMBERSHIP7.ToInsertCommand())
+    ExecuteCommand(TEST_MEMBERSHIP8.ToInsertCommand())
 
 
 def SetUpTestRatingData():

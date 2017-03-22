@@ -104,7 +104,8 @@ class CommunityTest(base_test.BaseTestCase):
                                     extensions.TEST_USER4.userid,
                                     extensions.TEST_USER5.userid,
                                     extensions.TEST_USER7.userid,
-                                    extensions.TEST_USER8.userid]))
+                                    extensions.TEST_USER8.userid,
+                                    extensions.TEST_USER9.userid]))
 
     def testGetCommunityMembersRouteInvalid(self):
         data = {"communityid": 1}

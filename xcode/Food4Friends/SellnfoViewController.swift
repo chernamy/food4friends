@@ -38,6 +38,7 @@ class SellnfoViewController: UIViewController {
             }, with: sell_url) { (result) in
                 switch result {
                 case .success(let upload, _, _):
+                    self.tabBarController?.selectedIndex = 4
                     print(upload)
                 case .failure( _):
                     print("no")

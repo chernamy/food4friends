@@ -10,6 +10,7 @@ sell = Blueprint("/api/v1/sell/", __name__)
 
 ALLOWED_EXT = set(["png", "jpg", "jpeg", "gif"])
 IMAGE_DIR = config.env["image_dir"]
+SAVE_IMAGE_DIR = config.env["save_image_dir"]
 
 @sell.route("/api/v1/sell", methods=["PUT"])
 @sell.route("/api/v1/sell/", methods=["PUT"])
@@ -172,11 +173,12 @@ def CreateOffer():
     description = request.form.get("description")
 
     photo_path = os.path.join(IMAGE_DIR, userid + "." + ext)
+    insert_photo_path = os.path.join(SAVE_IMAGE_DIR, userid + "." + ext)
     photo.save(photo_path)
 
     end = calendar.timegm(time.gmtime()) + duration * 60
 
-    new_item = extensions.ItemData(userid, photo_path, servings, end,
+    new_item = extensions.ItemData(userid, insert_photo_path, servings, end,
                                     price, address, description)
     extensions.Insert(new_item)
     return messages.SUCCESS, 200

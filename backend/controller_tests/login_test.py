@@ -16,7 +16,7 @@ class LoginTest(base_test.BaseTestCase):
         Args:
             test_driver: (BaseTest) instance of a test driver that needs to
                 log in.
-            user_num: (int) an int 1-5 that is the user to log in.
+            user_num: (int) an int 1-9 that is the user to log in.
 
         Returns:
             r: (Response) The response from the server.
@@ -72,6 +72,13 @@ class LoginTest(base_test.BaseTestCase):
     def testHTTP(self):
         r = self.PostJSON(LoginTest.LOGIN_ROUTE, https=False)
         self.assertEquals(r.status_code, 302)
+
+    def testAllTestUsersLogin(self):
+        for i in range(len(fb_test.FBTest.TEST_USER_IDS)):
+            r = LoginTest.LoginAsUser(self, i+1)
+            self.assertEquals(r.data, messages.SUCCESS)
+            LoginTest.Logout(self)
+
 
 if __name__ == "__main__":
     unittest.main()

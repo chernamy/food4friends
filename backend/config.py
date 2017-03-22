@@ -6,5 +6,6 @@ env = dict(
     state = "test",
     db_user = "root",
     db_passwd = "root",
-    image_dir = os.path.join("static", "images"),
+    image_dir = os.path.join("static", "images"), 
+    save_image_dir = os.path.join("images")
 )
