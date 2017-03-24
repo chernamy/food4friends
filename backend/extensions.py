@@ -462,6 +462,10 @@ def SetUpProdDatabase():
     conn = MySQLdb.connect(host="localhost", user=config.env["db_user"],
                             passwd=config.env["db_passwd"], db="prod")
 
+    # Make the first community for Michigan
+    michigan_community = CommunityData(1, "Univeristy of Michigan")
+    Insert(michigan_community)
+
 
 def Init():
     """Reinitializes the database. If this is prod, the connection will just

@@ -1,5 +1,6 @@
 import unittest
 import base_test
+import extensions
 import fb_test
 import json
 import messages
@@ -78,6 +79,15 @@ class LoginTest(base_test.BaseTestCase):
             r = LoginTest.LoginAsUser(self, i+1)
             self.assertEquals(r.data, messages.SUCCESS)
             LoginTest.Logout(self)
+
+    def testLogInAsNewUser(self):
+        # test user 10 is not in the DB. Make sure he can log in
+        self.assertEquals(extensions.Query(extensions.UserData,
+                            [("userid", fb_test.FBTest.TEST_USER_IDS[9])]), [])
+        r = LoginTest.LoginAsUser(self, 10)
+        self.assertEquals(r.data, messages.SUCCESS)
+        self.assertTrue(extensions.Query(extensions.UserData,
+                [("userid", fb_test.FBTest.TEST_USER_IDS[9])]) != [])
 
 
 if __name__ == "__main__":
