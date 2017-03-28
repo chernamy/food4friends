@@ -75,13 +75,10 @@ def GetUsersInCommunity():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
-    if request.json is None:
-        return messages.NO_JSON_DATA, 400
-
-    if "communityid" not in request.json:
+    if "communityid" not in request.args:
         return messages.MISSING_COMMUNITYID, 400
 
-    communityid = request.json.get("communityid")
+    communityid = request.args.get("communityid")
     communities = extensions.Query(extensions.MembershipData,
                                     [("communityid", communityid)])
     return messages.BuildMembersListMessage(communities), 200

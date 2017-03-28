@@ -118,7 +118,7 @@ class SellTest(base_test.BaseTestCase):
             (ItemData) The item data representing the sell offer for the
                 specified user.
         """
-        r = self.GetJSON(buy_test.BuyTest.BUY_ROUTE)
+        r = self.Get(buy_test.BuyTest.BUY_ROUTE)
         sell_offers = messages.UnwrapItemListMessage(r.data)
         user_offer_data = next(offer for offer in sell_offers if 
                                 offer.userid == userid)
@@ -313,14 +313,14 @@ class SellTest(base_test.BaseTestCase):
 
     def testViewIncompleteTransactionsRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
-        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        r = self.Get(SellTest.COMPLETE_ROUTE)
         self.assertEquals(r.data, messages.BuildTransactionsListMessage(
                 [extensions.TEST_TRANSACTION1]))
         login_test.LoginTest.Logout(self)
 
         # test no transactions
         login_test.LoginTest.LoginAsUser(self, 2)
-        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        r = self.Get(SellTest.COMPLETE_ROUTE)
         self.assertEquals(r.data, messages.BuildTransactionsListMessage([]))
         login_test.LoginTest.Logout(self)
 
@@ -337,7 +337,7 @@ class SellTest(base_test.BaseTestCase):
         # user 1 will now ask for his incomplete transactions and there should
         # be two of them
         login_test.LoginTest.LoginAsUser(self, 1)
-        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        r = self.Get(SellTest.COMPLETE_ROUTE)
         transaction_data1 = extensions.TEST_TRANSACTION1
         transaction_data2 = extensions.TransactionData(
                 extensions.TEST_USER1.userid, extensions.TEST_USER3.userid, 5)
@@ -345,7 +345,7 @@ class SellTest(base_test.BaseTestCase):
                             set([transaction_data1, transaction_data2]))
 
     def testViewIncompleteTransactionsRouteInvalid(self):
-        r = self.GetJSON(SellTest.COMPLETE_ROUTE)
+        r = self.Get(SellTest.COMPLETE_ROUTE)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
     def testCompleteRouteExists(self):
@@ -510,7 +510,7 @@ class SellTest(base_test.BaseTestCase):
         
         # check that the item was updated
         login_test.LoginTest.LoginAsUser(self, 3)
-        r = self.GetJSON(buy_test.BuyTest.BUY_ROUTE)
+        r = self.Get(buy_test.BuyTest.BUY_ROUTE)
         expected_item = extensions.ItemData.FromDict(
                             extensions.TEST_ITEM1.__dict__)
         expected_item.photo = os.path.join(SellTest.IMAGE_DIR,
