@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class CartViewController: UIViewController {
     @IBOutlet weak var buySubview: UIView!
@@ -14,59 +15,36 @@ class CartViewController: UIViewController {
     @IBOutlet weak var cartTitle: UILabel!
     @IBOutlet weak var servingsInfo: UILabel!
     @IBOutlet weak var timeLeft: UILabel!
-    
-//    func GETCall(params: [String:String]) {
-//        let userurl = URL(string: server + "/api/v1/user/")!
-//        
-//        let request = NSMutableURLRequest(url: userurl)
-//        request.httpMethod = "GET"
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        
-//        let jsonDict = ["userid":userid] as [String : Any]
-//        
-//        if let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) {
-//            request.httpBody = jsonData
-//        }
-//        
-//        let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in            // do stuff with response, data & error here
-//            if error != nil{
-//                print(error?.localizedDescription)
-//                return
-//            }
-//            
-//            do {
-//                if let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary {
-//                    if (json["error"] != nil) {
-//                        print(json["error"])
-//                    } else {
-//                        let resultValue:String = json["info"] as! String;
-//                        print("result: \(resultValue)")
-//                    }
-//                }
-//            } catch let error as NSError {
-//                print(error)
-//            }
-//            
-//        }
-//        task.resume()
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if (false) {
-            sellSubview.isHidden = true
-            buySubview.isHidden = false
+        
+        // remove both subviews from superview
+        for view in self.view.subviews {
+            view.removeFromSuperview()
         }
-        else {
-            // Sell Cart Page
-            sellSubview.isHidden = false
-            buySubview.isHidden = true
-            
-            
-            cartTitle.text = "Sold: Noodles & Broccoli"
-            servingsInfo.text = "Servings Left: 18"
-            timeLeft.text = "Time Remaining: 20 min"
+        
+        Alamofire.request(server + "/api/v1/user/", parameters: ["userid": userid], encoding: JSONEncoding.default).responseJSON { (response) in
+            print("GOT USER INFO")
+            print(response)
         }
+        
+//        self.view.addSubview(buySubview)
+//        self.view.addSubview(sellSubview)
+    
+        
+//        if (false) {
+//        }
+//        else {
+//            // Sell Cart Page
+//            sellSubview.isHidden = false
+//            buySubview.isHidden = true
+//            
+////            
+////            cartTitle.text = "Sold: Noodles & Broccoli"
+////            servingsInfo.text = "Servings Left: 18"
+////            timeLeft.text = "Time Remaining: 20 min"
+//        }
     }
 
     override func didReceiveMemoryWarning() {

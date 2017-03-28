@@ -68,7 +68,7 @@ class FacebookLoginController: UIViewController {
         
         if (FBSDKAccessToken.current() != nil ) {
             // User is logged in, do work such as go to next view controller.
-            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "homePage") as UIViewController
+            let viewController = self.storyboard!.instantiateViewController(withIdentifier: "tabView") as UIViewController
             self.present(viewController, animated: true, completion: nil)
         }
         else {

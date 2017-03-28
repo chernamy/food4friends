@@ -14,12 +14,16 @@ import Alamofire
 
 class ProfileViewController: UIViewController {
     @IBAction func logout(_ sender: Any) {
-//        FBSDKLoginManager.logOut()
+        
         userid = ""
         userToken = ""
         let loginManager = FBSDKLoginManager()
         loginManager.logOut()
-        self.dismiss(animated: false, completion: nil)
+        Alamofire.request(server + "/api/v1/logout/", method: .post).responseJSON { (response) in
+            print(response)
+        }
+        
+        self.dismiss(animated: true, completion: nil)
     }
     
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
@@ -57,6 +61,9 @@ class ProfileViewController: UIViewController {
                 self?.getDataFromUrl(url: url!) { (data, response, error)  in
                     guard let data = data, error == nil else { return }
                     print(response?.suggestedFilename ?? url?.lastPathComponent ?? "no response")
+                    self?.propic.contentMode = UIViewContentMode.scaleAspectFill
+                    self?.propic.clipsToBounds = true;
+                    self?.propic.layer.cornerRadius = 10;
                     self?.propic.image = UIImage(data: data)
                 }
             }

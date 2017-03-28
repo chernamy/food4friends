@@ -10,13 +10,13 @@ def GetUserData():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
-    if request.json is None:
-        return messages.NO_JSON_DATA, 400
+    if request.args is None:
+        return messages.NO_URL_PARAMETERS, 400
 
-    if "userid" not in request.json:
-        return messages.MISSING_USERID, 400
+    if "userid" not in request.args:
+        return messages.NO_URL_PARAMETERS, 400
 
-    userid = request.json.get("userid")
+    userid = request.args.get("userid")
     user_data = extensions.Query(extensions.UserData, [("userid", userid)])
     if not user_data:
         return messages.NONEXISTENT_USER, 400
