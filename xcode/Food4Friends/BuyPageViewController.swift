@@ -138,7 +138,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     var i = 0
                     while (i < self.totalNumItems) {
                         print("image names: " + self.photos[i])
-                        let url_string = server + "/static/" + self.photos[i]
+                        let url_string = server + "/" + self.photos[i]
                         print("url: " + url_string)
                         let url = URL(string: url_string)
                         self.downloadImage(url: url!)

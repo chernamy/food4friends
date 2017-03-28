@@ -44,47 +44,10 @@ class SellnfoViewController: UIViewController {
                     print("no")
                 }
             }
-
         }
         catch {
            print("error occured")
         }
-        
-        
-//        var request = NSMutableURLRequest(url: URL(string: server + "/api/v1/sell/")!)
-//        request.httpMethod = "POST"
-////        let postDict = ["userid": userid, "servings": servings.text!, "duration": durationMin.text!, "price": price.text!, "address": address.text!, "description": itemDescription.text!] as [String: Any]
-//        let boundary = generateBoundaryString()
-//
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-////        request.setValue("multipart/form-data; boundary=\(boundary)",
-////            forHTTPHeaderField: "Content-Type")
-//        
-//        let bodyData = "userid=id&key2=value&key3=value"
-//        request.httpBody = bodyData.data(using: String.Encoding.utf8);
-//        
-//        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, response, error in
-//            guard let data = data else {
-//                print("error getting data")
-//                return
-//            }
-//            
-//            
-//            if let httpStatus = response as? HTTPURLResponse,
-//                httpStatus.statusCode != 200 {
-//                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-//                print("response = \(response)")
-//            }
-//            
-//            let responseString = String(data: data, encoding: .utf8)
-//            print ("response String")
-//            print (responseString ?? "No string")
-//            self.tabBarController?.selectedIndex = 3;
-//        }
-//        
-//        task.resume()
-//        
         
     }
     

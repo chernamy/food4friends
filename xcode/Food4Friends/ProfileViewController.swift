@@ -14,7 +14,12 @@ import Alamofire
 
 class ProfileViewController: UIViewController {
     @IBAction func logout(_ sender: Any) {
-        
+//        FBSDKLoginManager.logOut()
+        userid = ""
+        userToken = ""
+        let loginManager = FBSDKLoginManager()
+        loginManager.logOut()
+        self.dismiss(animated: false, completion: nil)
     }
     
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
