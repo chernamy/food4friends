@@ -9,13 +9,14 @@
 import UIKit
 
 class BuyPageCell: UITableViewCell {
-
+    
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var name: UILabel!
     
     
     @IBOutlet weak var servingsBought: UITextField!
     
+    @IBOutlet weak var timeLeft: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var servingsAvailable: UILabel!
     
@@ -23,11 +24,11 @@ class BuyPageCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
-
+    
 }

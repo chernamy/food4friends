@@ -8,6 +8,24 @@
 
 import UIKit
 
+func hexStringToUIColor (hex:String) -> UIColor {
+    var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+    if (cString.hasPrefix("#")) {
+        cString.remove(at: cString.startIndex)
+    }
+    if ((cString.characters.count) != 6) {
+        return UIColor.gray
+    }
+    var rgbValue:UInt32 = 0
+    Scanner(string: cString).scanHexInt32(&rgbValue)
+    return UIColor(
+        red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+        green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+        blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+        alpha: CGFloat(1.0)
+    )
+}
+
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var popupView: UIView!
@@ -18,7 +36,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var descriptions: [String] = []
     var prices: [Int] = []
     var addresses: [Int] = []
-    var ends: [Int] = []
+    var ends: [String] = []
     var photos: [String] = []
     var servings: [Int] = []
     var userids: [String] = []
@@ -43,6 +61,21 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             print("Download Finished")
             self.image_data.append(data)
         }
+    }
+    
+    func refreshData() {
+        self.descriptions = []
+        self.prices = []
+        self.addresses = []
+        self.ends = []
+        self.photos = []
+        self.servings = []
+        self.userids = []
+        self.image_data = []
+        self.totalNumItems = 0
+        self.servingsBought = -1
+        self.itemNumberBought = -1
+        self.makeGETCall()
     }
     
     func makeGETCall() {
@@ -86,10 +119,17 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                             self.descriptions.append(item["description"] as! String)
                             self.prices.append(item["price"] as! Int)
                             //self.addresses.append(item["address"] as! Int)
-                            self.ends.append(item["end"] as! Int)
+                            let epochTime = item["end"] as! Double
+                            //self.ends.append(item["end"] as! Int)
                             self.photos.append(item["photo"] as! String)
                             self.servings.append(item["servings"] as! Int)
                             self.userids.append(item["userid"] as! String)
+                            let currentEpoch = NSDate().timeIntervalSince1970
+                            let diffEpoch = Double(epochTime) - Double(currentEpoch)
+                            var time = NSDate(timeIntervalSince1970: Double(diffEpoch))
+                            var timeLeft = String(describing: time)
+                            let timeArr = timeLeft.characters.split(separator: " ")
+                            self.ends.append(String(timeArr[1]))
                         }
                     }
                 }
@@ -151,16 +191,14 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                             self.errorMessage.text = json["error"] as! String?
                             self.errorMessage.lineBreakMode = .byWordWrapping
                             self.errorMessage.numberOfLines = 0
-//                            self.tableView.backgroundColor = UIColor.black
-//                            self.view.backgroundColor = UIColor.black
                         }
                         
                     } else {
                         let resultValue:String = json["info"] as! String;
                         print("result: \(resultValue)")
-                        self.refreshData()
                         self.popupView.isHidden = true
                         self.tabBarController?.selectedIndex = 3
+                        //self.refreshData()
                     }
                 }
             } catch let error as NSError {
@@ -172,20 +210,24 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         task.resume()
     }
     
-    func refreshData() {
-        self.descriptions = []
-        self.prices = []
-        self.addresses = []
-        self.ends = []
-        self.photos = []
-        self.servings = []
-        self.userids = []
-        self.image_data = []
-        self.totalNumItems = 0
-        self.servingsBought = -1
-        self.itemNumberBought = -1
-        //self.makeGETCall()
+    func animateViewMoving(up:Bool, moveValue: CGFloat) {
+        var movementDuration:TimeInterval = 0.3
+        var movement:CGFloat = (up ? -moveValue: moveValue)
+        UIView.beginAnimations("animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration)
+        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement)
+        UIView.commitAnimations()
     }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        animateViewMoving(up: true, moveValue: 100)
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        animateViewMoving(up: false, moveValue: 100)
+    }
+    
     
     //Calls this function when the tap is recognized.
     func dismissKeyboard() {
@@ -201,11 +243,11 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         self.popupView.layer.cornerRadius = 8.0
         self.errorView.layer.cornerRadius = 8.0
         self.makeGETCall()
-        errorView.isHidden = true
         //Looks for single or multiple taps.
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(BuyPageViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false 
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -216,7 +258,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBAction func cancelPopup(_ sender: Any) {
         popupView.isHidden = true
     }
-    
     
     // For creating the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -233,17 +274,19 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             cell?.price.text = "Price: $" + String(self.prices[indexPath.row])
             cell?.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
             cell?.servingsBought.text = ""
+            cell?.timeLeft.text = self.ends[indexPath.row]
+            
         }
         return cell!
     }
-   
+    
     @IBAction func buyItemFinal(_ sender: Any) {
         let sellerid = self.userids[itemNumberBought]
         let buyerid = userid
         let jsonDict = ["sellerid": sellerid, "buyerid": buyerid, "servings": self.servingsBought] as [String : Any]
         self.makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/buy/", login: false)
     }
-
+    
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
         if (cell.servingsBought.text != "") {

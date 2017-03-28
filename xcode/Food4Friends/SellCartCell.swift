@@ -20,6 +20,8 @@ class SellCartCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.buyerImage.layer.cornerRadius = self.buyerImage.frame.size.width / 2
+        self.buyerImage.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

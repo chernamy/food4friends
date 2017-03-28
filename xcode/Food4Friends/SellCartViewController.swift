@@ -8,13 +8,13 @@
 
 import UIKit
 
-
 class SellCartViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.separatorColor = hexStringToUIColor(hex: "#922745")
         tableView.delegate = self;
         tableView.dataSource = self;
     }
@@ -27,14 +27,14 @@ class SellCartViewController: UIViewController, UITableViewDataSource, UITableVi
     // For creating the table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // return how many rows in the table
-        return 3
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "sellCell", for: indexPath) as! SellCartCell
-        cell.servings?.text = "servings: 3"
-        cell.buyerImage?.image = #imageLiteral(resourceName: "enchilada")
+        cell.servings?.text = "Bought Servings: 2"
+        cell.buyerImage?.image = #imageLiteral(resourceName: "amy")
         return cell
     }
 

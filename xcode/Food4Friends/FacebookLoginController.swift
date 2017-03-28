@@ -14,7 +14,7 @@ import Foundation
 
 var userToken = ""
 var userid = ""
-var server = "http://35.1.58.233:3000"
+var server = "http://46df9ceb.ngrok.io"
 
 class FacebookLoginController: UIViewController {
     var ConfirmClickResponse = ""
@@ -75,7 +75,7 @@ class FacebookLoginController: UIViewController {
             let loginButton = FBSDKLoginButton()
             loginButton.readPermissions = ["public_profile", "email", "user_friends"]
             // Optional: Place the button in the center of your view.
-            loginButton.center = self.view.center
+            loginButton.center = CGPoint(x: 187.5, y: 500);
             self.view.addSubview(loginButton)
             FBSDKProfile.enableUpdates(onAccessTokenChange: true)
             NotificationCenter.default.addObserver(self, selector: #selector(onTokenUpdated), name: NSNotification.Name.FBSDKAccessTokenDidChange, object: nil)
