@@ -105,6 +105,7 @@ def UnwrapPendingRatingsListMessage(msg):
 SUCCESS = BuildInfoMessage("Success")
 NOT_LOGGED_IN = BuildErrorMessage("You are not logged in.")
 NO_JSON_DATA = BuildErrorMessage("Your request has no JSON data.")
+NO_URL_PARAMETERS = BuildErrorMessage("Your request has no URL parameters.")
 
 # ---- Login Request Error Messages ---- #
 MISSING_USERID = BuildErrorMessage("Missing userid")

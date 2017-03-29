@@ -275,7 +275,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             cell?.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
             cell?.servingsBought.text = ""
             cell?.timeLeft.text = self.ends[indexPath.row]
-            
         }
         return cell!
     }
@@ -310,7 +309,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
         cell.servingsBought.text = ""
-        
     }
 }
 

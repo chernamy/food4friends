@@ -369,8 +369,8 @@ def SetUpTestUserData():
 def SetUpTestItemData():
     ExecuteCommand(TEST_ITEM1.ToInsertCommand())
     ExecuteCommand(TEST_ITEM2.ToInsertCommand())
-    # ExecuteCommand(TEST_ITEM3.ToInsertCommand())
-    # ExecuteCommand(TEST_ITEM4.ToInsertCommand())
+    ExecuteCommand(TEST_ITEM3.ToInsertCommand())
+    ExecuteCommand(TEST_ITEM4.ToInsertCommand())
 
 
 def SetUpTestTransactionData():

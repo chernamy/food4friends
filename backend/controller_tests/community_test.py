@@ -16,12 +16,12 @@ class CommunityTest(base_test.BaseTestCase):
 
     def testViewCommunityRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
-        r = self.GetJSON(CommunityTest.ALL_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.ALL_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.BuildCommunityListMessage(
                 [extensions.TEST_COMMUNITY1, extensions.TEST_COMMUNITY2]))
 
     def testViewCommunityNotLoggedIn(self):
-        r = self.GetJSON(CommunityTest.ALL_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.ALL_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
     def testCreateCommunityRouteExists(self):
@@ -31,14 +31,14 @@ class CommunityTest(base_test.BaseTestCase):
         r = self.PostJSON(CommunityTest.ALL_COMMUNITIES_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
-        r = self.GetJSON(CommunityTest.ALL_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.ALL_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.BuildCommunityListMessage(
                 [extensions.TEST_COMMUNITY1, extensions.TEST_COMMUNITY2,
                     extensions.CommunityData(3, "TestCommunity3")]))
 
         # check that user got added to community
         data = {"communityid": 3}
-        r = self.GetJSON(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
+        r = self.Get(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
         self.assertEquals(set(messages.UnwrapMembersListMessage(r.data)),
                             set([extensions.TEST_USER1.userid]))
 
@@ -61,18 +61,18 @@ class CommunityTest(base_test.BaseTestCase):
 
     def testGetJoinedCommunitiesRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
-        r = self.GetJSON(CommunityTest.JOINED_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.JOINED_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.BuildCommunityListMessage(
                 [extensions.TEST_COMMUNITY1]))
 
     def testGetJoinedCommunitiesRouteNoCommunities(self):
         login_test.LoginTest.LoginAsUser(self, 6)
-        r = self.GetJSON(CommunityTest.JOINED_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.JOINED_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.BuildCommunityListMessage([]))
 
     def testGetJoinedCommunitiesRouteInvalidRequest(self):
         # test not logged in
-        r = self.GetJSON(CommunityTest.JOINED_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.JOINED_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
     def testGetInvitedCommunitiesRouteExists(self):
@@ -84,19 +84,19 @@ class CommunityTest(base_test.BaseTestCase):
 
         login_test.LoginTest.Logout(self)
         login_test.LoginTest.LoginAsUser(self, 6)
-        r = self.GetJSON(CommunityTest.INVITED_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.INVITED_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.BuildCommunityListMessage(
                 [extensions.TEST_COMMUNITY1]))
 
     def testGetInvitedCommunitiesRouteNoCommunities(self):
         login_test.LoginTest.LoginAsUser(self, 6)
-        r = self.GetJSON(CommunityTest.INVITED_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.INVITED_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.BuildCommunityListMessage([]))
 
     def testGetUsersInCommunityRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
         data = {"communityid": 1}
-        r = self.GetJSON(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
+        r = self.Get(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
         self.assertEquals(set(messages.UnwrapMembersListMessage(r.data)),
                             set([extensions.TEST_USER1.userid,
                                     extensions.TEST_USER2.userid,
@@ -109,15 +109,15 @@ class CommunityTest(base_test.BaseTestCase):
 
     def testGetCommunityMembersRouteInvalid(self):
         data = {"communityid": 1}
-        r = self.GetJSON(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
+        r = self.Get(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
         login_test.LoginTest.LoginAsUser(self, 1)
-        r = self.GetJSON(CommunityTest.SPECIFIC_COMMUNITY_ROUTE)
-        self.assertEquals(r.data, messages.NO_JSON_DATA)
+        r = self.Get(CommunityTest.SPECIFIC_COMMUNITY_ROUTE)
+        self.assertEquals(r.data, messages.MISSING_COMMUNITYID)
 
         data = {}
-        r = self.GetJSON(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
+        r = self.Get(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_COMMUNITYID)
         
     def testAddUserToCommunityRouteExists(self):
@@ -129,7 +129,7 @@ class CommunityTest(base_test.BaseTestCase):
 
         login_test.LoginTest.Logout(self)
         login_test.LoginTest.LoginAsUser(self, 6)
-        r = self.GetJSON(CommunityTest.INVITED_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.INVITED_COMMUNITIES_ROUTE)
         self.assertEquals(r.data,
             messages.BuildCommunityListMessage([extensions.TEST_COMMUNITY1]))
 
@@ -180,12 +180,12 @@ class CommunityTest(base_test.BaseTestCase):
         r = self.PostJSON(CommunityTest.ACCEPT_INVITATION_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
-        r = self.GetJSON(CommunityTest.JOINED_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.JOINED_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.BuildCommunityListMessage(
                 [extensions.TEST_COMMUNITY1]))
 
         data = {"communityid": extensions.TEST_COMMUNITY1.communityid}
-        r = self.GetJSON(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
+        r = self.Get(CommunityTest.SPECIFIC_COMMUNITY_ROUTE, data)
         self.assertTrue(extensions.TEST_USER6.userid in
                         set(messages.UnwrapMembersListMessage(r.data)))
 
@@ -230,7 +230,7 @@ class CommunityTest(base_test.BaseTestCase):
         r = self.DeleteJSON(CommunityTest.LEAVE_COMMUNITY_ROUTE, data)
         self.assertEquals(r.data, messages.SUCCESS)
 
-        r = self.GetJSON(CommunityTest.JOINED_COMMUNITIES_ROUTE)
+        r = self.Get(CommunityTest.JOINED_COMMUNITIES_ROUTE)
         self.assertEquals(r.data, messages.BuildCommunityListMessage([]))
 
     def testLeaveCommunityRouteMissingFields(self):

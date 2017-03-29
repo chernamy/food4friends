@@ -15,60 +15,49 @@ class CartViewController: UIViewController {
     @IBOutlet weak var cartTitle: UILabel!
     @IBOutlet weak var servingsInfo: UILabel!
     @IBOutlet weak var timeLeft: UILabel!
+    var role = ""
+    var role_userid = ""
     
-//    func GETCall(params: [String:String]) {
-//        let userurl = URL(string: server + "/api/v1/user/")!
-//        
-//        let request = NSMutableURLRequest(url: userurl)
-//        request.httpMethod = "GET"
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        
-//        let jsonDict = ["userid":userid] as [String : Any]
-//        
-//        if let jsonData = try? JSONSerialization.data(withJSONObject: jsonDict, options: .prettyPrinted) {
-//            request.httpBody = jsonData
-//        }
-//        
-//        let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in            // do stuff with response, data & error here
-//            if error != nil{
-//                print(error?.localizedDescription)
-//                return
-//            }
-//            
-//            do {
-//                if let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary {
-//                    if (json["error"] != nil) {
-//                        print(json["error"])
-//                    } else {
-//                        let resultValue:String = json["info"] as! String;
-//                        print("result: \(resultValue)")
-//                    }
-//                }
-//            } catch let error as NSError {
-//                print(error)
-//            }
-//            
-//        }
-//        task.resume()
-//    }
-    
-    
+    @IBOutlet weak var label: UILabel!
 
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-        if (false) {
-            sellSubview.isHidden = true
-            buySubview.isHidden = false
-        }
-        else {
-            // Sell Cart Page
-            sellSubview.isHidden = false
-            buySubview.isHidden = true
+
+        buySubview.isHidden = true
+        sellSubview.isHidden = true
+        label.isHidden = true
+        
+        Alamofire.request(server + "/api/v1/user/", parameters: ["userid": userid], encoding: URLEncoding.default).responseJSON { (response) in
             
+            self.buySubview.isHidden = false
+            self.sellSubview.isHidden = false
+            self.label.isHidden = false
             
-            cartTitle.text = "Sold: Noodles & Broccoli"
-            servingsInfo.text = "Servings Left: 18"
-            timeLeft.text = "Time Remaining: 20 min"
+            if response.result.isSuccess {
+                let resJson = response.result.value as? NSDictionary
+                let dict = resJson?["user"] as? NSDictionary
+                self.role = (dict?["role"] as? String)!
+                self.role_userid = (dict?["userid"] as? String)!
+            }
+            
+            if (self.role == "none") {
+                self.buySubview.removeFromSuperview()
+                self.sellSubview.removeFromSuperview()
+                self.label.text = "No Transaction In Progress"
+            }
+            
+            else if (self.role == "buyer") {
+                self.sellSubview.removeFromSuperview()
+            }
+                
+            else if (self.role == "seller") {
+                self.buySubview.removeFromSuperview()
+            }
+            else {
+                print("ERROR role not real")
+                print(response)
+            }
         }
     }
 
@@ -76,15 +65,4 @@ class CartViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

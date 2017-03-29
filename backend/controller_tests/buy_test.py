@@ -13,13 +13,13 @@ class BuyTest(base_test.BaseTestCase):
 
     def testBuyViewRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 3)
-        r = self.GetJSON(BuyTest.BUY_ROUTE)
+        r = self.Get(BuyTest.BUY_ROUTE)
         self.assertEquals(set(messages.UnwrapItemListMessage(r.data)),
                 set([extensions.TEST_ITEM1, extensions.TEST_ITEM3,
                         extensions.TEST_ITEM4]))
 
     def testBuyViewRouteNotLoggedIn(self):
-        r = self.GetJSON(BuyTest.BUY_ROUTE)
+        r = self.Get(BuyTest.BUY_ROUTE)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
     def testBuyPostRouteExists(self):
@@ -41,7 +41,7 @@ class BuyTest(base_test.BaseTestCase):
             item_data: (ItemData) The item data representing the sell offer
                 for the specified user.
         """
-        r = self.GetJSON(BuyTest.BUY_ROUTE)
+        r = self.Get(BuyTest.BUY_ROUTE)
         sell_offers = messages.UnwrapItemListMessage(r.data)
         user_offer_data = next(offer for offer in sell_offers if
                                 offer.userid == userid)
@@ -77,7 +77,7 @@ class BuyTest(base_test.BaseTestCase):
 
         # check that the seller no longer has any of that item we just bought
         # for sale.
-        r = self.GetJSON(BuyTest.BUY_ROUTE)
+        r = self.Get(BuyTest.BUY_ROUTE)
         self.assertEquals(set(messages.UnwrapItemListMessage(r.data)), 
                 set([extensions.TEST_ITEM3, extensions.TEST_ITEM4]))
 
@@ -196,7 +196,7 @@ class BuyTest(base_test.BaseTestCase):
 
     def testCurrBuyOffersRoute(self):
         login_test.LoginTest.LoginAsUser(self, 5)
-        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        r = self.Get(BuyTest.CURR_BUY_OFFERS_ROUTE)
         buy_offer = extensions.ItemData.FromDict(extensions.TEST_ITEM1.__dict__)
         buy_offer.servings = extensions.TEST_TRANSACTION1.servings
         self.assertEqual(r.data,
@@ -204,11 +204,11 @@ class BuyTest(base_test.BaseTestCase):
         login_test.LoginTest.Logout(self)
 
         login_test.LoginTest.LoginAsUser(self, 1)
-        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        r = self.Get(BuyTest.CURR_BUY_OFFERS_ROUTE)
         self.assertEqual(r.data, messages.BuildItemListMessage([]))
 
     def testCurrBuyOffersInvalid(self):
-        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        r = self.Get(BuyTest.CURR_BUY_OFFERS_ROUTE)
         self.assertEqual(r.data, messages.NOT_LOGGED_IN)
 
     def testCurrBuyOffersNoServingsLeft(self):
@@ -219,7 +219,7 @@ class BuyTest(base_test.BaseTestCase):
         r = self.PostJSON(BuyTest.BUY_ROUTE, data)
         self.assertEqual(r.data, messages.SUCCESS)
 
-        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        r = self.Get(BuyTest.CURR_BUY_OFFERS_ROUTE)
         buy_offer = extensions.ItemData.FromDict(extensions.TEST_ITEM1.__dict__)
         buy_offer.servings = extensions.TEST_ITEM1.servings
         self.assertEqual(r.data, messages.BuildItemListMessage([buy_offer]))
@@ -242,8 +242,8 @@ class BuyTest(base_test.BaseTestCase):
         login_test.LoginTest.LoginAsUser(self, 3)
         # Make sure the buy route doesn't lazily delete the offer data for an
         # item that still has incomplete transactions.
-        r = self.GetJSON(BuyTest.BUY_ROUTE)
-        r = self.GetJSON(BuyTest.CURR_BUY_OFFERS_ROUTE)
+        r = self.Get(BuyTest.BUY_ROUTE)
+        r = self.Get(BuyTest.CURR_BUY_OFFERS_ROUTE)
         buy_offer = extensions.ItemData.FromDict(extensions.TEST_ITEM2.__dict__)
         buy_offer.servings = 10
         self.assertEqual(r.data, messages.BuildItemListMessage([buy_offer]))

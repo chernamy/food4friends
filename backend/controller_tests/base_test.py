@@ -19,7 +19,7 @@ class BaseTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def GetJSON(self, route, data=None, https=False):
+    def Get(self, route, data=None, https=False):
         """Gets from the given route.
 
         Args:
@@ -37,9 +37,7 @@ class BaseTestCase(unittest.TestCase):
         if data is None:
             return self.app.get(route, base_url=base_url)
         else:
-            return self.app.get(route, data=json.dumps(data),
-                                content_type="application/json",
-                                base_url=base_url)
+            return self.app.get(route, query_string=data)
 
     def PostJSON(self, route, data=None, https=False):
         """Posts the given data as JSON to the specified route.

@@ -51,11 +51,12 @@ class SellnfoViewController: UIViewController {
         
     }
     
-
-
     override func viewDidLoad() {
         super.viewDidLoad()
         foodPic.image = Singleton.sharedInstance.imageValue
+        foodPic.contentMode = UIViewContentMode.scaleAspectFill
+        foodPic.clipsToBounds = true;
+        
         // Do any additional setup after loading the view.
     }
 

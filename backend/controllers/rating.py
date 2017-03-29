@@ -10,13 +10,10 @@ def ViewRatings():
     if "userid" not in session:
         return messages.NOT_LOGGED_IN, 403
 
-    if request.json is None:
-        return messages.NO_JSON_DATA, 400
-
-    if "sellerid" not in request.json:
+    if "sellerid" not in request.args:
         return messages.MISSING_SELLERID, 400
 
-    sellerid = request.json.get("sellerid")
+    sellerid = request.args.get("sellerid")
     ratings = extensions.Query(extensions.RatingData,
             [("sellerid", sellerid), ("rating", "pending", "!=")])
 

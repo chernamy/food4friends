@@ -14,7 +14,7 @@ class RatingTest(base_test.BaseTestCase):
     def testGetRatingsRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
         data = {"sellerid": extensions.TEST_USER1.userid}
-        r = self.GetJSON(RatingTest.RATING_ROUTE, data)
+        r = self.Get(RatingTest.RATING_ROUTE, data)
         self.assertEquals(r.data,
                 messages.BuildRatingsListMessage(
                         [extensions.TEST_RATING1,
@@ -24,35 +24,35 @@ class RatingTest(base_test.BaseTestCase):
     def testGetRatingsNoneAvailable(self):
         login_test.LoginTest.LoginAsUser(self, 1)
         data = {"sellerid": extensions.TEST_USER2.userid}
-        r = self.GetJSON(RatingTest.RATING_ROUTE, data)
+        r = self.Get(RatingTest.RATING_ROUTE, data)
         self.assertEquals(r.data, messages.BuildRatingsListMessage([]))
 
     def testGetRatingsInvalid(self):
         data = {"sellerid": extensions.TEST_USER2.userid}
-        r = self.GetJSON(RatingTest.RATING_ROUTE, data)
+        r = self.Get(RatingTest.RATING_ROUTE, data)
         self.assertEquals(r.data, messages.NOT_LOGGED_IN)
 
         login_test.LoginTest.LoginAsUser(self, 1)
-        r = self.GetJSON(RatingTest.RATING_ROUTE)
-        self.assertEquals(r.data, messages.NO_JSON_DATA)
+        r = self.Get(RatingTest.RATING_ROUTE)
+        self.assertEquals(r.data, messages.MISSING_SELLERID)
 
         data = {}
-        r = self.GetJSON(RatingTest.RATING_ROUTE, data)
+        r = self.Get(RatingTest.RATING_ROUTE, data)
         self.assertEquals(r.data, messages.MISSING_SELLERID)
 
     def testGetPendingRatingsRouteExists(self):
         login_test.LoginTest.LoginAsUser(self, 1)
-        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        r = self.Get(RatingTest.PENDING_RATINGS_ROUTE)
         self.assertEqual(r.data, messages.BuildPendingRatingsListMessage([]))
         login_test.LoginTest.Logout(self)
 
         login_test.LoginTest.LoginAsUser(self, 4)
-        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        r = self.Get(RatingTest.PENDING_RATINGS_ROUTE)
         self.assertEqual(r.data, messages.BuildPendingRatingsListMessage(
                 [extensions.TEST_RATING4]))
         
     def testGetPendingRatingsInvalid(self):
-        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        r = self.Get(RatingTest.PENDING_RATINGS_ROUTE)
         self.assertEqual(r.data, messages.NOT_LOGGED_IN)
 
     def testSubmitRatingRouteExists(self):
@@ -67,7 +67,7 @@ class RatingTest(base_test.BaseTestCase):
         new_rating.rating = "3"
         new_rating.description = "okay"
         data = {"sellerid": extensions.TEST_USER1.userid}
-        r = self.GetJSON(RatingTest.RATING_ROUTE, data)
+        r = self.Get(RatingTest.RATING_ROUTE, data)
         self.assertEquals(r.data, messages.BuildRatingsListMessage([
                             extensions.TEST_RATING1, extensions.TEST_RATING2,
                             extensions.TEST_RATING3, new_rating]))
@@ -92,7 +92,7 @@ class RatingTest(base_test.BaseTestCase):
 
         # User 3 checks there is a pending rating
         login_test.LoginTest.LoginAsUser(self, 3)
-        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        r = self.Get(RatingTest.PENDING_RATINGS_ROUTE)
         pending_rating = extensions.RatingData(5, extensions.TEST_USER7.userid,
                                                 extensions.TEST_USER3.userid,
                                                 "pending", "")
@@ -110,7 +110,7 @@ class RatingTest(base_test.BaseTestCase):
         new_rating = extensions.RatingData(5, extensions.TEST_USER7.userid,
                                             extensions.TEST_USER3.userid, "5",
                                             "fantastic")
-        r = self.GetJSON(RatingTest.RATING_ROUTE, rating_data)
+        r = self.Get(RatingTest.RATING_ROUTE, rating_data)
         self.assertEquals(r.data,
                             messages.BuildRatingsListMessage([new_rating]))
 
@@ -151,7 +151,7 @@ class RatingTest(base_test.BaseTestCase):
 
         # User 3 checks there is a pending rating
         login_test.LoginTest.LoginAsUser(self, 3)
-        r = self.GetJSON(RatingTest.PENDING_RATINGS_ROUTE)
+        r = self.Get(RatingTest.PENDING_RATINGS_ROUTE)
         pending_rating = extensions.RatingData(5, extensions.TEST_USER7.userid,
                                                 extensions.TEST_USER3.userid,
                                                 "pending", "")
@@ -175,7 +175,7 @@ class RatingTest(base_test.BaseTestCase):
         new_rating = extensions.RatingData(5, extensions.TEST_USER7.userid,
                                             extensions.TEST_USER3.userid, "5",
                                             "fantastic")
-        r = self.GetJSON(RatingTest.RATING_ROUTE, rating_data)
+        r = self.Get(RatingTest.RATING_ROUTE, rating_data)
         self.assertEquals(r.data,
                             messages.BuildRatingsListMessage([new_rating]))
 
