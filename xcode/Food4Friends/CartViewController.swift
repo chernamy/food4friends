@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class CartViewController: UIViewController {
     @IBOutlet weak var buySubview: UIView!
@@ -50,6 +51,8 @@ class CartViewController: UIViewController {
 //        }
 //        task.resume()
 //    }
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -197,7 +197,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                         let resultValue:String = json["info"] as! String;
                         print("result: \(resultValue)")
                         self.popupView.isHidden = true
-                        self.tabBarController?.selectedIndex = 3
+                        self.tabBarController?.selectedIndex = 4
                         //self.refreshData()
                     }
                 }

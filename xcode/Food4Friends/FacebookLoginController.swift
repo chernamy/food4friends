@@ -14,7 +14,7 @@ import Foundation
 
 var userToken = ""
 var userid = ""
-var server = "http://46df9ceb.ngrok.io"
+var server = "http://7b713d3f.ngrok.io"
 
 class FacebookLoginController: UIViewController {
     var ConfirmClickResponse = ""
