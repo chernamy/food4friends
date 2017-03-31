@@ -26,6 +26,19 @@ func hexStringToUIColor (hex:String) -> UIColor {
     )
 }
 
+struct Address {
+    var lattitude: String
+    var longitude: String
+    init(input: String) {
+        print(input)
+        let array_input = input.characters.split(separator: ",")
+        lattitude = String(array_input[0])
+        longitude = String(array_input[1])
+        print(lattitude)
+        print(longitude)
+    }
+}
+
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var popupView: UIView!
@@ -35,7 +48,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var descriptions: [String] = []
     var prices: [Int] = []
-    var addresses: [Int] = []
+    var addresses: [Address] = []
     var ends: [String] = []
     var photos: [String] = []
     var servings: [Int] = []
@@ -44,7 +57,9 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var totalNumItems = 0
     var servingsBought = -1
     var itemNumberBought = -1
-    var firstLoad: Bool = true
+    var getInProgress: Bool = false
+    var photoExists: Bool = false
+    var non_existing_photos: [String] = []
     
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) {
@@ -80,6 +95,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func makeGETCall() {
         let todoEndpoint: String = server + "/api/v1/buy/"
+        self.getInProgress = true
         guard let url = URL(string: todoEndpoint) else {
             print("Error: cannot create URL")
             return
@@ -119,8 +135,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                             self.descriptions.append(item["description"] as! String)
                             self.prices.append(item["price"] as! Int)
                             //self.addresses.append(item["address"] as! Int)
+                            self.addresses.append(Address(input: item["address"] as! String))
                             let epochTime = item["end"] as! Double
-                            //self.ends.append(item["end"] as! Int)
                             self.photos.append(item["photo"] as! String)
                             self.servings.append(item["servings"] as! Int)
                             self.userids.append(item["userid"] as! String)
@@ -150,7 +166,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 
                 DispatchQueue.main.async() { () -> Void in
-                    self.firstLoad = false
+                    self.getInProgress = false
                     self.tableView.reloadData()
                 }
             } catch {
@@ -198,7 +214,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                         print("result: \(resultValue)")
                         self.popupView.isHidden = true
                         self.tabBarController?.selectedIndex = 4
-                        //self.refreshData()
+                        self.refreshData()
                     }
                 }
             } catch let error as NSError {
@@ -238,16 +254,30 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     // default view controller stuff
     override func viewDidLoad() {
         super.viewDidLoad()
+        //UIRefreshControl.addTarget(self, action: #selector(refresh(_:)))
         self.popupView.isHidden = true
         self.errorView.isHidden = true
         self.popupView.layer.cornerRadius = 8.0
         self.errorView.layer.cornerRadius = 8.0
-        self.makeGETCall()
+        if (self.getInProgress == false) {
+            self.makeGETCall()
+            self.getInProgress = true
+        }
         //Looks for single or multiple taps.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("view appeared")
+        if (self.getInProgress == false) {
+            print("making get call in viewDidAppear")
+            self.makeGETCall()
+            self.getInProgress = true
+        }
     }
     
     override func didReceiveMemoryWarning() {
