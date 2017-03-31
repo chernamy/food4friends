@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 func hexStringToUIColor (hex:String) -> UIColor {
     var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -27,15 +28,13 @@ func hexStringToUIColor (hex:String) -> UIColor {
 }
 
 struct Address {
-    var lattitude: String
+    var latitude: String
     var longitude: String
     init(input: String) {
         print(input)
         let array_input = input.characters.split(separator: ",")
-        lattitude = String(array_input[0])
+        latitude = String(array_input[0])
         longitude = String(array_input[1])
-        print(lattitude)
-        print(longitude)
     }
 }
 
@@ -60,6 +59,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var getInProgress: Bool = false
     var photoExists: Bool = false
     var non_existing_photos: [String] = []
+    var addressStrings: [String] = []
     
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) {
@@ -150,6 +150,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                 }
                 
+                print(self.addresses) 
                 DispatchQueue.main.async() {
                     var i = 0
                     while (i < self.totalNumItems) {
@@ -305,6 +306,38 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             cell?.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
             cell?.servingsBought.text = ""
             cell?.timeLeft.text = self.ends[indexPath.row]
+            var addressString = ""
+            let geoCoder = CLGeocoder()
+            let location = CLLocation(latitude: Double(addresses[indexPath.row].latitude)!, longitude: Double(addresses[indexPath.row].longitude)!)
+            geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
+                
+                // Place details
+                var placeMark: CLPlacemark!
+                placeMark = placemarks?[0]
+                
+                // Address dictionary
+                //print(placeMark.addressDictionary as Any)
+                
+                // Location name
+                if let locationName = placeMark.addressDictionary!["Name"] as? NSString {
+                    addressString = addressString + (locationName as String) + ", "
+                }
+                // City
+                if let city = placeMark.addressDictionary!["City"] as? NSString {
+                    addressString = addressString + (city as String) + ", "
+                }
+                // State
+                if let state = placeMark.addressDictionary!["State"] as? NSString {
+                    addressString = addressString + (state as String) + " "
+                }
+                // Zip code
+                if let zip = placeMark.addressDictionary!["ZIP"] as? NSString {
+                    addressString = addressString + (zip as String)
+                }
+                cell?.address.text = addressString
+                print(addressString)
+            })
+            
         }
         return cell!
     }
