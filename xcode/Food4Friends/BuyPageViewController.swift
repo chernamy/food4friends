@@ -61,6 +61,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var non_existing_photos: [String] = []
     var addressStrings: [String] = []
     
+    private let refreshControl = UIRefreshControl()
+    
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) {
             (data, response, error) in
@@ -179,6 +181,12 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         task.resume()
     }
     
+    func deregisterFromKeyboardNotifications(){
+        //Removing notifies on keyboard appearing
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
     func makePOSTCall(jsonDict: Dictionary<String, Any>, api_route: String, login: Bool) {
         let loginurl = URL(string: server + api_route)!
         
@@ -216,6 +224,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                         self.popupView.isHidden = true
                         self.tabBarController?.selectedIndex = 4
                         self.refreshData()
+                        self.deregisterFromKeyboardNotifications()
                     }
                 }
             } catch let error as NSError {
@@ -245,11 +254,40 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         animateViewMoving(up: false, moveValue: 100)
     }
     
-    
     //Calls this function when the tap is recognized.
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        print("inkeyboardwill show function")
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if (self.view.frame.origin.y == 0){
+                self.view.frame.origin.y -= keyboardSize.height
+                print(self.view.frame.origin.y)
+                print("in y")
+            } else {
+//                print("keyboard will show; not in y")
+//                print(self.view.frame.origin.y)
+//                self.view.frame.origin.y = 0
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += keyboardSize.height
+            } else {
+                print("keyboard will hide; not in y")
+            }
+        }
+    }
+    
+    func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     // default view controller stuff
@@ -269,6 +307,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
+        self.registerForKeyboardNotifications()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -279,6 +319,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             self.makeGETCall()
             self.getInProgress = true
         }
+        self.registerForKeyboardNotifications()
     }
     
     override func didReceiveMemoryWarning() {
@@ -297,6 +338,14 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
+        
+        //refreshControl.addTarget(self, action: #selector(BuyPageViewController.refreshData(sender:)), for: .valueChanged)
+        
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? BuyPageCell
         if (image_data.count == self.totalNumItems && self.descriptions.count == self.totalNumItems && self.prices.count == self.totalNumItems && self.servings.count == self.totalNumItems) {
             popupView.isHidden = true
