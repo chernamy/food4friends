@@ -38,6 +38,13 @@ struct Address {
     }
 }
 
+var globalItemBought = ""
+var globalAvailServings = ""
+var globalAddress = ""
+var globalPrice = ""
+var globalTimeLeft = ""
+var globalImageData: Data? = nil
+
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var popupView: UIView!
@@ -127,7 +134,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     return
                 }
                 
-                //TODO: add to addresses array
                 if let arrJSON = todo["items"] as? NSArray{
                     print(arrJSON.count)
                     self.totalNumItems = arrJSON.count
@@ -338,13 +344,13 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
-        } else {
-            tableView.addSubview(refreshControl)
-        }
+        //if #available(iOS 10.0, *) {
+            //tableView.refreshControl = refreshControl
+        //} else {
+           // tableView.addSubview(refreshControl)
+        //}
         
-        //refreshControl.addTarget(self, action: #selector(BuyPageViewController.refreshData(sender:)), for: .valueChanged)
+       // refreshControl.addTarget(self, action: #selector(), for: .valueChanged)
         
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? BuyPageCell
         if (image_data.count == self.totalNumItems && self.descriptions.count == self.totalNumItems && self.prices.count == self.totalNumItems && self.servings.count == self.totalNumItems) {
@@ -398,18 +404,21 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         self.makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/buy/", login: false)
     }
     
-    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
-        if (cell.servingsBought.text != "") {
-            popupView.isHidden = false
-            itemNumberBought = indexPath.row
-            self.servingsBought = Int(cell.servingsBought.text!)!
-            print(indexPath.row)
-            return indexPath
-        } else {
-            print("row selected with no input data")
-            return nil
-        }
+
+        
+        
+//        if (cell.servingsBought.text != "") {
+//            popupView.isHidden = false
+//            itemNumberBought = indexPath.row
+//            self.servingsBought = Int(cell.servingsBought.text!)!
+//            print(indexPath.row)
+//            return indexPath
+//        } else {
+//            print("row selected with no input data")
+//            return nil
+//        }
     }
     
     @IBAction func errorConfirmation(_ sender: Any) {
@@ -420,7 +429,15 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         //Change the selected background view of the cell.
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
-        cell.servingsBought.text = ""
+        globalPrice = cell.price.text!
+        globalAddress = cell.address.text!
+        globalTimeLeft = cell.timeLeft.text!
+        globalItemBought = cell.name.text!
+        globalAvailServings = cell.servingsAvailable.text!
+        globalImageData = self.image_data[indexPath.row]
+//        let viewController = self.storyboard!.instantiateViewController(withIdentifier: "BuyConfirmation") as UIViewController
+//        self.present(viewController, animated: true, completion: nil)
+        //cell.servingsBought.text = ""
     }
 }
 
