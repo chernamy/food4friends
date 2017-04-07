@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 func hexStringToUIColor (hex:String) -> UIColor {
     var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -26,6 +27,24 @@ func hexStringToUIColor (hex:String) -> UIColor {
     )
 }
 
+struct Address {
+    var latitude: String
+    var longitude: String
+    init(input: String) {
+        print(input)
+        let array_input = input.characters.split(separator: ",")
+        latitude = String(array_input[0])
+        longitude = String(array_input[1])
+    }
+}
+
+var globalItemBought = ""
+var globalAvailServings = ""
+var globalAddress = ""
+var globalPrice = ""
+var globalTimeLeft = ""
+var globalImageData: Data? = nil
+
 class BuyPageViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var popupView: UIView!
@@ -35,7 +54,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var descriptions: [String] = []
     var prices: [Int] = []
-    var addresses: [Int] = []
+    var addresses: [Address] = []
     var ends: [String] = []
     var photos: [String] = []
     var servings: [Int] = []
@@ -44,7 +63,12 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     var totalNumItems = 0
     var servingsBought = -1
     var itemNumberBought = -1
-    var firstLoad: Bool = true
+    var getInProgress: Bool = false
+    var photoExists: Bool = false
+    var non_existing_photos: [String] = []
+    var addressStrings: [String] = []
+    
+    private let refreshControl = UIRefreshControl()
     
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) {
@@ -80,6 +104,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func makeGETCall() {
         let todoEndpoint: String = server + "/api/v1/buy/"
+        self.getInProgress = true
         guard let url = URL(string: todoEndpoint) else {
             print("Error: cannot create URL")
             return
@@ -109,7 +134,6 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     return
                 }
                 
-                //TODO: add to addresses array
                 if let arrJSON = todo["items"] as? NSArray{
                     print(arrJSON.count)
                     self.totalNumItems = arrJSON.count
@@ -119,8 +143,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                             self.descriptions.append(item["description"] as! String)
                             self.prices.append(item["price"] as! Int)
                             //self.addresses.append(item["address"] as! Int)
+                            self.addresses.append(Address(input: item["address"] as! String))
                             let epochTime = item["end"] as! Double
-                            //self.ends.append(item["end"] as! Int)
                             self.photos.append(item["photo"] as! String)
                             self.servings.append(item["servings"] as! Int)
                             self.userids.append(item["userid"] as! String)
@@ -134,6 +158,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                 }
                 
+                print(self.addresses) 
                 DispatchQueue.main.async() {
                     var i = 0
                     while (i < self.totalNumItems) {
@@ -150,7 +175,7 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                 }
                 
                 DispatchQueue.main.async() { () -> Void in
-                    self.firstLoad = false
+                    self.getInProgress = false
                     self.tableView.reloadData()
                 }
             } catch {
@@ -160,6 +185,12 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         })
         
         task.resume()
+    }
+    
+    func deregisterFromKeyboardNotifications(){
+        //Removing notifies on keyboard appearing
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func makePOSTCall(jsonDict: Dictionary<String, Any>, api_route: String, login: Bool) {
@@ -198,7 +229,8 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
                         print("result: \(resultValue)")
                         self.popupView.isHidden = true
                         self.tabBarController?.selectedIndex = 4
-                        //self.refreshData()
+                        self.refreshData()
+                        self.deregisterFromKeyboardNotifications()
                     }
                 }
             } catch let error as NSError {
@@ -228,26 +260,72 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         animateViewMoving(up: false, moveValue: 100)
     }
     
-    
     //Calls this function when the tap is recognized.
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
     
+    func keyboardWillShow(notification: NSNotification) {
+        print("inkeyboardwill show function")
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if (self.view.frame.origin.y == 0){
+                self.view.frame.origin.y -= keyboardSize.height
+                print(self.view.frame.origin.y)
+                print("in y")
+            } else {
+//                print("keyboard will show; not in y")
+//                print(self.view.frame.origin.y)
+//                self.view.frame.origin.y = 0
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += keyboardSize.height
+            } else {
+                print("keyboard will hide; not in y")
+            }
+        }
+    }
+    
+    func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
     // default view controller stuff
     override func viewDidLoad() {
         super.viewDidLoad()
+        //UIRefreshControl.addTarget(self, action: #selector(refresh(_:)))
         self.popupView.isHidden = true
         self.errorView.isHidden = true
         self.popupView.layer.cornerRadius = 8.0
         self.errorView.layer.cornerRadius = 8.0
-        self.makeGETCall()
+        if (self.getInProgress == false) {
+            self.makeGETCall()
+            self.getInProgress = true
+        }
         //Looks for single or multiple taps.
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
         
+        self.registerForKeyboardNotifications()
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("view appeared")
+        if (self.getInProgress == false) {
+            print("making get call in viewDidAppear")
+            self.makeGETCall()
+            self.getInProgress = true
+        }
+        self.registerForKeyboardNotifications()
     }
     
     override func didReceiveMemoryWarning() {
@@ -266,6 +344,14 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        //if #available(iOS 10.0, *) {
+            //tableView.refreshControl = refreshControl
+        //} else {
+           // tableView.addSubview(refreshControl)
+        //}
+        
+       // refreshControl.addTarget(self, action: #selector(), for: .valueChanged)
+        
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? BuyPageCell
         if (image_data.count == self.totalNumItems && self.descriptions.count == self.totalNumItems && self.prices.count == self.totalNumItems && self.servings.count == self.totalNumItems) {
             popupView.isHidden = true
@@ -275,6 +361,38 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
             cell?.servingsAvailable.text = "Servings: " + String(self.servings[indexPath.row])
             cell?.servingsBought.text = ""
             cell?.timeLeft.text = self.ends[indexPath.row]
+            var addressString = ""
+            let geoCoder = CLGeocoder()
+            let location = CLLocation(latitude: Double(addresses[indexPath.row].latitude)!, longitude: Double(addresses[indexPath.row].longitude)!)
+            geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
+                
+                // Place details
+                var placeMark: CLPlacemark!
+                placeMark = placemarks?[0]
+                
+                // Address dictionary
+                //print(placeMark.addressDictionary as Any)
+                
+                // Location name
+                if let locationName = placeMark.addressDictionary!["Name"] as? NSString {
+                    addressString = addressString + (locationName as String) + ", "
+                }
+                // City
+                if let city = placeMark.addressDictionary!["City"] as? NSString {
+                    addressString = addressString + (city as String) + ", "
+                }
+                // State
+                if let state = placeMark.addressDictionary!["State"] as? NSString {
+                    addressString = addressString + (state as String) + " "
+                }
+                // Zip code
+                if let zip = placeMark.addressDictionary!["ZIP"] as? NSString {
+                    addressString = addressString + (zip as String)
+                }
+                cell?.address.text = addressString
+                print(addressString)
+            })
+            
         }
         return cell!
     }
@@ -286,18 +404,21 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         self.makePOSTCall(jsonDict: jsonDict, api_route: "/api/v1/buy/", login: false)
     }
     
-    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
-        if (cell.servingsBought.text != "") {
-            popupView.isHidden = false
-            itemNumberBought = indexPath.row
-            self.servingsBought = Int(cell.servingsBought.text!)!
-            print(indexPath.row)
-            return indexPath
-        } else {
-            print("row selected with no input data")
-            return nil
-        }
+
+        
+        
+//        if (cell.servingsBought.text != "") {
+//            popupView.isHidden = false
+//            itemNumberBought = indexPath.row
+//            self.servingsBought = Int(cell.servingsBought.text!)!
+//            print(indexPath.row)
+//            return indexPath
+//        } else {
+//            print("row selected with no input data")
+//            return nil
+//        }
     }
     
     @IBAction func errorConfirmation(_ sender: Any) {
@@ -308,7 +429,15 @@ class BuyPageViewController: UIViewController, UITableViewDataSource, UITableVie
         //Change the selected background view of the cell.
         tableView.deselectRow(at: indexPath, animated: true)
         let cell = tableView.cellForRow(at: indexPath) as! BuyPageCell
-        cell.servingsBought.text = ""
+        globalPrice = cell.price.text!
+        globalAddress = cell.address.text!
+        globalTimeLeft = cell.timeLeft.text!
+        globalItemBought = cell.name.text!
+        globalAvailServings = cell.servingsAvailable.text!
+        globalImageData = self.image_data[indexPath.row]
+//        let viewController = self.storyboard!.instantiateViewController(withIdentifier: "BuyConfirmation") as UIViewController
+//        self.present(viewController, animated: true, completion: nil)
+        //cell.servingsBought.text = ""
     }
 }
 
