@@ -2,13 +2,17 @@ from flask import *
 import extensions
 import json
 import messages
+import os
 import requests
 
 APP_ID = "388599011490992"
 
 # Make sure the file is in your gitignore.
-with open("fb.token") as f:
-    APP_TOKEN = f.readline().rstrip("\n")
+if os.path.exists("fb.token"):
+    with open("fb.token") as f:
+        APP_TOKEN = f.readline().rstrip("\n")
+else:
+    APP_TOKEN = os.environ["APP_TOKEN"]
 
 FB_GRAPH_URL = "https://graph.facebook.com/v2.8/" + APP_ID
 
