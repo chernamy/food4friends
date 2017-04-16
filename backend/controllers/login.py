@@ -12,7 +12,7 @@ logout = Blueprint("api/v1/logout/", __name__)
 @utils.ssl_required
 def Login():
     if request.json is None:
-        return messages.NO_JSON_DATA
+        return messages.NO_JSON_DATA, 400
 
     if "userid" not in request.json:
         return messages.MISSING_USERID, 400
