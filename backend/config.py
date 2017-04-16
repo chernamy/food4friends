@@ -13,7 +13,7 @@ env = dict(
 #"""
 
 if "DB_AUTH" in os.environ:
-    env["host"] = "mysql://%s@us-cdbr-iron-east-03.cleardb.net" %(os.environ["DB_AUTH"])
+    env["host"] = "%s@us-cdbr-iron-east-03.cleardb.net" %(os.environ["DB_AUTH"])
     db_data = os.environ["DB_AUTH"].split(":")
     env["db_user"] = db_data[0]
     env["db_passwd"] = db_data[1]
