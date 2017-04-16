@@ -37,6 +37,7 @@ def VerifyAccessToken(user_id, access_token):
         "access_token": APP_TOKEN
     }
     r = requests.get(url, params=payload)
+    print r.text
     token_info = json.loads(r.text)["data"]
     if "user_id" in token_info and token_info["user_id"] == user_id:
         return True
