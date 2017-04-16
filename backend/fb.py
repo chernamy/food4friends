@@ -14,6 +14,8 @@ if os.path.exists("fb.token"):
 else:
     APP_TOKEN = os.environ["APP_TOKEN"]
 
+print "APP_TOKEN", APP_TOKEN
+
 FB_GRAPH_URL = "https://graph.facebook.com/v2.8/" + APP_ID
 
 def UrlFor(fb_graph_route):
@@ -37,7 +39,6 @@ def VerifyAccessToken(user_id, access_token):
         "access_token": APP_TOKEN
     }
     r = requests.get(url, params=payload)
-    print r.text
     token_info = json.loads(r.text)["data"]
     if "user_id" in token_info and token_info["user_id"] == user_id:
         return True
