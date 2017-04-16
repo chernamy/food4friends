@@ -2,6 +2,7 @@ import calendar
 import config
 import decimal
 import fb_test
+from _mysql_exceptions import OperationalError
 import MySQLdb
 import MySQLdb.cursors
 import time
@@ -349,9 +350,20 @@ conn = None
 
 
 def ExecuteCommand(command):
-    x = conn.cursor()
-    x.execute(command)
-    conn.commit()
+    global conn
+    try:
+        x = conn.cursor()
+        x.execute(command)
+        conn.commit()
+    except: OperationalError
+        conn = MySQLdb.connect(host=config.env["host"],
+                                user=config.env["db_user"],
+                                passwd=config.env["db_passwd"],
+                                db=config.env["db_name"])
+        x = conn.cursor()
+        x.execute(command)
+        conn.commit()
+        
 
 
 def SetUpTestUserData():
