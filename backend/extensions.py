@@ -355,7 +355,7 @@ def ExecuteCommand(command):
         x = conn.cursor()
         x.execute(command)
         conn.commit()
-    except: OperationalError
+    except OperationalError:
         conn = MySQLdb.connect(host=config.env["host"],
                                 user=config.env["db_user"],
                                 passwd=config.env["db_passwd"],
