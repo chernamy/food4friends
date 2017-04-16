@@ -24,4 +24,7 @@ if __name__ == '__main__':
     #app.config["SSL"] = True
     app.secret_key = "12345"
     app.config["SECRET_KEY"] = "12345"
+    app.config['SESSION_TYPE'] = 'filesystem'
+    sess.init_app(app)
+
     app.run(host=config.env['host'], port=config.env['port'], debug=True)

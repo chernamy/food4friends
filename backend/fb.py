@@ -14,8 +14,6 @@ if os.path.exists("fb.token"):
 else:
     APP_TOKEN = os.environ["APP_TOKEN"]
 
-print "APP_TOKEN", APP_TOKEN
-
 FB_GRAPH_URL = "https://graph.facebook.com/v2.8/" + APP_ID
 
 def UrlFor(fb_graph_route):
