@@ -2,8 +2,12 @@ from flask import Flask, render_template, send_from_directory
 import config
 import controllers
 import extensions
+import logging
+import sys
 
 app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 app.register_blueprint(controllers.login)
 app.register_blueprint(controllers.logout)
