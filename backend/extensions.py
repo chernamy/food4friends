@@ -402,8 +402,9 @@ def SetUpTestRatingData():
 
 def SetUpTestDatabase():
     global conn
-    conn = MySQLdb.connect(host="localhost", user=config.env["db_user"],
-                            passwd=config.env["db_passwd"], db="test")
+    conn = MySQLdb.connect(host=config.env["host"], user=config.env["db_user"],
+                            passwd=config.env["db_passwd"],
+                            db=config.env["db_name"])
 
     ExecuteCommand("DROP TABLE IF EXISTS USER;")
     ExecuteCommand("CREATE TABLE USER("\
@@ -459,8 +460,9 @@ def SetUpTestDatabase():
 
 def SetUpProdDatabase():
     global conn
-    conn = MySQLdb.connect(host="localhost", user=config.env["db_user"],
-                            passwd=config.env["db_passwd"], db="prod")
+    conn = MySQLdb.connect(host=config.env["host"], user=config.env["db_user"],
+                            passwd=config.env["db_passwd"],
+                            db=config.env["db_name"])
 
     # Make the first community for Michigan
     michigan_community = CommunityData(1, "Univeristy of Michigan")
